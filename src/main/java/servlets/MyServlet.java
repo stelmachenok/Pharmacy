@@ -1,6 +1,6 @@
 package servlets;
 
-import Controller.Controller;
+import controller.Controller;
 import entity.Medicament;
 
 import javax.servlet.RequestDispatcher;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Created by y50-70 on 20.10.2017.

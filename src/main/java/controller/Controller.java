@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import DAO.impl.MedicamentDAO;
 import entity.Medicament;
