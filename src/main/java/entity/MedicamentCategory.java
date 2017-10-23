@@ -8,6 +8,14 @@ public class MedicamentCategory {
     private String description;
     private int ID;
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
     public String getCategoryName() {
         return categoryName;
     }

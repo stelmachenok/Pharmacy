@@ -13,6 +13,14 @@ public class Pharmacy {
     private String category;
     private int ID;
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
     public void setPharmacyName(String pharmacyName) {
         this.pharmacyName = pharmacyName;
     }
