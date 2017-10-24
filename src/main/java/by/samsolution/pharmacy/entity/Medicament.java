@@ -1,4 +1,6 @@
-package entity;
+package by.samsolution.pharmacy.entity;
+
+import java.util.UUID;
 
 /**
  * Created by y50-70 on 20.10.2017.
@@ -10,19 +12,20 @@ public class Medicament {
     private String packingForm; //todo replace by enum
     private String internationalNonproprietaryName;
     private String releaseMedicament; //todo replace by enum
-    private int GUID;
+    private final UUID GUID;
 
     public Medicament() {
+        this.GUID = UUID.randomUUID();
     }
 
-    public Medicament(String brandName, String activeIngredient, int dosage, String packingForm, String internationalNonproprietaryName, String releaseMedicament, int GUID) {
+    public Medicament(String brandName, String activeIngredient, int dosage, String packingForm, String internationalNonproprietaryName, String releaseMedicament) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseMedicament = releaseMedicament;
-        this.GUID = GUID;
+        this.GUID = UUID.randomUUID();
     }
 
     public String getBrandName() {
@@ -49,7 +52,7 @@ public class Medicament {
         return releaseMedicament;
     }
 
-    public int getGUID() {
+    public UUID getGUID() {
         return GUID;
     }
 
@@ -75,9 +78,5 @@ public class Medicament {
 
     public void setReleaseMedicament(String releaseMedicament) {
         this.releaseMedicament = releaseMedicament;
-    }
-
-    public void setGUID(int GUID) {
-        this.GUID = GUID;
     }
 }

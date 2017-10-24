@@ -1,4 +1,4 @@
-package entity;
+package by.samsolution.pharmacy.entity;
 
 /**
  * Created by y50-70 on 20.10.2017.

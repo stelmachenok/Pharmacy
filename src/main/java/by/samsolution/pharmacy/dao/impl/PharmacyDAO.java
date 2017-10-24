@@ -1,19 +1,18 @@
-package DAO.impl;
+package by.samsolution.pharmacy.dao.impl;
 
-import DAO.InterfaceDAO;
-import entity.MedicamentCategory;
-import entity.Pharmacy;
-import storage.Storage;
+import by.samsolution.pharmacy.dao.InterfaceDAO;
+import by.samsolution.pharmacy.entity.Pharmacy;
+import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
 
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class PharmavyDAO implements InterfaceDAO<Pharmacy, Integer> {
+public class PharmacyDAO implements InterfaceDAO<Pharmacy, Integer> {
     private Storage<Pharmacy> storage;
 
-    public PharmavyDAO(Storage<Pharmacy> storage) {
+    public PharmacyDAO(Storage<Pharmacy> storage) {
         this.storage = storage;
     }
 

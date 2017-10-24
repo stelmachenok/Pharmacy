@@ -1,8 +1,4 @@
-package storage;
-
-import entity.Medicament;
-import entity.MedicamentCategory;
-import entity.Pharmacy;
+package by.samsolution.pharmacy.storage;
 
 import java.util.ArrayList;
 import java.util.List;

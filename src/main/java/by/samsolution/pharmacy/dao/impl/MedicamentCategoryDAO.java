@@ -1,8 +1,8 @@
-package DAO.impl;
+package by.samsolution.pharmacy.dao.impl;
 
-import DAO.InterfaceDAO;
-import entity.MedicamentCategory;
-import storage.Storage;
+import by.samsolution.pharmacy.dao.InterfaceDAO;
+import by.samsolution.pharmacy.entity.MedicamentCategory;
+import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
 
@@ -24,12 +24,9 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, I
     @Override
     public MedicamentCategory getEntityById(Integer id) {
         List<MedicamentCategory> categories = storage.getItemList();
-        for (MedicamentCategory category : categories) {
-            if (category.getID() == id){
-                return category;
-            }
-        }
-        return null;
+        return categories.stream()
+                .filter((c) -> c.getID() == id)
+                .findFirst().get();
     }
 
     @Override

@@ -1,15 +1,16 @@
-package DAO.impl;
+package by.samsolution.pharmacy.dao.impl;
 
-import DAO.InterfaceDAO;
-import entity.Medicament;
-import storage.Storage;
+import by.samsolution.pharmacy.dao.InterfaceDAO;
+import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<Medicament, Integer> {
+public class MedicamentDAO implements InterfaceDAO<Medicament, UUID> {
     private Storage<Medicament> storage;
 
     public MedicamentDAO() {
@@ -22,15 +23,12 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, Integer> {
     }
 
     @Override
-    public Medicament getEntityById(Integer id) {
-        for (Medicament medicament : storage.getItemList()) {
-            if (medicament.getGUID() == id) {
-                return medicament;
-            }
-        }
-        return null;
+    public Medicament getEntityById(UUID id) {
+        List<Medicament> medicaments = storage.getItemList();
+        return medicaments.stream()
+                .filter((c) -> c.getGUID().equals(id))
+                .findFirst().get();
     }
-
     @Override
     public void update(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
@@ -45,7 +43,7 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, Integer> {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(UUID id) {
         List<Medicament> medicaments = storage.getItemList();
         for (int i = 0; i < medicaments.size(); i++) {
             Medicament medicament = medicaments.get(i);
@@ -65,8 +63,7 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, Integer> {
                     medicament.getActiveIngredient().equals(entity.getActiveIngredient()) &&
                     medicament.getDosage() == entity.getDosage() &&
                     medicament.getPackingForm().equals(entity.getPackingForm()) &&
-                    medicament.getInternationalNonproprietaryName().equals(entity.getInternationalNonproprietaryName()) &&
-                    medicament.getGUID() == entity.getGUID()){
+                    medicament.getInternationalNonproprietaryName().equals(entity.getInternationalNonproprietaryName())){
                 return false;
             }
         }

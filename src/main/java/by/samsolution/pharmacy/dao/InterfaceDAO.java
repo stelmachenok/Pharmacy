@@ -1,6 +1,4 @@
-package DAO;
-
-import entity.Medicament;
+package by.samsolution.pharmacy.dao;
 
 import java.util.List;
 
