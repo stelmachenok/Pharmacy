@@ -5,11 +5,14 @@ import by.samsolution.pharmacy.entity.Pharmacy;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class PharmacyDAO implements InterfaceDAO<Pharmacy, Integer> {
+public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID> {
     private Storage<Pharmacy> storage;
 
     public PharmacyDAO(Storage<Pharmacy> storage) {
@@ -22,53 +25,70 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Integer> {
     }
 
     @Override
-    public Pharmacy getEntityById(Integer id) {
+    public Pharmacy getEntityById(UUID id) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        for (Pharmacy pharmacy : pharmacies) {
-            if (pharmacy.getID() == id){
-                return pharmacy;
-            }
+        Supplier<Stream<Pharmacy>> supplierStream =
+                () -> pharmacies
+                        .stream()
+                        .filter((p) -> p.getID().equals(id));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            return supplierStream
+                    .get()
+                    .findFirst()
+                    .get();
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
     public void update(Pharmacy entity) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        for (int i = 0; i < pharmacies.size(); i++) {
-            Pharmacy pharmacy = pharmacies.get(i);
-            if (pharmacy.getID() == entity.getID()) {
-                pharmacies.remove(i);
-                pharmacies.add(entity);
-                break;
-            }
+        Supplier<Stream<Pharmacy>> supplierStream =
+                () -> pharmacies
+                        .stream()
+                        .filter((p) -> p.getID().equals(entity.getID()));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            pharmacies.remove(supplierStream
+                    .get()
+                    .findFirst()
+                    .get());
+            pharmacies.add(entity);
         }
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(UUID id) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        for (int i = 0; i < pharmacies.size(); i++) {
-            Pharmacy pharmacy = pharmacies.get(i);
-            if (pharmacy.getID() == id) {
-                pharmacies.remove(i);
-                return true;
-            }
+        Supplier<Stream<Pharmacy>> supplierStream =
+                () -> pharmacies
+                        .stream()
+                        .filter((p) -> p.getID().equals(id));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            pharmacies.remove(supplierStream
+                    .get()
+                    .findFirst()
+                    .get());
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean create(Pharmacy entity) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        for (Pharmacy pharmacy : pharmacies) {
-            if (pharmacy.getPharmacyName().equals(entity.getPharmacyName()) &&
-                    pharmacy.getAddress().equals(entity.getAddress()) &&
-                    pharmacy.getID() == entity.getID()){
-                return false;
-            }
+        Supplier<Stream<Pharmacy>> supplierStream =
+                () -> pharmacies
+                        .stream()
+                        .filter((p) -> p.getPharmacyName().equals(entity.getPharmacistName()) &&
+                        p.getAddress().equals(entity.getAddress()));
+        if (supplierStream.get().noneMatch(s -> true)){
+            pharmacies.add(entity);
+            return true;
         }
-        pharmacies.add(entity);
-        return true;
+        else{
+            return false;
+        }
     }
 }

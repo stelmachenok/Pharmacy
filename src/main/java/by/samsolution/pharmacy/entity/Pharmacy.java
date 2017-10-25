@@ -1,5 +1,7 @@
 package by.samsolution.pharmacy.entity;
 
+import java.util.UUID;
+
 /**
  * Created by y50-70 on 20.10.2017.
  */
@@ -11,13 +13,9 @@ public class Pharmacy {
     private String login;
     private String password;
     private String category;
-    private int ID;
+    private UUID ID;
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public int getID() {
+    public UUID getID() {
         return ID;
     }
 

@@ -1,18 +1,20 @@
 package by.samsolution.pharmacy.entity;
 
+import java.util.UUID;
+
 /**
  * Created by y50-70 on 20.10.2017.
  */
 public class MedicamentCategory {
     private String categoryName;
     private String description;
-    private int ID;
+    private UUID ID;
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public MedicamentCategory(){
+        this.ID = UUID.randomUUID();
     }
 
-    public int getID() {
+    public UUID getID() {
         return ID;
     }
 

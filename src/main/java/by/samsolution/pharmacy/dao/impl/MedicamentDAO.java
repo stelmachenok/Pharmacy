@@ -6,6 +6,8 @@ import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Created by y50-70 on 20.10.2017.
@@ -25,49 +27,70 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, UUID> {
     @Override
     public Medicament getEntityById(UUID id) {
         List<Medicament> medicaments = storage.getItemList();
-        return medicaments.stream()
-                .filter((c) -> c.getGUID().equals(id))
-                .findFirst().get();
+        Supplier<Stream<Medicament>> supplierStream =
+                () -> medicaments
+                        .stream()
+                        .filter((m) -> m.getGUID().equals(id));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            return supplierStream
+                    .get()
+                    .findFirst()
+                    .get();
+        } else {
+            return null;
+        }
     }
     @Override
     public void update(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
-        for (int i = 0; i < medicaments.size(); i++) {
-            Medicament medicament = medicaments.get(i);
-            if (medicament.getGUID() == entity.getGUID()) {
-                medicaments.remove(i);
-                medicaments.add(entity);
-                break;
-            }
+        Supplier<Stream<Medicament>> supplierStream =
+                () -> medicaments
+                        .stream()
+                        .filter((m) -> m.getGUID().equals(entity.getGUID()));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            medicaments.remove(supplierStream
+                    .get()
+                    .findFirst()
+                    .get());
+            medicaments.add(entity);
         }
     }
 
     @Override
     public boolean delete(UUID id) {
         List<Medicament> medicaments = storage.getItemList();
-        for (int i = 0; i < medicaments.size(); i++) {
-            Medicament medicament = medicaments.get(i);
-            if (medicament.getGUID() == id) {
-                medicaments.remove(i);
-                return true;
-            }
+        Supplier<Stream<Medicament>> supplierStream =
+                () -> medicaments
+                        .stream()
+                        .filter((m) -> m.getGUID().equals(id));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            medicaments.remove(supplierStream
+                    .get()
+                    .findFirst()
+                    .get());
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean create(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
-        for (Medicament medicament : medicaments) {
-            if (medicament.getBrandName().equals(entity.getBrandName()) &&
-                    medicament.getActiveIngredient().equals(entity.getActiveIngredient()) &&
-                    medicament.getDosage() == entity.getDosage() &&
-                    medicament.getPackingForm().equals(entity.getPackingForm()) &&
-                    medicament.getInternationalNonproprietaryName().equals(entity.getInternationalNonproprietaryName())){
-                return false;
-            }
+        Supplier<Stream<Medicament>> supplierStream =
+                () -> medicaments
+                        .stream()
+                        .filter((m) -> m.getBrandName().equals(entity.getBrandName()) &&
+                    m.getActiveIngredient().equals(entity.getActiveIngredient()) &&
+                    m.getDosage() == entity.getDosage() &&
+                    m.getPackingForm().equals(entity.getPackingForm()) &&
+                    m.getInternationalNonproprietaryName().equals(entity.getInternationalNonproprietaryName()));
+        if (supplierStream.get().noneMatch(s -> true)){
+            medicaments.add(entity);
+            return true;
         }
-        medicaments.add(entity);
-        return true;
+        else{
+            return false;
+        }
     }
 }
