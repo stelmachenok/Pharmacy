@@ -37,7 +37,7 @@ ${internationalNonproprietaryName}
 <br>
 <b>Рецептурный отпуск</b>
 <br>
-${releaseMedicament}
+${releaseForm}
 <br>
 <b>ID</b>
 <br>

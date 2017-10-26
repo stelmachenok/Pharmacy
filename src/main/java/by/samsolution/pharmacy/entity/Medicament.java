@@ -8,23 +8,23 @@ import java.util.UUID;
 public class Medicament {
     private String brandName;
     private String activeIngredient;
-    private int dosage;
-    private String packingForm; //todo replace by enum
+    private String dosage;
+    private PackingForm packingForm;
     private String internationalNonproprietaryName;
-    private String releaseMedicament; //todo replace by enum
+    private ReleaseForm releaseForm;
     private final UUID GUID;
 
     public Medicament() {
         this.GUID = UUID.randomUUID();
     }
 
-    public Medicament(String brandName, String activeIngredient, int dosage, String packingForm, String internationalNonproprietaryName, String releaseMedicament) {
+    public Medicament(String brandName, String activeIngredient, String dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
-        this.releaseMedicament = releaseMedicament;
+        this.releaseForm = releaseForm;
         this.GUID = UUID.randomUUID();
     }
 
@@ -36,11 +36,11 @@ public class Medicament {
         return activeIngredient;
     }
 
-    public int getDosage() {
+    public String getDosage() {
         return dosage;
     }
 
-    public String getPackingForm() {
+    public PackingForm getPackingForm() {
         return packingForm;
     }
 
@@ -48,8 +48,8 @@ public class Medicament {
         return internationalNonproprietaryName;
     }
 
-    public String getReleaseMedicament() {
-        return releaseMedicament;
+    public ReleaseForm getReleaseForm() {
+        return releaseForm;
     }
 
     public UUID getGUID() {
@@ -64,11 +64,11 @@ public class Medicament {
         this.activeIngredient = activeIngredient;
     }
 
-    public void setDosage(int dosage) {
+    public void setDosage(String dosage) {
         this.dosage = dosage;
     }
 
-    public void setPackingForm(String packingForm) {
+    public void setPackingForm(PackingForm packingForm) {
         this.packingForm = packingForm;
     }
 
@@ -76,7 +76,48 @@ public class Medicament {
         this.internationalNonproprietaryName = internationalNonproprietaryName;
     }
 
-    public void setReleaseMedicament(String releaseMedicament) {
-        this.releaseMedicament = releaseMedicament;
+    public void setReleaseForm(ReleaseForm releaseForm) {
+        this.releaseForm = releaseForm;
+    }
+
+    @Override
+    public String toString() {
+        return "Medicament{" +
+                "brandName='" + brandName + '\'' +
+                ", activeIngredient='" + activeIngredient + '\'' +
+                ", dosage='" + dosage + '\'' +
+                ", packingForm=" + packingForm +
+                ", internationalNonproprietaryName='" + internationalNonproprietaryName + '\'' +
+                ", releaseForm=" + releaseForm +
+                ", GUID=" + GUID +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Medicament)) return false;
+
+        Medicament that = (Medicament) o;
+
+        if (brandName != null ? !brandName.equals(that.brandName) : that.brandName != null) return false;
+        if (activeIngredient != null ? !activeIngredient.equals(that.activeIngredient) : that.activeIngredient != null)
+            return false;
+        if (dosage != null ? !dosage.equals(that.dosage) : that.dosage != null) return false;
+        if (packingForm != that.packingForm) return false;
+        if (internationalNonproprietaryName != null ? !internationalNonproprietaryName.equals(that.internationalNonproprietaryName) : that.internationalNonproprietaryName != null)
+            return false;
+        return releaseForm == that.releaseForm;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = brandName != null ? brandName.hashCode() : 0;
+        result = 31 * result + (activeIngredient != null ? activeIngredient.hashCode() : 0);
+        result = 31 * result + (dosage != null ? dosage.hashCode() : 0);
+        result = 31 * result + (packingForm != null ? packingForm.hashCode() : 0);
+        result = 31 * result + (internationalNonproprietaryName != null ? internationalNonproprietaryName.hashCode() : 0);
+        result = 31 * result + (releaseForm != null ? releaseForm.hashCode() : 0);
+        return result;
     }
 }

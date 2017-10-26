@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID> {
+public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID, String> {
     private Storage<Pharmacy> storage;
 
     public PharmacyDAO(Storage<Pharmacy> storage) {
@@ -32,10 +32,21 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID> {
                         .stream()
                         .filter((p) -> p.getID().equals(id));
         if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream
-                    .get()
-                    .findFirst()
-                    .get();
+            return supplierStream.get().findFirst().get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Pharmacy getEntityByName(String name) {
+        List<Pharmacy> pharmacies = storage.getItemList();
+        Supplier<Stream<Pharmacy>> supplierStream =
+                () -> pharmacies
+                        .stream()
+                        .filter((p) -> p.getPharmacyName().equals(name));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            return supplierStream.get().findFirst().get();
         } else {
             return null;
         }
@@ -76,19 +87,10 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID> {
     }
 
     @Override
-    public boolean create(Pharmacy entity) {
+    public void create(Pharmacy entity) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        Supplier<Stream<Pharmacy>> supplierStream =
-                () -> pharmacies
-                        .stream()
-                        .filter((p) -> p.getPharmacyName().equals(entity.getPharmacistName()) &&
-                        p.getAddress().equals(entity.getAddress()));
-        if (supplierStream.get().noneMatch(s -> true)){
-            pharmacies.add(entity);
-            return true;
-        }
-        else{
-            return false;
-        }
+
+        pharmacies.add(entity);
+
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<Medicament, UUID> {
+public class MedicamentDAO implements InterfaceDAO<Medicament, UUID, String> {
     private Storage<Medicament> storage;
 
     public MedicamentDAO() {
@@ -40,6 +40,24 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, UUID> {
             return null;
         }
     }
+
+    @Override
+    public Medicament getEntityByName(String name) {
+        List<Medicament> medicaments = storage.getItemList();
+        Supplier<Stream<Medicament>> supplierStream =
+                () -> medicaments
+                        .stream()
+                        .filter((m) -> m.getGUID().equals(name));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            return supplierStream
+                    .get()
+                    .findFirst()
+                    .get();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public void update(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
@@ -75,22 +93,8 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, UUID> {
     }
 
     @Override
-    public boolean create(Medicament entity) {
+    public void create(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
-        Supplier<Stream<Medicament>> supplierStream =
-                () -> medicaments
-                        .stream()
-                        .filter((m) -> m.getBrandName().equals(entity.getBrandName()) &&
-                    m.getActiveIngredient().equals(entity.getActiveIngredient()) &&
-                    m.getDosage() == entity.getDosage() &&
-                    m.getPackingForm().equals(entity.getPackingForm()) &&
-                    m.getInternationalNonproprietaryName().equals(entity.getInternationalNonproprietaryName()));
-        if (supplierStream.get().noneMatch(s -> true)){
-            medicaments.add(entity);
-            return true;
-        }
-        else{
-            return false;
-        }
+        medicaments.add(entity);
     }
 }

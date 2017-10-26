@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, UUID> {
+public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, UUID, String> {
     private Storage<MedicamentCategory> storage;
 
     public MedicamentCategoryDAO() {
@@ -31,6 +31,23 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, U
                 () -> categories
                         .stream()
                         .filter((c) -> c.getID().equals(id));
+        if (supplierStream.get().anyMatch(s -> true)) {
+            return supplierStream
+                    .get()
+                    .findFirst()
+                    .get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public MedicamentCategory getEntityByName(String name) {
+        List<MedicamentCategory> categories = storage.getItemList();
+        Supplier<Stream<MedicamentCategory>> supplierStream =
+                () -> categories
+                        .stream()
+                        .filter((c) -> c.getCategoryName().equals(name));
         if (supplierStream.get().anyMatch(s -> true)) {
             return supplierStream
                     .get()
@@ -76,19 +93,8 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, U
     }
 
     @Override
-    public boolean create(MedicamentCategory entity) {
+    public void create(MedicamentCategory entity) {
         List<MedicamentCategory> categories = storage.getItemList();
-        Supplier<Stream<MedicamentCategory>> supplierStream =
-                () -> categories
-                        .stream()
-                        .filter((c) -> c.getCategoryName().equals(entity.getCategoryName()) &&
-                                c.getDescription().equals(entity.getDescription()));
-        if (supplierStream.get().noneMatch(s -> true)){
-            categories.add(entity);
-            return true;
-        }
-        else{
-            return false;
-        }
+        categories.add(entity);
     }
 }
