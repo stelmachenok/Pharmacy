@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID, String> {
     private Storage<Pharmacy> storage;
 
-    public PharmacyDAO(Storage<Pharmacy> storage) {
-        this.storage = storage;
+    public PharmacyDAO() {
+        this.storage = new Storage<>();
     }
 
     @Override
