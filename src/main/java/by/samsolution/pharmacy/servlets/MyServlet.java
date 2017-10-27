@@ -27,9 +27,7 @@ public class MyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    public void init() throws ServletException {
         List<Medicament> medicaments = new ArrayList<>();
         medicaments.add(new Medicament("L-ОПТИК", "Левофлоксацин", "5 мг", PackingForm.DROP, "Левофлоксацин", ReleaseForm.WITHOUT_RECIPE));
         medicaments.add(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", "50 мкг", PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
@@ -43,6 +41,13 @@ public class MyServlet extends HttpServlet {
 
         Service service = (Service) getServletContext().getAttribute("Service");
         medicaments.forEach(service::addMedicament);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Service service = (Service) getServletContext().getAttribute("Service");
         service.getAllMedicaments().forEach(System.out::println);
+
     }
 }
