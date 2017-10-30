@@ -2,22 +2,22 @@ package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.storage.Storage;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<Medicament, UUID, String> {
+public class MedicamentDAO implements InterfaceDAO<Medicament, Long, String> {
     private Storage<Medicament> storage;
+    private long ID;
 
     public MedicamentDAO() {
         storage = new Storage<>();
+        ID = 0;
     }
 
     @Override
@@ -26,9 +26,9 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, UUID, String> {
     }
 
     @Override
-    public Medicament getEntityById(UUID id) {
+    public Medicament getEntityById(Long id) {
         List<Medicament> medicaments = storage.getItemList();
-        return medicaments.stream().filter(m -> m.getGUID().equals(id)).findAny().orElse(null);
+        return medicaments.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
@@ -38,33 +38,33 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, UUID, String> {
     }
 
     @Override
-    public boolean update(Medicament entity) {
+    public void update(Medicament entity) throws EntityNotFoundException {
         List<Medicament> medicaments = storage.getItemList();
-        Medicament existedMedicament = medicaments.stream().filter(m -> m.getBrandName().equals(entity.getBrandName())).findAny().orElse(null);
+        Medicament existedMedicament = medicaments.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
         if (existedMedicament != null) {
             medicaments.remove(existedMedicament);
             medicaments.add(entity);
-            return true;
         } else {
-            return false;
+            throw new EntityNotFoundException("Medicament " + entity + " doesn't exist");
         }
     }
 
     @Override
-    public boolean delete(String name) {
+    public void delete(Long id) throws EntityNotFoundException {
         List<Medicament> medicaments = storage.getItemList();
-        Medicament existedMedicament = medicaments.stream().filter(m -> m.getBrandName().equals(name)).findAny().orElse(null);
+        Medicament existedMedicament = medicaments.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         if (existedMedicament != null) {
             medicaments.remove(existedMedicament);
-            return true;
         } else {
-            return false;
+            throw new EntityNotFoundException("Medicament with ID = " + id + " doesn't exist");
         }
     }
 
     @Override
     public void create(Medicament entity) {
         List<Medicament> medicaments = storage.getItemList();
+        entity.setId(ID);
+        ID++;
         medicaments.add(entity);
     }
 }

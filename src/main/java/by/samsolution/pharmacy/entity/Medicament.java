@@ -12,10 +12,11 @@ public class Medicament {
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
-    private final UUID GUID;
+    private final UUID guid;
+    private Long id;
 
     public Medicament() {
-        this.GUID = UUID.randomUUID();
+        this.guid = UUID.randomUUID();
     }
 
     public Medicament(String brandName, String activeIngredient, String dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
@@ -25,7 +26,7 @@ public class Medicament {
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
-        this.GUID = UUID.randomUUID();
+        this.guid = UUID.randomUUID();
     }
 
     public String getBrandName() {
@@ -52,8 +53,17 @@ public class Medicament {
         return releaseForm;
     }
 
-    public UUID getGUID() {
-        return GUID;
+    public UUID getGuid() {
+        return guid;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+
+        return id;
     }
 
     public void setBrandName(String brandName) {
@@ -89,7 +99,7 @@ public class Medicament {
                 ", packingForm=" + packingForm +
                 ", internationalNonproprietaryName='" + internationalNonproprietaryName + '\'' +
                 ", releaseForm=" + releaseForm +
-                ", GUID=" + GUID +
+                ", guid=" + guid +
                 '}';
     }
 

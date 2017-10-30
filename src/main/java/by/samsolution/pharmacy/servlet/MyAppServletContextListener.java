@@ -1,4 +1,4 @@
-package by.samsolution.pharmacy.servlets;
+package by.samsolution.pharmacy.servlet;
 import by.samsolution.pharmacy.service.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

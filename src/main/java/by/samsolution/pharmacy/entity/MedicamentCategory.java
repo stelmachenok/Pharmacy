@@ -8,14 +8,11 @@ import java.util.UUID;
 public class MedicamentCategory {
     private String categoryName;
     private String description;
-    private UUID ID;
+    private UUID guid;
+    private Long id;
 
     public MedicamentCategory(){
-        this.ID = UUID.randomUUID();
-    }
-
-    public UUID getID() {
-        return ID;
+        this.guid = guid.randomUUID();
     }
 
     public String getCategoryName() {
@@ -24,6 +21,18 @@ public class MedicamentCategory {
 
     public String getDescription() {
         return description;
+    }
+
+    public java.util.UUID getGuid() {
+        return guid;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setCategoryName(String categoryName) {

@@ -13,10 +13,19 @@ public class Pharmacy {
     private String login;
     private String password;
     private String category;
-    private UUID ID;
+    private UUID uuid;
+    private Long id;
 
-    public UUID getID() {
-        return ID;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public void setPharmacyName(String pharmacyName) {

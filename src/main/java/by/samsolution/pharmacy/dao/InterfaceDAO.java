@@ -1,5 +1,7 @@
 package by.samsolution.pharmacy.dao;
 
+import by.samsolution.pharmacy.exception.EntityNotFoundException;
+
 import java.util.List;
 
 /**
@@ -12,9 +14,9 @@ public interface InterfaceDAO<E, K, N> {
 
     E getEntityByName(N name);
 
-    boolean update(E entity);
+    void update(E entity) throws EntityNotFoundException;
 
-    boolean delete(N id);
+    void delete(K id) throws EntityNotFoundException;
 
     void create(E entity);
 }

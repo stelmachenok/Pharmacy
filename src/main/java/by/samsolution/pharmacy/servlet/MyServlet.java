@@ -1,7 +1,5 @@
-package by.samsolution.pharmacy.servlets;
+package by.samsolution.pharmacy.servlet;
 
-import by.samsolution.pharmacy.controller.Controller;
-import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
@@ -9,7 +7,6 @@ import by.samsolution.pharmacy.service.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
