@@ -15,8 +15,4 @@ public class Controller {
         Medicament medicament = new Medicament("Мезим", "панкреатин", "125 мг", PackingForm.TABLET, "Мезим форте 10000", ReleaseForm.WITHOUT_RECIPE);
         medicamentDAO.create(medicament);
     }
-
-//    public Medicament getMedicamentByName(int ID){
-//        return medicamentDAO.getEntityById();
-//    }
 }

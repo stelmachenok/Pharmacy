@@ -12,9 +12,9 @@ public interface InterfaceDAO<E, K, N> {
 
     E getEntityByName(N name);
 
-    void update(E entity);
+    boolean update(E entity);
 
-    boolean delete(K id);
+    boolean delete(N id);
 
     void create(E entity);
 }

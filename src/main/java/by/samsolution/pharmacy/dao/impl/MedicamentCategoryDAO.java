@@ -27,65 +27,34 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, U
     @Override
     public MedicamentCategory getEntityById(UUID id) {
         List<MedicamentCategory> categories = storage.getItemList();
-        Supplier<Stream<MedicamentCategory>> supplierStream =
-                () -> categories
-                        .stream()
-                        .filter((c) -> c.getID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream
-                    .get()
-                    .findFirst()
-                    .get();
-        } else {
-            return null;
-        }
+        return categories.stream().filter(m -> m.getID().equals(id)).findAny().orElse(null);
     }
 
     @Override
     public MedicamentCategory getEntityByName(String name) {
         List<MedicamentCategory> categories = storage.getItemList();
-        Supplier<Stream<MedicamentCategory>> supplierStream =
-                () -> categories
-                        .stream()
-                        .filter((c) -> c.getCategoryName().equals(name));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream
-                    .get()
-                    .findFirst()
-                    .get();
-        } else {
-            return null;
-        }
+        return categories.stream().filter(m -> m.getCategoryName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(MedicamentCategory entity) {
+    public boolean update(MedicamentCategory entity) {
         List<MedicamentCategory> categories = storage.getItemList();
-        Supplier<Stream<MedicamentCategory>> supplierStream =
-                () -> categories
-                        .stream()
-                        .filter((c) -> c.getID().equals(entity.getID()));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            categories.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
+        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getCategoryName().equals(entity.getCategoryName())).findAny().orElse(null);
+        if (existedCategory != null) {
+            categories.remove(existedCategory);
             categories.add(entity);
+            return true;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(String name) {
         List<MedicamentCategory> categories = storage.getItemList();
-        Supplier<Stream<MedicamentCategory>> supplierStream =
-                () -> categories
-                        .stream()
-                        .filter((c) -> c.getID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            categories.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
+        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getCategoryName().equals(name)).findAny().orElse(null);
+        if (existedCategory!= null) {
+            categories.remove(existedCategory);
             return true;
         } else {
             return false;

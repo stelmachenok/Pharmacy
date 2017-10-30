@@ -27,59 +27,34 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, UUID, String> {
     @Override
     public Pharmacy getEntityById(UUID id) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        Supplier<Stream<Pharmacy>> supplierStream =
-                () -> pharmacies
-                        .stream()
-                        .filter((p) -> p.getID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream.get().findFirst().get();
-        } else {
-            return null;
-        }
+        return pharmacies.stream().filter(m -> m.getID().equals(id)).findAny().orElse(null);
     }
 
     @Override
     public Pharmacy getEntityByName(String name) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        Supplier<Stream<Pharmacy>> supplierStream =
-                () -> pharmacies
-                        .stream()
-                        .filter((p) -> p.getPharmacyName().equals(name));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream.get().findFirst().get();
-        } else {
-            return null;
-        }
+        return pharmacies.stream().filter(m -> m.getPharmacyName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(Pharmacy entity) {
+    public boolean update(Pharmacy entity) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        Supplier<Stream<Pharmacy>> supplierStream =
-                () -> pharmacies
-                        .stream()
-                        .filter((p) -> p.getID().equals(entity.getID()));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            pharmacies.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
+        Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getPharmacyName().equals(entity.getPharmacyName())).findAny().orElse(null);
+        if (existedPharmacy != null) {
+            pharmacies.remove(existedPharmacy);
             pharmacies.add(entity);
+            return true;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(String name) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        Supplier<Stream<Pharmacy>> supplierStream =
-                () -> pharmacies
-                        .stream()
-                        .filter((p) -> p.getID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            pharmacies.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
+        Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getPharmacyName().equals(name)).findAny().orElse(null);
+        if (existedPharmacy != null) {
+            pharmacies.remove(existedPharmacy);
             return true;
         } else {
             return false;

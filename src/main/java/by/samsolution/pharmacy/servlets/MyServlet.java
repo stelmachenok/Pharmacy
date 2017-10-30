@@ -6,6 +6,8 @@ import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 import by.samsolution.pharmacy.service.Service;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +22,8 @@ import java.util.List;
  * Created by y50-70 on 20.10.2017.
  */
 public class MyServlet extends HttpServlet {
+    static final Logger logger = LogManager.getLogger(MyServlet.class);
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,7 +51,7 @@ public class MyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Service service = (Service) getServletContext().getAttribute("Service");
-        service.getAllMedicaments().forEach(System.out::println);
+        service.getAllMedicaments().forEach(logger::info);
 
     }
 }
