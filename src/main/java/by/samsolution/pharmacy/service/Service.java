@@ -21,13 +21,15 @@ public class Service {
         pharmacyDAO = new PharmacyDAO();
     }
 
-    public void addMedicament(Medicament medicament) {
+    public boolean addMedicament(Medicament medicament) {
         Medicament existedMedicament = medicamentDAO.getEntityByName(medicament.getBrandName());
         if (!medicament.equals(existedMedicament)){
             medicamentDAO.create(medicament);
+            return true;
         }
         else{
             logger.info("Medicament " + existedMedicament.getBrandName() + " already exist!");
+            return false;
         }
     }
 
