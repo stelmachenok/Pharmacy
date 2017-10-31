@@ -5,8 +5,7 @@ import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
 import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.exception.PharmacyApplicationException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.*;
 
 import java.util.List;
 
@@ -14,9 +13,11 @@ public class Service {
     private MedicamentDAO medicamentDAO;
     private MedicamentCategoryDAO categoryDAO;
     private PharmacyDAO pharmacyDAO;
-    static final Logger logger = LogManager.getLogger(Service.class);
+
+    private static Logger logger = LoggerFactory.getLogger(Service.class);
 
     public Service() {
+
         medicamentDAO = new MedicamentDAO();
         categoryDAO = new MedicamentCategoryDAO();
         pharmacyDAO = new PharmacyDAO();
