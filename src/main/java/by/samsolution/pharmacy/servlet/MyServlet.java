@@ -3,6 +3,7 @@ package by.samsolution.pharmacy.servlet;
 import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
+import by.samsolution.pharmacy.exception.PharmacyApplicationException;
 import by.samsolution.pharmacy.service.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,13 @@ public class MyServlet extends HttpServlet {
         medicaments.add(new Medicament("АДАПТОЛ", "Мебикар", "500 мг", PackingForm.TABLET, "Мебикар", ReleaseForm.WITHOUT_RECIPE));
 
         Service service = (Service) getServletContext().getAttribute("Service");
-        medicaments.forEach(service::addMedicament);
+        for (Medicament medicament : medicaments) {
+            try {
+                service.addMedicament(medicament);
+            } catch (PharmacyApplicationException e) {
+                logger.info(e.getMessage());
+            }
+        }
     }
 
     @Override

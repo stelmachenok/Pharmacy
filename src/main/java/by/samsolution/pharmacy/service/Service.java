@@ -4,6 +4,7 @@ import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
 import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.exception.PharmacyApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,15 +22,14 @@ public class Service {
         pharmacyDAO = new PharmacyDAO();
     }
 
-    public boolean addMedicament(Medicament medicament) {
+    public boolean addMedicament(Medicament medicament) throws PharmacyApplicationException {
         Medicament existedMedicament = medicamentDAO.getEntityByName(medicament.getBrandName());
         if (!medicament.equals(existedMedicament)){
             medicamentDAO.create(medicament);
             return true;
         }
         else{
-            logger.info("Medicament " + existedMedicament.getBrandName() + " already exist!");
-            return false;
+            throw new PharmacyApplicationException("Medicament " + existedMedicament.getBrandName() + " already exist!");
         }
     }
 
