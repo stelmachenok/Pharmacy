@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, Long, String> {
     private Storage<MedicamentCategory> storage;
-    private long ID;
+    private Long ID;
 
     public MedicamentCategoryDAO() {
         storage = new Storage<>();
-        ID = 0;
+        ID = 0L;
     }
 
     @Override
@@ -38,26 +38,18 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
-    public void update(MedicamentCategory entity) throws EntityNotFoundException {
+    public void update(MedicamentCategory entity){
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        if (existedCategory != null) {
-            categories.remove(existedCategory);
-            categories.add(entity);
-        } else {
-            throw new EntityNotFoundException("Medicament category " + entity + " doesn't exist");
-        }
+        categories.remove(existedCategory);
+        categories.add(entity);
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
+    public void delete(Long id){
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        if (existedCategory!= null) {
-            categories.remove(existedCategory);
-        } else {
-            throw new EntityNotFoundException("Medicament category with ID = " + id + " doesn't exist");
-        }
+        categories.remove(existedCategory);
     }
 
     @Override

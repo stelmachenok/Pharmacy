@@ -16,6 +16,21 @@ public class Pharmacy {
     private UUID uuid;
     private Long id;
 
+    public Pharmacy() {
+        uuid = UUID.randomUUID();
+    }
+
+    public Pharmacy(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, String category) {
+        this.pharmacyName = pharmacyName;
+        this.address = address;
+        this.pharmacistName = pharmacistName;
+        this.contactNumber = contactNumber;
+        this.login = login;
+        this.password = password;
+        this.category = category;
+        uuid = UUID.randomUUID();
+    }
+
     public Long getId() {
         return id;
     }

@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 public class MedicamentDAO implements InterfaceDAO<Medicament, Long, String> {
     private Storage<Medicament> storage;
-    private long ID;
+    private Long ID;
 
     public MedicamentDAO() {
         storage = new Storage<>();
-        ID = 0;
+        ID = 0L;
     }
 
     @Override
@@ -38,26 +38,18 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, Long, String> {
     }
 
     @Override
-    public void update(Medicament entity) throws EntityNotFoundException {
+    public void update(Medicament entity){
         List<Medicament> medicaments = storage.getItemList();
         Medicament existedMedicament = medicaments.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        if (existedMedicament != null) {
-            medicaments.remove(existedMedicament);
-            medicaments.add(entity);
-        } else {
-            throw new EntityNotFoundException("Medicament " + entity + " doesn't exist");
-        }
+        medicaments.remove(existedMedicament);
+        medicaments.add(entity);
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
+    public void delete(Long id) {
         List<Medicament> medicaments = storage.getItemList();
         Medicament existedMedicament = medicaments.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        if (existedMedicament != null) {
-            medicaments.remove(existedMedicament);
-        } else {
-            throw new EntityNotFoundException("Medicament with ID = " + id + " doesn't exist");
-        }
+        medicaments.remove(existedMedicament);
     }
 
     @Override

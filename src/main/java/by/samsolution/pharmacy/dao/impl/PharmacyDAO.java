@@ -17,6 +17,7 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String> {
 
     public PharmacyDAO() {
         this.storage = new Storage<>();
+        ID = 0L;
     }
 
     @Override
@@ -40,23 +41,15 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String> {
     public void update(Pharmacy entity) throws EntityNotFoundException {
         List<Pharmacy> pharmacies = storage.getItemList();
         Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        if (existedPharmacy != null) {
-            pharmacies.remove(existedPharmacy);
-            pharmacies.add(entity);
-        } else {
-            throw new EntityNotFoundException("Pharmacy " + entity + " doesn't exist");
-        }
+        pharmacies.remove(existedPharmacy);
+        pharmacies.add(entity);
     }
 
     @Override
     public void delete(Long id) throws EntityNotFoundException {
         List<Pharmacy> pharmacies = storage.getItemList();
         Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        if (existedPharmacy != null) {
-            pharmacies.remove(existedPharmacy);
-        } else {
-            throw new EntityNotFoundException("Pharmacy with ID = " + id + " doesn't exist");
-        }
+        pharmacies.remove(existedPharmacy);
     }
 
     @Override

@@ -12,7 +12,13 @@ public class MedicamentCategory {
     private Long id;
 
     public MedicamentCategory(){
-        this.guid = guid.randomUUID();
+        this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentCategory(String categoryName, String description) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.guid = UUID.randomUUID();
     }
 
     public String getCategoryName() {
