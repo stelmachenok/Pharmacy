@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Medicament {
     private String brandName;
     private String activeIngredient;
-    private String dosage;
+    private Double dosage;
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
@@ -19,7 +19,7 @@ public class Medicament {
         this.guid = UUID.randomUUID();
     }
 
-    public Medicament(String brandName, String activeIngredient, String dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public Medicament(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
@@ -37,7 +37,7 @@ public class Medicament {
         return activeIngredient;
     }
 
-    public String getDosage() {
+    public Double getDosage() {
         return dosage;
     }
 
@@ -74,7 +74,7 @@ public class Medicament {
         this.activeIngredient = activeIngredient;
     }
 
-    public void setDosage(String dosage) {
+    public void setDosage(Double dosage) {
         this.dosage = dosage;
     }
 
@@ -101,33 +101,5 @@ public class Medicament {
                 ", releaseForm=" + releaseForm +
                 ", guid=" + guid +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Medicament)) return false;
-
-        Medicament that = (Medicament) o;
-
-        if (brandName != null ? !brandName.equals(that.brandName) : that.brandName != null) return false;
-        if (activeIngredient != null ? !activeIngredient.equals(that.activeIngredient) : that.activeIngredient != null)
-            return false;
-        if (dosage != null ? !dosage.equals(that.dosage) : that.dosage != null) return false;
-        if (packingForm != that.packingForm) return false;
-        if (internationalNonproprietaryName != null ? !internationalNonproprietaryName.equals(that.internationalNonproprietaryName) : that.internationalNonproprietaryName != null)
-            return false;
-        return releaseForm == that.releaseForm;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = brandName != null ? brandName.hashCode() : 0;
-        result = 31 * result + (activeIngredient != null ? activeIngredient.hashCode() : 0);
-        result = 31 * result + (dosage != null ? dosage.hashCode() : 0);
-        result = 31 * result + (packingForm != null ? packingForm.hashCode() : 0);
-        result = 31 * result + (internationalNonproprietaryName != null ? internationalNonproprietaryName.hashCode() : 0);
-        result = 31 * result + (releaseForm != null ? releaseForm.hashCode() : 0);
-        return result;
     }
 }

@@ -10,16 +10,16 @@
     <packaging>war</packaging>
 
     <!--<dependencyManagement>-->
-        <!--&lt;!&ndash;all spring dependencies &ndash;&gt;-->
-        <!--<dependencies>-->
-            <!--<dependency>-->
-                <!--<groupId>org.springframework</groupId>-->
-                <!--<artifactId>spring-framework-bom</artifactId>-->
-                <!--<version>4.2.4.RELEASE</version>-->
-                <!--<type>pom</type>-->
-                <!--<scope>import</scope>-->
-            <!--</dependency>-->
-        <!--</dependencies>-->
+    <!--&lt;!&ndash;all spring dependencies &ndash;&gt;-->
+    <!--<dependencies>-->
+    <!--<dependency>-->
+    <!--<groupId>org.springframework</groupId>-->
+    <!--<artifactId>spring-framework-bom</artifactId>-->
+    <!--<version>4.2.4.RELEASE</version>-->
+    <!--<type>pom</type>-->
+    <!--<scope>import</scope>-->
+    <!--</dependency>-->
+    <!--</dependencies>-->
     <!--</dependencyManagement>-->
 
     <dependencies>
@@ -75,12 +75,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.0.1</version>
+            <scope>test</scope>
         </dependency>
-
         <!--&lt;!&ndash; Spring MVC &ndash;&gt;-->
         <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-webmvc</artifactId>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-webmvc</artifactId>-->
         <!--</dependency>-->
 
     </dependencies>
