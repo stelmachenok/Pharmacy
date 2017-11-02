@@ -1,4 +1,5 @@
 package by.samsolution.pharmacy.servlet;
+
 import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
@@ -7,13 +8,15 @@ import by.samsolution.pharmacy.service.Service;
 import org.slf4j.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAppServletContextListener implements ServletContextListener{
+public class MyAppServletContextListener implements ServletContextListener {
 
     private static Logger logger = LoggerFactory.getLogger(MyAppServletContextListener.class);
 
@@ -39,8 +42,7 @@ public class MyAppServletContextListener implements ServletContextListener{
         medicaments.add(new Medicament("АДАПТОЛ", "Мебикар", 500.0, PackingForm.TABLET, "Мебикар", ReleaseForm.WITHOUT_RECIPE));
 
 
-        String path = arg0.getServletContext().getInitParameter("contextConfigLocation");
-        ApplicationContext context = new ClassPathXmlApplicationContext(path);
+        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(arg0.getServletContext());
         arg0.getServletContext().setAttribute("context", context);
         Service service = (Service) context.getBean("Service");
         for (Medicament medicament : medicaments) {
