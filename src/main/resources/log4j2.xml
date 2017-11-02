@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <File name="FileAppender" fileName="log4j.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+    </Appenders>
+
+
+
+    <Loggers>
+        <Logger name= "FileLogger" level="debug" additivity="true">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name= "ConsoleLogger" level="debug" additivity="true">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+
+
+        <!-- Root Logger -->
+        <Root level="all">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+
+
+</Configuration>

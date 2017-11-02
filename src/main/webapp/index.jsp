@@ -39,7 +39,7 @@ ${internationalNonproprietaryName}
 <br>
 ${releaseForm}
 <br>
-<b>ID</b>
+<b>id</b>
 <br>
 ${GUID}
 <br>

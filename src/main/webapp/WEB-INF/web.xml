@@ -9,12 +9,12 @@
 
     <servlet>
         <servlet-name>myServlet</servlet-name>
-        <servlet-class>by.samsolution.pharmacy.servlets.MyServlet</servlet-class>
+        <servlet-class>by.samsolution.pharmacy.servlet.MyServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/s</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
@@ -23,7 +23,7 @@
 
     <listener>
         <listener-class>
-            by.samsolution.pharmacy.servlets.MyAppServletContextListener
+            by.samsolution.pharmacy.servlet.MyAppServletContextListener
         </listener-class>
     </listener>
 

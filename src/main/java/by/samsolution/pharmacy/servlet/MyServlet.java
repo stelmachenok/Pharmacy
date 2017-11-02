@@ -1,0 +1,61 @@
+package by.samsolution.pharmacy.servlet;
+
+import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.entity.PackingForm;
+import by.samsolution.pharmacy.entity.ReleaseForm;
+import by.samsolution.pharmacy.exception.PharmacyApplicationException;
+import by.samsolution.pharmacy.service.Service;
+import org.slf4j.*;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by y50-70 on 20.10.2017.
+ */
+public class MyServlet extends HttpServlet {
+
+    private static Logger logger = LoggerFactory.getLogger(MyServlet.class);
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        super.doPost(request, response);
+    }
+
+    @Override
+    public void init() throws ServletException {
+        List<Medicament> medicaments = new ArrayList<>();
+        medicaments.add(new Medicament("L-ОПТИК", "Левофлоксацин", 5.0, PackingForm.DROP, "Левофлоксацин", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("5-НОК", "Нитроксолин", 50.0, PackingForm.TABLET, "Нитроксолин", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АВЕЛОКС", "Моксифлоксацин", 400.0, PackingForm.TABLET, "Моксифлоксацин", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АВОДАРТ", "Дутастерид", 0.5, PackingForm.CAPSULE, "Дутастерид", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АВОДАРТ", "Дутастерид", 0.5, PackingForm.CAPSULE, "Дутастерид", ReleaseForm.WITHOUT_RECIPE));
+        medicaments.add(new Medicament("АДАПТОЛ", "Мебикар", 500.0, PackingForm.TABLET, "Мебикар", ReleaseForm.WITHOUT_RECIPE));
+
+        Service service = (Service) getServletContext().getAttribute("Service");
+        for (Medicament medicament : medicaments) {
+            try {
+                service.addMedicament(medicament);
+            } catch (PharmacyApplicationException e) {
+                logger.info(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Service service = (Service) getServletContext().getAttribute("Service");
+        service.getAllMedicaments().forEach(m->logger.info(String.valueOf(m)));
+
+    }
+}
