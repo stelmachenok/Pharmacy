@@ -20,6 +20,14 @@ public class MedicamentDAO implements InterfaceDAO<Medicament, Long, String> {
         ID = 0L;
     }
 
+    public void setStorage(Storage<Medicament> storage) {
+        this.storage = storage;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
+
     @Override
     public List<Medicament> getAll() {
         return storage.getItemList();

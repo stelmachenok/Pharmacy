@@ -6,6 +6,11 @@
 
     <display-name>Pharmacy</display-name>
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/Beans.xml</param-value>
+    </context-param>
+
 
     <servlet>
         <servlet-name>myServlet</servlet-name>

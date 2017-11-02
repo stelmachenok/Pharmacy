@@ -1,0 +1,10 @@
+<html>
+<body>
+## $foo - это переменная шаблона
+<ul>
+    #foreach( $medicament in $medicaments )
+        <li>$medicament</li>
+    #end
+</ul>
+</body>
+</html>

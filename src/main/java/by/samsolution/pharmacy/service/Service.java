@@ -23,10 +23,21 @@ public class Service {
     private static Logger logger = LoggerFactory.getLogger(Service.class);
 
     public Service() {
-
         medicamentDAO = new MedicamentDAO();
         categoryDAO = new MedicamentCategoryDAO();
         pharmacyDAO = new PharmacyDAO();
+    }
+
+    public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
+        this.medicamentDAO = medicamentDAO;
+    }
+
+    public void setCategoryDAO(MedicamentCategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
+    }
+
+    public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
+        this.pharmacyDAO = pharmacyDAO;
     }
 
     public void addMedicament(Medicament medicament) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
@@ -62,7 +73,7 @@ public class Service {
 
     public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistEsception {
         MedicamentCategory existedCategory = categoryDAO.getEntityByName(category.getCategoryName());
-        if (!equalsCathegory(category, existedCategory)) {
+        if (!equalsCategory(category, existedCategory)) {
             categoryDAO.create(category);
         } else {
             throw new EntityAlreadyExistEsception("Category " + existedCategory + " already exist!");
@@ -149,7 +160,7 @@ public class Service {
                 pharmacy.getAddress().equals(pharmacy2.getAddress());
     }
 
-    private boolean equalsCathegory(MedicamentCategory category, MedicamentCategory category2) {
+    private boolean equalsCategory(MedicamentCategory category, MedicamentCategory category2) {
         return category != null && category2 != null &&
                 category.getCategoryName().equals(category2.getCategoryName()) &&
                 category.getDescription().equals(category2.getDescription());
