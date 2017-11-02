@@ -62,7 +62,7 @@ public class Service {
 
     public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistEsception {
         MedicamentCategory existedCategory = categoryDAO.getEntityByName(category.getCategoryName());
-        if (equalsCathegory(category, existedCategory)) {
+        if (!equalsCathegory(category, existedCategory)) {
             categoryDAO.create(category);
         } else {
             throw new EntityAlreadyExistEsception("Category " + existedCategory + " already exist!");
@@ -78,7 +78,7 @@ public class Service {
         }
     }
 
-    public void deleteMedicamentCategory(Medicament category) throws EntityNotFoundException {
+    public void deleteMedicamentCategory(MedicamentCategory category) throws EntityNotFoundException {
         MedicamentCategory existedCategory = categoryDAO.getEntityById(category.getId());
         if (existedCategory != null) {
             categoryDAO.delete(category.getId());
