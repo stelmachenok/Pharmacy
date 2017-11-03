@@ -3,9 +3,7 @@ package by.samsolution.pharmacy.service;
 import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
-import by.samsolution.pharmacy.entity.Medicament;
-import by.samsolution.pharmacy.entity.MedicamentCategory;
-import by.samsolution.pharmacy.entity.Pharmacy;
+import by.samsolution.pharmacy.entity.*;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistEsception;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
@@ -38,6 +36,24 @@ public class Service {
 
     public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
         this.pharmacyDAO = pharmacyDAO;
+    }
+
+    public void addMedicament(String string) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+        Medicament medicament = new Medicament();
+        string = string.trim();
+        String[] parameters = string.split(" ");
+        medicament.setBrandName(parameters[0]);
+        medicament.setActiveIngredient(parameters[1]);
+        try {
+
+            medicament.setDosage(Double.valueOf(parameters[2]));
+        }catch (NumberFormatException e){
+            throw new ObjectValidationFailedException("Incorrect dosage " + parameters[2], e);
+        }
+        medicament.setPackingForm(PackingForm.valueOf(parameters[3]));
+        medicament.setInternationalNonproprietaryName(parameters[4]);
+        medicament.setReleaseForm(ReleaseForm.valueOf(parameters[5]));
+        addMedicament(medicament);
     }
 
     public void addMedicament(Medicament medicament) throws EntityAlreadyExistEsception, ObjectValidationFailedException {

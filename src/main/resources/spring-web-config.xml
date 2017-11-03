@@ -21,6 +21,10 @@
         <property name="service" ref="Service"/>
     </bean>
 
+    <bean class="by.samsolution.pharmacy.controller.FormExecuteController" name="/formExecute*">
+        <property name="service" ref="Service"/>
+    </bean>
+
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
