@@ -28,6 +28,10 @@
     <mvc:annotation-driven  />
     <context:component-scan base-package="by.samsolution.pharmacy.controller" />
 
+    <bean class="by.samsolution.pharmacy.controller.FormExecuteController" name="/formExecute*">
+        <property name="service" ref="Service"/>
+    </bean>
+
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
