@@ -1,16 +1,11 @@
 package by.samsolution.pharmacy.controller;
 
 import java.io.IOException;
-import java.util.Map;
 
+import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
@@ -30,6 +25,7 @@ public class MyController implements org.springframework.web.servlet.mvc.Control
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ModelAndView mvc = new ModelAndView("medicaments");
         mvc.getModel().put("medicaments", service.getAllMedicaments());
+        mvc.getModel().put("medicament", new Medicament());
         return mvc;
     }
 

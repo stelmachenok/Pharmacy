@@ -4,7 +4,7 @@ import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
 import by.samsolution.pharmacy.entity.*;
-import by.samsolution.pharmacy.exception.EntityAlreadyExistEsception;
+import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import org.slf4j.*;
@@ -38,7 +38,7 @@ public class Service {
         this.pharmacyDAO = pharmacyDAO;
     }
 
-    public void addMedicament(String string) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    public void addMedicament(String string) throws EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament medicament = new Medicament();
         string = string.trim();
         String[] parameters = string.split(" ");
@@ -56,14 +56,14 @@ public class Service {
         addMedicament(medicament);
     }
 
-    public void addMedicament(Medicament medicament) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    public void addMedicament(Medicament medicament) throws EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament existedMedicament = medicamentDAO.getEntityByName(medicament.getBrandName());
         if (medicament.getDosage() < 0)
             throw new ObjectValidationFailedException("Incorrect dosage " + medicament.getDosage());
         if (!equalsMedicaments(existedMedicament, medicament)) {
             medicamentDAO.create(medicament);
         } else {
-            throw new EntityAlreadyExistEsception("Medicament " + existedMedicament + " already exist!");
+            throw new EntityAlreadyExistException("Medicament " + existedMedicament + " already exist!");
         }
     }
 
@@ -87,12 +87,12 @@ public class Service {
         }
     }
 
-    public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistEsception {
+    public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistException {
         MedicamentCategory existedCategory = categoryDAO.getEntityByName(category.getCategoryName());
         if (!equalsCategory(category, existedCategory)) {
             categoryDAO.create(category);
         } else {
-            throw new EntityAlreadyExistEsception("Category " + existedCategory + " already exist!");
+            throw new EntityAlreadyExistException("Category " + existedCategory + " already exist!");
         }
     }
 
@@ -115,7 +115,7 @@ public class Service {
     }
 
 
-    public void addPharmacy(Pharmacy pharmacy) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    public void addPharmacy(Pharmacy pharmacy) throws EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy existedPharmacy = pharmacyDAO.getEntityByName(pharmacy.getPharmacyName());
         Pattern mobilePhonePattern = Pattern.compile("\\+375-(\\d){2}-((\\d){3})-(\\d){2}-(\\d){2}");
         Pattern homePhonePattern = Pattern.compile("8\\s(\\d){3}\\s((\\d){3})-(\\d){2}-(\\d){2}");
@@ -127,7 +127,7 @@ public class Service {
         if (!equalsPharmacies(pharmacy, existedPharmacy)) {
             pharmacyDAO.create(pharmacy);
         } else {
-            throw new EntityAlreadyExistEsception("Pharmacy " + existedPharmacy + " already exist!");
+            throw new EntityAlreadyExistException("Pharmacy " + existedPharmacy + " already exist!");
         }
     }
 

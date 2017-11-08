@@ -1,5 +1,5 @@
 import by.samsolution.pharmacy.entity.Pharmacy;
-import by.samsolution.pharmacy.exception.EntityAlreadyExistEsception;
+import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
@@ -17,40 +17,40 @@ public class ServicePharmacyManipulationTest {
     }
 
     @Test
-    void addOnePharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addOnePharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addPharmacy(new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1"));
     }
 
     @Test
-    void addTwoDiffPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addTwoDiffPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addPharmacy(new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1"));
         service.addPharmacy(new Pharmacy("Аптека № 17", "улица Филимонова 119, Минск", "Атрошенко", "8 017 210-07-72", "atroshenko", "12345", "2"));
     }
 
     @Test
-    void addTwoSamePharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addTwoSamePharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addPharmacy(new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1"));
-        assertThrows(EntityAlreadyExistEsception.class, () -> {
+        assertThrows(EntityAlreadyExistException.class, () -> {
             service.addPharmacy(new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1"));
         });
     }
 
     @Test
-    void addIncorrectNumberPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addIncorrectNumberPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         assertThrows(ObjectValidationFailedException.class, ()->{
             service.addPharmacy(new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "eight zero one seven 210-07-72", "tabina", "qwerty", "1"));
         });
     }
 
     @Test
-    void deleteExistedPharmacy() throws EntityNotFoundException, EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void deleteExistedPharmacy() throws EntityNotFoundException, EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy pharmacy = new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1");
         service.addPharmacy(pharmacy);
         service.deletePharmacy(pharmacy);
     }
 
     @Test
-    void deleteNonexistentPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void deleteNonexistentPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy pharmacy = new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1");
         Pharmacy pharmacy2 = new Pharmacy("Аптека № 17", "улица Филимонова 119, Минск", "Атрошенко", "8 017 210-07-72", "atroshenko", "12345", "2");
         service.addPharmacy(pharmacy);
@@ -60,7 +60,7 @@ public class ServicePharmacyManipulationTest {
     }
 
     @Test
-    void updateExistedPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException, EntityNotFoundException {
+    void updateExistedPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException, EntityNotFoundException {
         Pharmacy pharmacy = new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1");
         service.addPharmacy(pharmacy);
         pharmacy.setPharmacyName("Аптека №2");
@@ -68,7 +68,7 @@ public class ServicePharmacyManipulationTest {
     }
 
     @Test
-    void updateNonexistentPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void updateNonexistentPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy pharmacy = new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1");
         Pharmacy pharmacy2 = new Pharmacy("Аптека № 17", "улица Филимонова 119, Минск", "Атрошенко", "8 017 210-07-72", "atroshenko", "12345", "2");
         service.addPharmacy(pharmacy);
@@ -78,7 +78,7 @@ public class ServicePharmacyManipulationTest {
     }
 
     @Test
-    void updateIncorrectNumberPharmacy() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void updateIncorrectNumberPharmacy() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy pharmacy = new Pharmacy("Доктор До Аптека", "улица Филимонова 3/2, Минск", "Табина", "8 017 210-07-72", "tabina", "qwerty", "1");
         service.addPharmacy(pharmacy);
         pharmacy.setContactNumber("eight zero one seven 210-07-72");

@@ -1,7 +1,7 @@
 import by.samsolution.pharmacy.entity.Medicament;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
-import by.samsolution.pharmacy.exception.EntityAlreadyExistEsception;
+import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
@@ -19,40 +19,40 @@ public class ServiceMedicamentManipulationTest {
     }
 
     @Test
-    void addOneMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addOneMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addMedicament(new Medicament("L-ОПТИК", "Левофлоксацин", 5.0, PackingForm.DROP, "Левофлоксацин", ReleaseForm.WITHOUT_RECIPE));
     }
 
     @Test
-    void addTwoDiffMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addTwoDiffMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addMedicament(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
         service.addMedicament(new Medicament("L-ОПТИК", "Левофлоксацин", 5.0, PackingForm.DROP, "Левофлоксацин", ReleaseForm.WITHOUT_RECIPE));
     }
 
     @Test
-    void addTwoSameMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addTwoSameMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         service.addMedicament(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
-        assertThrows(EntityAlreadyExistEsception.class, () -> {
+        assertThrows(EntityAlreadyExistException.class, () -> {
             service.addMedicament(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
         });
     }
 
     @Test
-    void addNegativeDosageMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void addNegativeDosageMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         assertThrows(ObjectValidationFailedException.class, ()->{
             service.addMedicament(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", -50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
         });
     }
 
     @Test
-    void deleteExistedMedicament() throws EntityNotFoundException, EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void deleteExistedMedicament() throws EntityNotFoundException, EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament medicament = new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE);
         service.addMedicament(medicament);
         service.deleteMedicament(medicament);
     }
 
     @Test
-    void deleteNonexistentMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void deleteNonexistentMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament medicament = new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE);
         Medicament medicament2 = new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE);
         service.addMedicament(medicament);
@@ -62,7 +62,7 @@ public class ServiceMedicamentManipulationTest {
     }
 
     @Test
-    void updateExistedMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException, EntityNotFoundException {
+    void updateExistedMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException, EntityNotFoundException {
         Medicament medicament = new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE);
         service.addMedicament(medicament);
         medicament.setBrandName("ТИРОКСИН");
@@ -70,7 +70,7 @@ public class ServiceMedicamentManipulationTest {
     }
 
     @Test
-    void updateNonexistentMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void updateNonexistentMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament medicament = new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE);
         Medicament medicament2 = new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE);
         service.addMedicament(medicament);
@@ -80,7 +80,7 @@ public class ServiceMedicamentManipulationTest {
     }
 
     @Test
-    void updateNegativeDosageMedicament() throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    void updateNegativeDosageMedicament() throws EntityAlreadyExistException, ObjectValidationFailedException {
         Medicament medicament = new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE);
         service.addMedicament(medicament);
         medicament.setDosage(-50.0);

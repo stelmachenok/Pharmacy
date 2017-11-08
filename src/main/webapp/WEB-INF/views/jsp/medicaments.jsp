@@ -1,5 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 <html>
@@ -31,31 +33,31 @@
 
     <b>${exceptionText}</b>
 
-    <form action="/formExecute" method="GET">
+    <form:form method="POST" action="/formExecute" modelAttribute="medicament">
         <table border="0">
 
             <tr>
                 <td><b>Brand Name</b></td>
-                <td><input type="text" name="brandName"
-                           value="АВОДАРТ" size="70"/></td>
+                <td><form:input type="text" name="brandName"
+                           value="АВОДАРТ" size="70" path="brandName"/></td>
             </tr>
 
             <tr>
                 <td><b>Active Ingredient</b></td>
-                <td><input type="text" name="activeIngredient"
-                           value="Дутастерид" size="70"/></td>
+                <td><form:input type="text" name="activeIngredient"
+                           value="Дутастерид" size="70" path="activeIngredient"/></td>
             </tr>
 
             <tr>
                 <td><b>Dosage</b></td>
-                <td><input type="text" name="dosage"
-                           value="0.5" size="70"/></td>
+                <td><form:input type="text" name="dosage"
+                           value="0.5" size="70" path="dosage"/></td>
             </tr>
 
             <tr>
                 <td><b>Packing Form</b></td>
                 <td>
-                    <select name="packingForm">
+                    <form:select name="packingForm" path="packingForm">
                         <option value="CAPSULE">TABLET</option>
                         <option value="POWDER">POWDER</option>
                         <option value="TABLET">CAPSULE</option>
@@ -74,24 +76,24 @@
                         <option value="SYRUP">SYRUP</option>
                         <option value="POTION">POTION</option>
                         <option value="AEROSOL">AEROSOL</option>
-                    </select>
+                    </form:select>
                 </td>
             </tr>
 
             <tr>
                 <td><b>International Nonproprietary Name</b></td>
-                <td><input type="text" name="internationalNonproprietaryName"
-                           value="Дутастерид" size="70"/></td>
+                <td><form:input type="text" name="internationalNonproprietaryName"
+                           value="Дутастерид" size="70" path="internationalNonproprietaryName"/></td>
             </tr>
 
             <tr>
                 <td>Release Form</td>
                 <td>
-                    <select name="releaseForm">
+                    <form:select name="releaseForm" path="releaseForm">
                         <option value="WITHOUT_RECIPE">WITHOUT RECIPE</option>
                         <option value="USUAL_RECIPE">USUAL RECIPE</option>
                         <option value="PINK_RECIPE">PINK RECIPE</option>
-                    </select>
+                    </form:select>
                 </td>
             </tr>
 
@@ -99,7 +101,8 @@
                 <td colspan="2"><input type="submit" value="Submit"/></td>
             </tr>
         </table>
-    </form>
+        <%--<form:errors path="dosage"/>--%>
+    </form:form>
 </table>
 </body>
 </html>
