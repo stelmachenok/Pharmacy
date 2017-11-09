@@ -58,9 +58,9 @@
                 <td><b>Packing Form</b></td>
                 <td>
                     <form:select name="packingForm" path="packingForm">
-                        <option value="CAPSULE">TABLET</option>
+                        <option value="CAPSULE">CAPSULE</option>
                         <option value="POWDER">POWDER</option>
-                        <option value="TABLET">CAPSULE</option>
+                        <option value="TABLET">TABLET</option>
                         <option value="DRAGEES">DRAGEES</option>
                         <option value="GRANULE">GRANULE</option>
                         <option value="CARAMEL">CARAMEL</option>
@@ -101,7 +101,6 @@
                 <td colspan="2"><input type="submit" value="Submit"/></td>
             </tr>
         </table>
-        <%--<form:errors path="dosage"/>--%>
     </form:form>
 </table>
 </body>
