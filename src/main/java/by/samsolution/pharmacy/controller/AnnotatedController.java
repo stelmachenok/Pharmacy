@@ -1,6 +1,7 @@
 package by.samsolution.pharmacy.controller;
 
-import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.dto.MedicamentDto;
+import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
@@ -25,11 +26,12 @@ public class AnnotatedController {
 
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
-            @ModelAttribute("medicament") Medicament medicament,
+            @ModelAttribute("medicament") MedicamentDto medicamentDto,
             BindingResult result, ModelMap model) throws EntityAlreadyExistException, ObjectValidationFailedException {
+
         try {
-            service.addMedicament(medicament);
-        } catch (EntityAlreadyExistException | NumberFormatException | ObjectValidationFailedException e) {
+            service.addMedicament(medicamentDto);
+        } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
             model.addAttribute("exceptionText", e.getMessage());
         }
         model.addAttribute("medicaments", service.getAllMedicaments());
@@ -39,7 +41,7 @@ public class AnnotatedController {
     @RequestMapping(value = "/medicaments", method = RequestMethod.GET)
     public String showAddUserForm(Model model) {
         model.addAttribute("medicaments", service.getAllMedicaments());
-        model.addAttribute("medicament", new Medicament());
+        model.addAttribute("medicament", new MedicamentDto());
         return "medicaments";
     }
 }

@@ -1,32 +1,20 @@
 package by.samsolution.pharmacy.servlet;
 
-import by.samsolution.pharmacy.entity.Medicament;
-import by.samsolution.pharmacy.entity.PackingForm;
-import by.samsolution.pharmacy.entity.ReleaseForm;
-import by.samsolution.pharmacy.exception.PharmacyApplicationException;
 import by.samsolution.pharmacy.service.Service;
-import by.samsolution.pharmacy.storage.Storage;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.*;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by y50-70 on 20.10.2017.

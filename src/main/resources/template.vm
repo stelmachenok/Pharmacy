@@ -2,8 +2,8 @@
 <body>
 ## $foo - это переменная шаблона
 <ul>
-    #foreach( $medicament in $medicaments )
-        <li>$medicament</li>
+    #foreach( $medicamentEntity in $medicamentEntities )
+        <li>$medicamentEntity</li>
     #end
 </ul>
 </body>

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Tag Example</title>
+    <title>Medicaments</title>
 </head>
 
 <body>
@@ -20,14 +20,14 @@
         <td>Release Form</td>
     </tr>
 
-    <c:forEach items="${medicaments}" var="medicament">
+    <c:forEach items="${medicaments}" var="medicamentDto">
         <tr>
-            <td>${medicament.brandName}</td>
-            <td>${medicament.activeIngredient}</td>
-            <td>${medicament.dosage}</td>
-            <td>${medicament.packingForm}</td>
-            <td>${medicament.internationalNonproprietaryName}</td>
-            <td>${medicament.releaseForm}</td>
+            <td>${medicamentDto.brandName}</td>
+            <td>${medicamentDto.activeIngredient}</td>
+            <td>${medicamentDto.dosage}</td>
+            <td>${medicamentDto.packingForm}</td>
+            <td>${medicamentDto.internationalNonproprietaryName}</td>
+            <td>${medicamentDto.releaseForm}</td>
         </tr>
     </c:forEach>
 

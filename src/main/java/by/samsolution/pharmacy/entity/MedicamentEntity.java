@@ -1,11 +1,13 @@
 package by.samsolution.pharmacy.entity;
 
+import by.samsolution.pharmacy.dto.MedicamentDto;
+
 import java.util.UUID;
 
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class Medicament {
+public class MedicamentEntity {
     private String brandName;
     private String activeIngredient;
     private Double dosage;
@@ -15,11 +17,11 @@ public class Medicament {
     private final UUID guid;
     private Long id;
 
-    public Medicament() {
+    public MedicamentEntity() {
         this.guid = UUID.randomUUID();
     }
 
-    public Medicament(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
@@ -27,6 +29,21 @@ public class Medicament {
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
         this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentEntity(MedicamentDto medicamentDto){
+        this.brandName = medicamentDto.getBrandName();
+        this.activeIngredient = medicamentDto.getActiveIngredient();
+        this.dosage = Double.valueOf(medicamentDto.getDosage());
+        this.packingForm = medicamentDto.getPackingForm();
+        this.internationalNonproprietaryName = medicamentDto.getInternationalNonproprietaryName();
+        this.releaseForm = medicamentDto.getReleaseForm();
+        this.id = medicamentDto.getId();
+        this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentDto toDto(){
+        return new MedicamentDto(this);
     }
 
     public String getBrandName() {
@@ -92,7 +109,7 @@ public class Medicament {
 
     @Override
     public String toString() {
-        return "Medicament{" +
+        return "MedicamentEntity{" +
                 "brandName='" + brandName + '\'' +
                 ", activeIngredient='" + activeIngredient + '\'' +
                 ", dosage='" + dosage + '\'' +

@@ -7,7 +7,7 @@
 
     <bean id="MedicamentStorage" class="by.samsolution.pharmacy.storage.Storage">
         <property name="itemList">
-            <list value-type="by.samsolution.pharmacy.entity.Medicament">
+            <list value-type="by.samsolution.pharmacy.entity.MedicamentEntity">
             </list>
         </property>
     </bean>
