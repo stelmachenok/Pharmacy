@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class Pharmacy {
+public class Pharmacy extends BasicEntity{
     private String pharmacyName;
     private String address;
     private String pharmacistName;

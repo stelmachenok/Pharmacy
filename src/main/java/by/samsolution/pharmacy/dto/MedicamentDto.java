@@ -4,7 +4,7 @@ import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 
-public class MedicamentDto {
+public class MedicamentDto extends BasicDto{
     private String brandName;
     private String activeIngredient;
     private String dosage;

@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentCategory {
+public class MedicamentCategory extends BasicEntity{
     private String categoryName;
     private String description;
     private UUID guid;

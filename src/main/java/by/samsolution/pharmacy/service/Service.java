@@ -1,5 +1,6 @@
 package by.samsolution.pharmacy.service;
 
+import by.samsolution.pharmacy.converter.impl.MedicineConverter;
 import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
@@ -46,7 +47,8 @@ public class Service {
         if (!dosagePatternMatcher.matches()) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
-        MedicamentEntity medicamentEntity = medicamentDto.toEntity();
+        MedicineConverter converter  = new MedicineConverter();
+        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
         if (!equalsMedicaments(existedMedicamentEntity, medicamentEntity)) {
             medicamentDAO.create(medicamentEntity);
             medicamentDto.setId(medicamentEntity.getId());
@@ -62,7 +64,8 @@ public class Service {
         if (!dosagePatternMatcher.matches()) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
-        MedicamentEntity medicamentEntity = medicamentDto.toEntity();
+        MedicineConverter converter = new MedicineConverter();
+        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
         if (existedMedicamentEntity != null) {
             medicamentDAO.update(medicamentEntity);
         } else {
@@ -72,7 +75,8 @@ public class Service {
 
     public void deleteMedicament(MedicamentDto medicamentDto) throws EntityNotFoundException {
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
-        MedicamentEntity medicamentEntity = medicamentDto.toEntity();
+        MedicineConverter converter = new MedicineConverter();
+        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
         if (existedMedicamentEntity != null) {
             medicamentDAO.delete(medicamentEntity.getId());
         } else {

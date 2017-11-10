@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentEntity {
+public class MedicamentEntity extends BasicEntity{
     private String brandName;
     private String activeIngredient;
     private Double dosage;
