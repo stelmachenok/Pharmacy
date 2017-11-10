@@ -10,6 +10,7 @@ import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import org.slf4j.*;
+import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ public class Service {
     private MedicamentDAO medicamentDAO;
     private MedicamentCategoryDAO categoryDAO;
     private PharmacyDAO pharmacyDAO;
+    private MedicineConverter medicineConverter;
 
     private static Logger logger = LoggerFactory.getLogger(Service.class);
 
@@ -26,6 +28,7 @@ public class Service {
         medicamentDAO = new MedicamentDAO();
         categoryDAO = new MedicamentCategoryDAO();
         pharmacyDAO = new PharmacyDAO();
+        medicineConverter = new MedicineConverter();
     }
 
     public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
@@ -40,6 +43,10 @@ public class Service {
         this.pharmacyDAO = pharmacyDAO;
     }
 
+    public void setMedicineConverter(MedicineConverter medicineConverter) {
+        this.medicineConverter = medicineConverter;
+    }
+
     public void addMedicament(MedicamentDto medicamentDto) throws EntityAlreadyExistException, ObjectValidationFailedException {
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
         Pattern dosagePattern = Pattern.compile("(\\d)+.(\\d)+");
@@ -47,8 +54,7 @@ public class Service {
         if (!dosagePatternMatcher.matches()) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
-        MedicineConverter converter  = new MedicineConverter();
-        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
         if (!equalsMedicaments(existedMedicamentEntity, medicamentEntity)) {
             medicamentDAO.create(medicamentEntity);
             medicamentDto.setId(medicamentEntity.getId());
@@ -64,8 +70,7 @@ public class Service {
         if (!dosagePatternMatcher.matches()) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
-        MedicineConverter converter = new MedicineConverter();
-        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
         if (existedMedicamentEntity != null) {
             medicamentDAO.update(medicamentEntity);
         } else {
@@ -75,8 +80,7 @@ public class Service {
 
     public void deleteMedicament(MedicamentDto medicamentDto) throws EntityNotFoundException {
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
-        MedicineConverter converter = new MedicineConverter();
-        MedicamentEntity medicamentEntity = converter.dtoToEntity(medicamentDto);
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
         if (existedMedicamentEntity != null) {
             medicamentDAO.delete(medicamentEntity.getId());
         } else {

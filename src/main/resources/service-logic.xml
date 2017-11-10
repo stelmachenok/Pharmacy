@@ -41,10 +41,14 @@
         <property name="storage" ref="CategoryStorage"/>
     </bean>
 
+    <bean id="MedicineConverter" class="by.samsolution.pharmacy.converter.impl.MedicineConverter">
+    </bean>
+
     <bean id="Service" class="by.samsolution.pharmacy.service.Service">
         <property name="categoryDAO" ref="CategoryDAO"/>
         <property name="medicamentDAO" ref="MedicamentDAO"/>
         <property name="pharmacyDAO" ref="PharmacyDAO"/>
+        <property name="medicineConverter" ref="MedicineConverter"/>
     </bean>
 
 
