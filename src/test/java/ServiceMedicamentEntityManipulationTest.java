@@ -1,3 +1,7 @@
+import by.samsolution.pharmacy.converter.impl.MedicineConverter;
+import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
+import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
+import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
@@ -16,7 +20,7 @@ public class ServiceMedicamentEntityManipulationTest {
 
     @BeforeEach
     void serviceInit(){
-        service = new Service();
+        service = new Service(new MedicamentDAO(), new MedicamentCategoryDAO(), new PharmacyDAO(), new MedicineConverter());
     }
 
     @Test

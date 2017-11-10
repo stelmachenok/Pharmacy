@@ -23,19 +23,13 @@ public class Service {
 
     private static Logger logger = LoggerFactory.getLogger(Service.class);
 
-    public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
+    public Service() {
+    }
+
+    public Service(MedicamentDAO medicamentDAO, MedicamentCategoryDAO categoryDAO, PharmacyDAO pharmacyDAO, MedicineConverter medicineConverter) {
         this.medicamentDAO = medicamentDAO;
-    }
-
-    public void setCategoryDAO(MedicamentCategoryDAO categoryDAO) {
         this.categoryDAO = categoryDAO;
-    }
-
-    public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
         this.pharmacyDAO = pharmacyDAO;
-    }
-
-    public void setMedicineConverter(MedicineConverter medicineConverter) {
         this.medicineConverter = medicineConverter;
     }
 
@@ -172,6 +166,22 @@ public class Service {
         return category != null && category2 != null &&
                 category.getCategoryName().equals(category2.getCategoryName()) &&
                 category.getDescription().equals(category2.getDescription());
+    }
+
+    public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
+        this.medicamentDAO = medicamentDAO;
+    }
+
+    public void setCategoryDAO(MedicamentCategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
+    }
+
+    public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
+        this.pharmacyDAO = pharmacyDAO;
+    }
+
+    public void setMedicineConverter(MedicineConverter medicineConverter) {
+        this.medicineConverter = medicineConverter;
     }
 }
 

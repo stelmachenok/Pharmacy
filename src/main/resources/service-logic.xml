@@ -45,10 +45,10 @@
     </bean>
 
     <bean id="Service" class="by.samsolution.pharmacy.service.Service">
-        <property name="categoryDAO" ref="CategoryDAO"/>
-        <property name="medicamentDAO" ref="MedicamentDAO"/>
-        <property name="pharmacyDAO" ref="PharmacyDAO"/>
-        <property name="medicineConverter" ref="MedicineConverter"/>
+        <constructor-arg ref="CategoryDAO"/>
+        <constructor-arg ref="MedicamentDAO"/>
+        <constructor-arg ref="PharmacyDAO"/>
+        <constructor-arg ref="MedicineConverter"/>
     </bean>
 
 
