@@ -51,6 +51,10 @@
         <constructor-arg ref="MedicineConverter"/>
     </bean>
 
+    <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
+    </bean>
+
+
 
     <!--<bean id = "PharmacyDAO" class = "by.samsolution.pharmacy.dao.impl.PharmacyDAO">-->
     <!--<property name = "storage" ref="Storage"/>-->

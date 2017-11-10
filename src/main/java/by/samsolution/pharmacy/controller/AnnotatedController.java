@@ -1,10 +1,10 @@
 package by.samsolution.pharmacy.controller;
 
 import by.samsolution.pharmacy.dto.MedicamentDto;
-import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
+import by.samsolution.pharmacy.formvalidator.MedicamentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AnnotatedController {
 
     Service service;
+    MedicamentValidator medicamentValidator;
 
     @Autowired
-    public AnnotatedController(Service service){
+    public AnnotatedController(Service service, MedicamentValidator medicamentValidator) {
         this.service = service;
+        this.medicamentValidator = medicamentValidator;
     }
 
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
@@ -29,10 +31,9 @@ public class AnnotatedController {
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
             BindingResult result, ModelMap model) throws EntityAlreadyExistException, ObjectValidationFailedException {
 
-        try {
+        medicamentValidator.validate(medicamentDto, result);
+        if (!result.hasErrors()) {
             service.addMedicament(medicamentDto);
-        } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
-            model.addAttribute("exceptionText", e.getMessage());
         }
         model.addAttribute("medicaments", service.getAllMedicaments());
         return "medicaments";

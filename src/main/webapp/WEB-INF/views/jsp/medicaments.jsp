@@ -1,7 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 <html>
@@ -38,20 +38,41 @@
 
             <tr>
                 <td><b>Brand Name</b></td>
-                <td><form:input type="text" name="brandName"
-                           value="АВОДАРТ" size="70" path="brandName"/></td>
+                <td>
+                    <spring:bind path="brandName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" name="brandName"
+                                        value="АВОДАРТ" size="70" path="brandName" class="form-control"/>
+                            <form:errors path="brandName" class="control-label"/>
+                        </div>
+                    </spring:bind>
+                </td>
             </tr>
 
             <tr>
                 <td><b>Active Ingredient</b></td>
-                <td><form:input type="text" name="activeIngredient"
-                           value="Дутастерид" size="70" path="activeIngredient"/></td>
+                <td>
+                    <spring:bind path="activeIngredient">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" name="activeIngredient"
+                                        value="Дутастерид" size="70" path="activeIngredient" class="form-control"/>
+                            <form:errors path="activeIngredient" class="control-label"/>
+                        </div>
+                    </spring:bind>
+                </td>
             </tr>
 
             <tr>
                 <td><b>Dosage</b></td>
-                <td><form:input type="text" name="dosage"
-                           value="0.5" size="70" path="dosage"/></td>
+                <td>
+                    <spring:bind path="dosage">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" name="dosage"
+                                        value="0.5" size="70" path="dosage" class="form-control"/>
+                            <form:errors path="dosage" class="control-label"/>
+                        </div>
+                    </spring:bind>
+                </td>
             </tr>
 
             <tr>
@@ -82,8 +103,16 @@
 
             <tr>
                 <td><b>International Nonproprietary Name</b></td>
-                <td><form:input type="text" name="internationalNonproprietaryName"
-                           value="Дутастерид" size="70" path="internationalNonproprietaryName"/></td>
+                <td>
+                    <spring:bind path="internationalNonproprietaryName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" name="internationalNonproprietaryName"
+                                        value="Дутастерид" size="70" path="internationalNonproprietaryName"
+                                        class="form-control"/>
+                            <form:errors path="internationalNonproprietaryName" class="control-label"/>
+                        </div>
+                    </spring:bind>
+                </td>
             </tr>
 
             <tr>
