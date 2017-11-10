@@ -10,7 +10,6 @@ import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import org.slf4j.*;
-import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,13 +22,6 @@ public class Service {
     private MedicineConverter medicineConverter;
 
     private static Logger logger = LoggerFactory.getLogger(Service.class);
-
-    public Service() {
-        medicamentDAO = new MedicamentDAO();
-        categoryDAO = new MedicamentCategoryDAO();
-        pharmacyDAO = new PharmacyDAO();
-        medicineConverter = new MedicineConverter();
-    }
 
     public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
         this.medicamentDAO = medicamentDAO;
