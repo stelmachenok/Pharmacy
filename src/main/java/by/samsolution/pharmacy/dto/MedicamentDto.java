@@ -10,18 +10,11 @@ import javax.validation.constraints.NotNull;
 
 public class MedicamentDto extends BasicDto{
 
-    @NotNull
     private String brandName;
-    @NotNull
     private String activeIngredient;
-    @NotNull
-    @Min(0)
     private Double dosage;
-
     private PackingForm packingForm;
-    @NotNull
     private String internationalNonproprietaryName;
-
     private ReleaseForm releaseForm;
     private Long id;
 
