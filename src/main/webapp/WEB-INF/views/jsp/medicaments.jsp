@@ -41,9 +41,8 @@
                 <td>
                     <spring:bind path="brandName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" name="brandName"
-                                        value="АВОДАРТ" size="70" path="brandName" class="form-control"/>
-                            <form:errors path="brandName" class="control-label"/>
+                            <form:input type="text" value="АВОДАРТ" size="70" path="brandName"/>
+                            <form:errors path="brandName"/>
                         </div>
                     </spring:bind>
                 </td>
@@ -54,9 +53,8 @@
                 <td>
                     <spring:bind path="activeIngredient">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" name="activeIngredient"
-                                        value="Дутастерид" size="70" path="activeIngredient" class="form-control"/>
-                            <form:errors path="activeIngredient" class="control-label"/>
+                            <form:input type="text" value="Дутастерид" size="70" path="activeIngredient"/>
+                            <form:errors path="activeIngredient"/>
                         </div>
                     </spring:bind>
                 </td>
@@ -67,9 +65,8 @@
                 <td>
                     <spring:bind path="dosage">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" name="dosage"
-                                        value="0.5" size="70" path="dosage" class="form-control"/>
-                            <form:errors path="dosage" class="control-label"/>
+                            <form:input type="text" value="0.5" size="70" path="dosage"/>
+                            <form:errors path="dosage"/>
                         </div>
                     </spring:bind>
                 </td>
@@ -106,10 +103,8 @@
                 <td>
                     <spring:bind path="internationalNonproprietaryName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" name="internationalNonproprietaryName"
-                                        value="Дутастерид" size="70" path="internationalNonproprietaryName"
-                                        class="form-control"/>
-                            <form:errors path="internationalNonproprietaryName" class="control-label"/>
+                            <form:input type="text" value="Дутастерид" size="70" path="internationalNonproprietaryName"/>
+                            <form:errors path="internationalNonproprietaryName"/>
                         </div>
                     </spring:bind>
                 </td>
