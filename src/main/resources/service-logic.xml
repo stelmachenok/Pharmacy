@@ -51,24 +51,7 @@
         <constructor-arg ref="MedicineConverter"/>
     </bean>
 
-    <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
-    </bean>
-
-
-
-    <!--<bean id = "PharmacyDAO" class = "by.samsolution.pharmacy.dao.impl.PharmacyDAO">-->
-    <!--<property name = "storage" ref="Storage"/>-->
-
-    <!--<property name = "ID" value = "0"/>-->
-    <!--</bean>-->
-
-    <!--<bean id = "MedicamentCategoryDAO" class = "by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO">-->
-    <!--<property name = "storage" ref = "storage"/>-->
-    <!--<property name = "ID" value = "0"/>-->
-    <!--</bean>-->
-
-    <!--<bean id = "MedicamentDAO" class = "by.samsolution.pharmacy.dao.impl.MedicamentDAO">-->
-    <!--<property name = "message" value = "Hello World!"/>-->
+    <!--<bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">-->
     <!--</bean>-->
 
 </beans>

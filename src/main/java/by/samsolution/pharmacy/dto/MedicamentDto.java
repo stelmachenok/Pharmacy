@@ -3,18 +3,25 @@ package by.samsolution.pharmacy.dto;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
+import by.samsolution.pharmacy.formvalidator.Dosage;
+import by.samsolution.pharmacy.formvalidator.NotNullOrWhiteSpace;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class MedicamentDto extends BasicDto{
 
+public class MedicamentDto extends BasicDto {
+
+    @NotNullOrWhiteSpace
     private String brandName;
+    @NotNullOrWhiteSpace
     private String activeIngredient;
+    @Dosage
     private Double dosage;
+
     private PackingForm packingForm;
+    @NotNull
     private String internationalNonproprietaryName;
+
     private ReleaseForm releaseForm;
     private Long id;
 
@@ -22,6 +29,7 @@ public class MedicamentDto extends BasicDto{
     }
 
     public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
@@ -40,7 +48,7 @@ public class MedicamentDto extends BasicDto{
         this.id = medicamentEntity.getId();
     }
 
-    public MedicamentEntity toEntity(){
+    public MedicamentEntity toEntity() {
         return new MedicamentEntity(this);
     }
 

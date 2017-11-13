@@ -25,6 +25,7 @@
         </property>
     </bean>
 
+    <!--controller-->
     <mvc:annotation-driven  />
     <context:component-scan base-package="by.samsolution.pharmacy.controller" />
 

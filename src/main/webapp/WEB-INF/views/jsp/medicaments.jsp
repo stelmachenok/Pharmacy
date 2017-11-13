@@ -103,7 +103,8 @@
                 <td>
                     <spring:bind path="internationalNonproprietaryName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" value="Дутастерид" size="70" path="internationalNonproprietaryName"/>
+                            <form:input type="text" value="Дутастерид" size="70"
+                                        path="internationalNonproprietaryName"/>
                             <form:errors path="internationalNonproprietaryName"/>
                         </div>
                     </spring:bind>
