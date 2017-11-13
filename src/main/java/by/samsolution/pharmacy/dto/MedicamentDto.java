@@ -4,19 +4,31 @@ import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class MedicamentDto extends BasicDto{
+
+    @NotNull
     private String brandName;
+    @NotNull
     private String activeIngredient;
-    private String dosage;
+    @NotNull
+    @Min(0)
+    private Double dosage;
+
     private PackingForm packingForm;
+    @NotNull
     private String internationalNonproprietaryName;
+
     private ReleaseForm releaseForm;
     private Long id;
 
     public MedicamentDto() {
     }
 
-    public MedicamentDto(String brandName, String activeIngredient, String dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
@@ -28,7 +40,7 @@ public class MedicamentDto extends BasicDto{
     public MedicamentDto(MedicamentEntity medicamentEntity) {
         this.brandName = medicamentEntity.getBrandName();
         this.activeIngredient = medicamentEntity.getActiveIngredient();
-        this.dosage = String.valueOf(medicamentEntity.getDosage());
+        this.dosage = medicamentEntity.getDosage();
         this.packingForm = medicamentEntity.getPackingForm();
         this.internationalNonproprietaryName = medicamentEntity.getInternationalNonproprietaryName();
         this.releaseForm = medicamentEntity.getReleaseForm();
@@ -47,7 +59,7 @@ public class MedicamentDto extends BasicDto{
         return activeIngredient;
     }
 
-    public String getDosage() {
+    public Double getDosage() {
         return dosage;
     }
 
@@ -75,7 +87,7 @@ public class MedicamentDto extends BasicDto{
         this.activeIngredient = activeIngredient;
     }
 
-    public void setDosage(String dosage) {
+    public void setDosage(Double dosage) {
         this.dosage = dosage;
     }
 

@@ -11,7 +11,7 @@ public class MedicineConverter implements InterfaceConverter<MedicamentDto, Medi
         MedicamentDto dto = new MedicamentDto();
         dto.setBrandName(entity.getBrandName());
         dto.setActiveIngredient(entity.getActiveIngredient());
-        dto.setDosage(String.valueOf(entity.getDosage()));
+        dto.setDosage(entity.getDosage());
         dto.setPackingForm(entity.getPackingForm());
         dto.setInternationalNonproprietaryName(entity.getInternationalNonproprietaryName());
         dto.setReleaseForm(entity.getReleaseForm());
@@ -24,7 +24,7 @@ public class MedicineConverter implements InterfaceConverter<MedicamentDto, Medi
         MedicamentEntity entity = new MedicamentEntity();
         entity.setBrandName(dto.getBrandName());
         entity.setActiveIngredient(dto.getActiveIngredient());
-        entity.setDosage(Double.valueOf(dto.getDosage()));
+        entity.setDosage(dto.getDosage());
         entity.setPackingForm(dto.getPackingForm());
         entity.setInternationalNonproprietaryName(dto.getInternationalNonproprietaryName());
         entity.setReleaseForm(dto.getReleaseForm());

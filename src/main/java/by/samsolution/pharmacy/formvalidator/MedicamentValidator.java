@@ -5,9 +5,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MedicamentValidator implements Validator {
 
     @Override
@@ -25,10 +22,8 @@ public class MedicamentValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "internationalNonproprietaryName", "NotEmpty.medicament.internationalNonproprietaryName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "releaseForm", "NotEmpty.medicament.releaseForm");
 
-        Pattern dosagePattern = Pattern.compile("(\\d)+.(\\d)+");
-        Matcher dosagePatternMatcher = dosagePattern.matcher(medicamentDto.getDosage());
-        if (!dosagePatternMatcher.matches()) {
-            errors.rejectValue("dosage", "Pattern.medicament.badDosage");
+        if (medicamentDto.getDosage() != null && medicamentDto.getDosage() < 0) {
+            errors.rejectValue("dosage", "Pattern.medicament.negativeDosage");
         }
     }
 }
