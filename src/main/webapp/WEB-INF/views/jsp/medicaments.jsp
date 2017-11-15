@@ -1,23 +1,28 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page contentType="text/html;charset=utf-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Medicaments</title>
+    <title><spring:message code="title"/></title>
 </head>
 
 <body>
+<span style="float: right">
+    <a href="/medicaments?lang=en">en</a>
+    |
+    <a href="/medicaments?lang=ru">ru</a>
+</span>
 <table border="1" cellspacing="0" cellpadding="2">
     <tr>
-        <td>Brand Name</td>
-        <td>Active Ingredient</td>
-        <td>Dosage</td>
-        <td>Packing Form</td>
-        <td>International Nonproprietary Name</td>
-        <td>Release Form</td>
+        <td><spring:message code="label.brandName"/></td>
+        <td><spring:message code="label.activeIngredient"/></td>
+        <td><spring:message code="label.dosage"/></td>
+        <td><spring:message code="label.packingForm"/></td>
+        <td><spring:message code="label.internationalNonproprietaryName"/></td>
+        <td><spring:message code="label.releaseForm"/></td>
     </tr>
 
     <c:forEach items="${medicaments}" var="medicamentDto">
@@ -31,13 +36,11 @@
         </tr>
     </c:forEach>
 
-    <b>${exceptionText}</b>
-
     <form:form method="POST" action="/formExecute" modelAttribute="medicament">
         <table border="0">
 
             <tr>
-                <td><b>Brand Name</b></td>
+                <td><b><spring:message code="label.brandName"/></b></td>
                 <td>
                     <spring:bind path="brandName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -49,7 +52,7 @@
             </tr>
 
             <tr>
-                <td><b>Active Ingredient</b></td>
+                <td><b><spring:message code="label.activeIngredient"/></b></td>
                 <td>
                     <spring:bind path="activeIngredient">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -61,7 +64,7 @@
             </tr>
 
             <tr>
-                <td><b>Dosage</b></td>
+                <td><b><spring:message code="label.dosage"/></b></td>
                 <td>
                     <spring:bind path="dosage">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -73,7 +76,7 @@
             </tr>
 
             <tr>
-                <td><b>Packing Form</b></td>
+                <td><b><spring:message code="label.packingForm"/></b></td>
                 <td>
                     <form:select name="packingForm" path="packingForm">
                         <option value="CAPSULE">CAPSULE</option>
@@ -99,11 +102,12 @@
             </tr>
 
             <tr>
-                <td><b>International Nonproprietary Name</b></td>
+                <td><b><spring:message code="label.internationalNonproprietaryName"/></b></td>
                 <td>
                     <spring:bind path="internationalNonproprietaryName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" value="Дутастерид" size="70" path="internationalNonproprietaryName"/>
+                            <form:input type="text" value="Дутастерид" size="70"
+                                        path="internationalNonproprietaryName"/>
                             <form:errors path="internationalNonproprietaryName"/>
                         </div>
                     </spring:bind>
@@ -111,7 +115,7 @@
             </tr>
 
             <tr>
-                <td>Release Form</td>
+                <td><spring:message code="label.releaseForm"/></td>
                 <td>
                     <form:select name="releaseForm" path="releaseForm">
                         <option value="WITHOUT_RECIPE">WITHOUT RECIPE</option>
@@ -127,5 +131,6 @@
         </table>
     </form:form>
 </table>
+<b>${exceptionText}</b>
 </body>
 </html>

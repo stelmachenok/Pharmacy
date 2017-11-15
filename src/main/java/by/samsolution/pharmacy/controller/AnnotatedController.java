@@ -5,6 +5,9 @@ import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
 import by.samsolution.pharmacy.formvalidator.MedicamentValidator;
+import by.samsolution.pharmacy.servlet.MyAppServletContextListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +22,7 @@ public class AnnotatedController {
 
     Service service;
     MedicamentValidator medicamentValidator;
+    private static Logger logger = LoggerFactory.getLogger(MyAppServletContextListener.class);
 
     @Autowired
     public AnnotatedController(Service service, MedicamentValidator medicamentValidator) {
@@ -29,11 +33,17 @@ public class AnnotatedController {
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
-            BindingResult result, ModelMap model) throws EntityAlreadyExistException, ObjectValidationFailedException {
+            BindingResult result, ModelMap model){
 
         medicamentValidator.validate(medicamentDto, result);
         if (!result.hasErrors()) {
-            service.addMedicament(medicamentDto);
+            try {
+                service.addMedicament(medicamentDto);
+                logger.info("Medicament " + medicamentDto + " pushed successfully");
+            } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
+                model.addAttribute("exceptionText", e.getMessage());
+                logger.error(e.getMessage());
+            }
         }
         model.addAttribute("medicaments", service.getAllMedicaments());
         return "medicaments";
