@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AnnotatedController {
@@ -30,10 +31,15 @@ public class AnnotatedController {
         this.medicamentValidator = medicamentValidator;
     }
 
+    @RequestMapping("/")
+    public String home() {
+        return "welcome";
+    }
+
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
-            BindingResult result, ModelMap model){
+            BindingResult result, ModelMap model) {
 
         medicamentValidator.validate(medicamentDto, result);
         if (!result.hasErrors()) {
@@ -43,7 +49,10 @@ public class AnnotatedController {
             } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
+                model.addAttribute("medicaments", service.getAllMedicaments());
+                return "medicaments";
             }
+            return "redirect:/medicaments";
         }
         model.addAttribute("medicaments", service.getAllMedicaments());
         return "medicaments";

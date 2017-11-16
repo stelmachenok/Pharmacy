@@ -2,18 +2,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="title"/></title>
+    <title><spring:message code="title.medicaments"/></title>
 </head>
 
 <body>
 <span style="float: right">
-    <a href="/medicaments?lang=en">en</a>
+    <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?lang=en">en</a>
     |
-    <a href="/medicaments?lang=ru">ru</a>
+    <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?lang=ru">ru</a>
 </span>
 <table border="1" cellspacing="0" cellpadding="2">
     <tr>
@@ -36,7 +36,18 @@
         </tr>
     </c:forEach>
 
-    <form:form method="POST" action="/formExecute" modelAttribute="medicament">
+    <table border="0" cellspacing="0" cellpadding="2">
+    <c:forEach var="i" begin="1" end="2">
+        <tr>
+            <td>
+                <a href="<%= pageContext.getServletContext().getContextPath() %>?pageNum=${i}&page-size="> page #i</a>
+            </td>
+        </tr>
+    </c:forEach>
+
+
+    <c:url var="post_url" value="/formExecute"/>
+    <form:form method="POST" modelAttribute="medicament" action="${post_url}">
         <table border="0">
 
             <tr>
