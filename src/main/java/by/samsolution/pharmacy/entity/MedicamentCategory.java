@@ -5,17 +5,20 @@ import java.util.UUID;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentCategory {
+public class MedicamentCategory extends BasicEntity{
     private String categoryName;
     private String description;
-    private UUID ID;
+    private UUID guid;
+    private Long id;
 
     public MedicamentCategory(){
-        this.ID = UUID.randomUUID();
+        this.guid = UUID.randomUUID();
     }
 
-    public UUID getID() {
-        return ID;
+    public MedicamentCategory(String categoryName, String description) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.guid = UUID.randomUUID();
     }
 
     public String getCategoryName() {
@@ -24,6 +27,18 @@ public class MedicamentCategory {
 
     public String getDescription() {
         return description;
+    }
+
+    public java.util.UUID getGuid() {
+        return guid;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setCategoryName(String categoryName) {

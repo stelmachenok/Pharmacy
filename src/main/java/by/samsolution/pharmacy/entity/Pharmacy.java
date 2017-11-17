@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class Pharmacy {
+public class Pharmacy extends BasicEntity{
     private String pharmacyName;
     private String address;
     private String pharmacistName;
@@ -13,10 +13,34 @@ public class Pharmacy {
     private String login;
     private String password;
     private String category;
-    private UUID ID;
+    private UUID uuid;
+    private Long id;
 
-    public UUID getID() {
-        return ID;
+    public Pharmacy() {
+        uuid = UUID.randomUUID();
+    }
+
+    public Pharmacy(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, String category) {
+        this.pharmacyName = pharmacyName;
+        this.address = address;
+        this.pharmacistName = pharmacistName;
+        this.contactNumber = contactNumber;
+        this.login = login;
+        this.password = password;
+        this.category = category;
+        uuid = UUID.randomUUID();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public void setPharmacyName(String pharmacyName) {

@@ -1,31 +1,49 @@
 package by.samsolution.pharmacy.entity;
 
+import by.samsolution.pharmacy.dto.MedicamentDto;
+
 import java.util.UUID;
 
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class Medicament {
+public class MedicamentEntity extends BasicEntity{
     private String brandName;
     private String activeIngredient;
-    private String dosage;
+    private Double dosage;
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
-    private final UUID GUID;
+    private final UUID guid;
+    private Long id;
 
-    public Medicament() {
-        this.GUID = UUID.randomUUID();
+    public MedicamentEntity() {
+        this.guid = UUID.randomUUID();
     }
 
-    public Medicament(String brandName, String activeIngredient, String dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
-        this.GUID = UUID.randomUUID();
+        this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentEntity(MedicamentDto medicamentDto){
+        this.brandName = medicamentDto.getBrandName();
+        this.activeIngredient = medicamentDto.getActiveIngredient();
+        this.dosage = Double.valueOf(medicamentDto.getDosage());
+        this.packingForm = medicamentDto.getPackingForm();
+        this.internationalNonproprietaryName = medicamentDto.getInternationalNonproprietaryName();
+        this.releaseForm = medicamentDto.getReleaseForm();
+        this.id = medicamentDto.getId();
+        this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentDto toDto(){
+        return new MedicamentDto(this);
     }
 
     public String getBrandName() {
@@ -36,7 +54,7 @@ public class Medicament {
         return activeIngredient;
     }
 
-    public String getDosage() {
+    public Double getDosage() {
         return dosage;
     }
 
@@ -52,8 +70,17 @@ public class Medicament {
         return releaseForm;
     }
 
-    public UUID getGUID() {
-        return GUID;
+    public UUID getGuid() {
+        return guid;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+
+        return id;
     }
 
     public void setBrandName(String brandName) {
@@ -64,7 +91,7 @@ public class Medicament {
         this.activeIngredient = activeIngredient;
     }
 
-    public void setDosage(String dosage) {
+    public void setDosage(Double dosage) {
         this.dosage = dosage;
     }
 
@@ -82,42 +109,14 @@ public class Medicament {
 
     @Override
     public String toString() {
-        return "Medicament{" +
+        return "MedicamentEntity{" +
                 "brandName='" + brandName + '\'' +
                 ", activeIngredient='" + activeIngredient + '\'' +
                 ", dosage='" + dosage + '\'' +
                 ", packingForm=" + packingForm +
                 ", internationalNonproprietaryName='" + internationalNonproprietaryName + '\'' +
                 ", releaseForm=" + releaseForm +
-                ", GUID=" + GUID +
+                ", guid=" + guid +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Medicament)) return false;
-
-        Medicament that = (Medicament) o;
-
-        if (brandName != null ? !brandName.equals(that.brandName) : that.brandName != null) return false;
-        if (activeIngredient != null ? !activeIngredient.equals(that.activeIngredient) : that.activeIngredient != null)
-            return false;
-        if (dosage != null ? !dosage.equals(that.dosage) : that.dosage != null) return false;
-        if (packingForm != that.packingForm) return false;
-        if (internationalNonproprietaryName != null ? !internationalNonproprietaryName.equals(that.internationalNonproprietaryName) : that.internationalNonproprietaryName != null)
-            return false;
-        return releaseForm == that.releaseForm;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = brandName != null ? brandName.hashCode() : 0;
-        result = 31 * result + (activeIngredient != null ? activeIngredient.hashCode() : 0);
-        result = 31 * result + (dosage != null ? dosage.hashCode() : 0);
-        result = 31 * result + (packingForm != null ? packingForm.hashCode() : 0);
-        result = 31 * result + (internationalNonproprietaryName != null ? internationalNonproprietaryName.hashCode() : 0);
-        result = 31 * result + (releaseForm != null ? releaseForm.hashCode() : 0);
-        return result;
     }
 }

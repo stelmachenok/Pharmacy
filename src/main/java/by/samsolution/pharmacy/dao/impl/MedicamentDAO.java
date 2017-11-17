@@ -1,100 +1,68 @@
 package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<Medicament, UUID, String> {
-    private Storage<Medicament> storage;
+public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, String> {
+    private Storage<MedicamentEntity> storage;
+    private Long ID;
 
     public MedicamentDAO() {
         storage = new Storage<>();
+        ID = 0L;
+    }
+
+    public void setStorage(Storage<MedicamentEntity> storage) {
+        this.storage = storage;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     @Override
-    public List<Medicament> getAll() {
+    public List<MedicamentEntity> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public Medicament getEntityById(UUID id) {
-        List<Medicament> medicaments = storage.getItemList();
-        Supplier<Stream<Medicament>> supplierStream =
-                () -> medicaments
-                        .stream()
-                        .filter((m) -> m.getGUID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream
-                    .get()
-                    .findFirst()
-                    .get();
-        } else {
-            return null;
-        }
+    public MedicamentEntity getEntityById(Long id) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        return medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public Medicament getEntityByName(String name) {
-        List<Medicament> medicaments = storage.getItemList();
-        Supplier<Stream<Medicament>> supplierStream =
-                () -> medicaments
-                        .stream()
-                        .filter((m) -> m.getGUID().equals(name));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            return supplierStream
-                    .get()
-                    .findFirst()
-                    .get();
-        } else {
-            return null;
-        }
+    public MedicamentEntity getEntityByName(String name) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        return medicamentEntities.stream().filter(m -> m.getBrandName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(Medicament entity) {
-        List<Medicament> medicaments = storage.getItemList();
-        Supplier<Stream<Medicament>> supplierStream =
-                () -> medicaments
-                        .stream()
-                        .filter((m) -> m.getGUID().equals(entity.getGUID()));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            medicaments.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
-            medicaments.add(entity);
-        }
+    public void update(MedicamentEntity entity){
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentEntity);
+        medicamentEntities.add(entity);
     }
 
     @Override
-    public boolean delete(UUID id) {
-        List<Medicament> medicaments = storage.getItemList();
-        Supplier<Stream<Medicament>> supplierStream =
-                () -> medicaments
-                        .stream()
-                        .filter((m) -> m.getGUID().equals(id));
-        if (supplierStream.get().anyMatch(s -> true)) {
-            medicaments.remove(supplierStream
-                    .get()
-                    .findFirst()
-                    .get());
-            return true;
-        } else {
-            return false;
-        }
+    public void delete(Long id) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentEntity);
     }
 
     @Override
-    public void create(Medicament entity) {
-        List<Medicament> medicaments = storage.getItemList();
-        medicaments.add(entity);
+    public void create(MedicamentEntity entity) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        entity.setId(ID);
+        ID++;
+        medicamentEntities.add(entity);
     }
 }
