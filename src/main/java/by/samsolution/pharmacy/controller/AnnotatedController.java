@@ -36,6 +36,21 @@ public class AnnotatedController {
         return "welcome";
     }
 
+    @RequestMapping("/pharmacies")
+    public String pharmacies() {
+        return "pharmacies";
+    }
+
+    @RequestMapping("/categories")
+    public String categories() {
+        return "categories";
+    }
+
+    @RequestMapping("/availabilityOfDrugs")
+    public String availabilityOfDrugs() {
+        return "availabilityOfDrugs";
+    }
+
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,

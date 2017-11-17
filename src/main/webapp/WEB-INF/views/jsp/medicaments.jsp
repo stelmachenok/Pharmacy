@@ -36,14 +36,14 @@
         </tr>
     </c:forEach>
 
-    <table border="0" cellspacing="0" cellpadding="2">
-    <c:forEach var="i" begin="1" end="2">
-        <tr>
-            <td>
-                <a href="<%= pageContext.getServletContext().getContextPath() %>?pageNum=${i}&page-size="> page #i</a>
-            </td>
-        </tr>
-    </c:forEach>
+    <%--<table border="0" cellspacing="0" cellpadding="2">--%>
+    <%--<c:forEach var="i" begin="1" end="2">--%>
+        <%--<tr>--%>
+            <%--<td>--%>
+                <%--<a href="<%= pageContext.getServletContext().getContextPath() %>?pageNum=${i}&page-size="> page #i</a>--%>
+            <%--</td>--%>
+        <%--</tr>--%>
+    <%--</c:forEach>--%>
 
 
     <c:url var="post_url" value="/formExecute"/>
