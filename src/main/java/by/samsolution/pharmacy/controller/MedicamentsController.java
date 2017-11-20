@@ -5,7 +5,6 @@ import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.service.Service;
 import by.samsolution.pharmacy.formvalidator.MedicamentValidator;
-import by.samsolution.pharmacy.servlet.MyAppServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class AnnotatedController {
+public class MedicamentsController {
 
     Service service;
     MedicamentValidator medicamentValidator;
-    private static Logger logger = LoggerFactory.getLogger(MyAppServletContextListener.class);
+    private static Logger logger = LoggerFactory.getLogger(MedicamentsController.class);
 
     @Autowired
-    public AnnotatedController(Service service, MedicamentValidator medicamentValidator) {
+    public MedicamentsController(Service service, MedicamentValidator medicamentValidator) {
         this.service = service;
         this.medicamentValidator = medicamentValidator;
     }
@@ -33,21 +32,6 @@ public class AnnotatedController {
     @RequestMapping("/")
     public String home() {
         return "welcome";
-    }
-
-    @RequestMapping("/pharmacies")
-    public String pharmacies() {
-        return "pharmacies";
-    }
-
-    @RequestMapping("/categories")
-    public String categories() {
-        return "categories";
-    }
-
-    @RequestMapping("/availabilityOfDrugs")
-    public String availabilityOfDrugs() {
-        return "availabilityOfDrugs";
     }
 
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
@@ -65,13 +49,12 @@ public class AnnotatedController {
             } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
-                addAllAttribute(pageNum, pageSize, model);
+                addAllAttributes(pageNum, pageSize, model);
                 return "medicaments";
             }
             return "redirect:/medicaments?page-num=" + pageNum + "&page-size=" + pageSize;
-        }
-        else {
-            addAllAttribute(pageNum, pageSize, model);
+        } else {
+            addAllAttributes(pageNum, pageSize, model);
             return "medicaments";
         }
     }
@@ -80,12 +63,12 @@ public class AnnotatedController {
     public String showAddUserForm(ModelMap model,
                                   @RequestParam(value = "page-num", required = false) Integer pageNum,
                                   @RequestParam(value = "page-size", required = false) Integer pageSize) {
-        addAllAttribute(pageNum, pageSize, model);
+        addAllAttributes(pageNum, pageSize, model);
         model.addAttribute("medicament", new MedicamentDto());
         return "medicaments";
     }
 
-    private void addAllAttribute(Integer pageNum, Integer pageSize, ModelMap model){
+    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model) {
         if (pageNum == null)
             pageNum = 1;
         if (pageSize == null)
