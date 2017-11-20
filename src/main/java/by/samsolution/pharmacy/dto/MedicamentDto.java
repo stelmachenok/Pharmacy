@@ -30,20 +30,6 @@ public class MedicamentDto extends BasicDto{
         this.releaseForm = releaseForm;
     }
 
-    public MedicamentDto(MedicamentEntity medicamentEntity) {
-        this.brandName = medicamentEntity.getBrandName();
-        this.activeIngredient = medicamentEntity.getActiveIngredient();
-        this.dosage = medicamentEntity.getDosage();
-        this.packingForm = medicamentEntity.getPackingForm();
-        this.internationalNonproprietaryName = medicamentEntity.getInternationalNonproprietaryName();
-        this.releaseForm = medicamentEntity.getReleaseForm();
-        this.id = medicamentEntity.getId();
-    }
-
-    public MedicamentEntity toEntity(){
-        return new MedicamentEntity(this);
-    }
-
     public String getBrandName() {
         return brandName;
     }

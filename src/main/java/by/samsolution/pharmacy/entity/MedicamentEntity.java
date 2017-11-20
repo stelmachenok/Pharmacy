@@ -31,21 +31,6 @@ public class MedicamentEntity extends BasicEntity{
         this.guid = UUID.randomUUID();
     }
 
-    public MedicamentEntity(MedicamentDto medicamentDto){
-        this.brandName = medicamentDto.getBrandName();
-        this.activeIngredient = medicamentDto.getActiveIngredient();
-        this.dosage = Double.valueOf(medicamentDto.getDosage());
-        this.packingForm = medicamentDto.getPackingForm();
-        this.internationalNonproprietaryName = medicamentDto.getInternationalNonproprietaryName();
-        this.releaseForm = medicamentDto.getReleaseForm();
-        this.id = medicamentDto.getId();
-        this.guid = UUID.randomUUID();
-    }
-
-    public MedicamentDto toDto(){
-        return new MedicamentDto(this);
-    }
-
     public String getBrandName() {
         return brandName;
     }

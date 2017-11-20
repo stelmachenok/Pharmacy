@@ -1,7 +1,7 @@
 package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.entity.MedicamentEntity;
+import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, String> {
-    private Storage<MedicamentEntity> storage;
+public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String> {
+    private Storage<MedicamentDto> storage;
     private Long ID;
 
     public MedicamentDAO() {
@@ -18,7 +18,7 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
         ID = 0L;
     }
 
-    public void setStorage(Storage<MedicamentEntity> storage) {
+    public void setStorage(Storage<MedicamentDto> storage) {
         this.storage = storage;
     }
 
@@ -27,40 +27,40 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
     }
 
     @Override
-    public List<MedicamentEntity> getAll() {
+    public List<MedicamentDto> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public MedicamentEntity getEntityById(Long id) {
-        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+    public MedicamentDto getEntityById(Long id) {
+        List<MedicamentDto> medicamentEntities = storage.getItemList();
         return medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public MedicamentEntity getEntityByName(String name) {
-        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+    public MedicamentDto getEntityByName(String name) {
+        List<MedicamentDto> medicamentEntities = storage.getItemList();
         return medicamentEntities.stream().filter(m -> m.getBrandName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(MedicamentEntity entity){
-        List<MedicamentEntity> medicamentEntities = storage.getItemList();
-        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        medicamentEntities.remove(existedMedicamentEntity);
+    public void update(MedicamentDto entity){
+        List<MedicamentDto> medicamentEntities = storage.getItemList();
+        MedicamentDto existedMedicamentDto = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentDto);
         medicamentEntities.add(entity);
     }
 
     @Override
     public void delete(Long id) {
-        List<MedicamentEntity> medicamentEntities = storage.getItemList();
-        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        medicamentEntities.remove(existedMedicamentEntity);
+        List<MedicamentDto> medicamentEntities = storage.getItemList();
+        MedicamentDto existedMedicamentDto = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentDto);
     }
 
     @Override
-    public void create(MedicamentEntity entity) {
-        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+    public void create(MedicamentDto entity) {
+        List<MedicamentDto> medicamentEntities = storage.getItemList();
         entity.setId(ID);
         ID++;
         medicamentEntities.add(entity);

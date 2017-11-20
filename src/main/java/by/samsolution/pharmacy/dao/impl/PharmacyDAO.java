@@ -1,18 +1,17 @@
 package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.entity.Pharmacy;
+import by.samsolution.pharmacy.dto.PharmacyDto;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String> {
-    private Storage<Pharmacy> storage;
+public class PharmacyDAO implements InterfaceDAO<PharmacyDto, Long, String> {
+    private Storage<PharmacyDto> storage;
     private Long ID;
 
     public PharmacyDAO() {
@@ -20,7 +19,7 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String> {
         ID = 0L;
     }
 
-    public void setStorage(Storage<Pharmacy> storage) {
+    public void setStorage(Storage<PharmacyDto> storage) {
         this.storage = storage;
     }
 
@@ -29,40 +28,40 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String> {
     }
 
     @Override
-    public List<Pharmacy> getAll() {
+    public List<PharmacyDto> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public Pharmacy getEntityById(Long id) {
-        List<Pharmacy> pharmacies = storage.getItemList();
+    public PharmacyDto getEntityById(Long id) {
+        List<PharmacyDto> pharmacies = storage.getItemList();
         return pharmacies.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public Pharmacy getEntityByName(String name) {
-        List<Pharmacy> pharmacies = storage.getItemList();
+    public PharmacyDto getEntityByName(String name) {
+        List<PharmacyDto> pharmacies = storage.getItemList();
         return pharmacies.stream().filter(m -> m.getPharmacyName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(Pharmacy entity) throws EntityNotFoundException {
-        List<Pharmacy> pharmacies = storage.getItemList();
-        Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        pharmacies.remove(existedPharmacy);
+    public void update(PharmacyDto entity) throws EntityNotFoundException {
+        List<PharmacyDto> pharmacies = storage.getItemList();
+        PharmacyDto existedPharmacyDto = pharmacies.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+        pharmacies.remove(existedPharmacyDto);
         pharmacies.add(entity);
     }
 
     @Override
     public void delete(Long id) throws EntityNotFoundException {
-        List<Pharmacy> pharmacies = storage.getItemList();
-        Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        pharmacies.remove(existedPharmacy);
+        List<PharmacyDto> pharmacies = storage.getItemList();
+        PharmacyDto existedPharmacyDto = pharmacies.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        pharmacies.remove(existedPharmacyDto);
     }
 
     @Override
-    public void create(Pharmacy entity) {
-        List<Pharmacy> pharmacies = storage.getItemList();
+    public void create(PharmacyDto entity) {
+        List<PharmacyDto> pharmacies = storage.getItemList();
         entity.setId(ID);
         ID++;
         pharmacies.add(entity);

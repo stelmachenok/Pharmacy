@@ -1,18 +1,16 @@
 package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.entity.MedicamentCategory;
-import by.samsolution.pharmacy.exception.EntityNotFoundException;
+import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, Long, String> {
-    private Storage<MedicamentCategory> storage;
+public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, String> {
+    private Storage<CategoryDto> storage;
     private Long ID;
 
     public MedicamentCategoryDAO() {
@@ -20,7 +18,7 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
         ID = 0L;
     }
 
-    public void setStorage(Storage<MedicamentCategory> storage) {
+    public void setStorage(Storage<CategoryDto> storage) {
         this.storage = storage;
     }
 
@@ -29,40 +27,40 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
-    public List<MedicamentCategory> getAll() {
+    public List<CategoryDto> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public MedicamentCategory getEntityById(Long id) {
-        List<MedicamentCategory> categories = storage.getItemList();
+    public CategoryDto getEntityById(Long id) {
+        List<CategoryDto> categories = storage.getItemList();
         return categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public MedicamentCategory getEntityByName(String name) {
-        List<MedicamentCategory> categories = storage.getItemList();
+    public CategoryDto getEntityByName(String name) {
+        List<CategoryDto> categories = storage.getItemList();
         return categories.stream().filter(m -> m.getCategoryName().equals(name)).findAny().orElse(null);
     }
 
     @Override
-    public void update(MedicamentCategory entity){
-        List<MedicamentCategory> categories = storage.getItemList();
-        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+    public void update(CategoryDto entity){
+        List<CategoryDto> categories = storage.getItemList();
+        CategoryDto existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
         categories.remove(existedCategory);
         categories.add(entity);
     }
 
     @Override
     public void delete(Long id){
-        List<MedicamentCategory> categories = storage.getItemList();
-        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        List<CategoryDto> categories = storage.getItemList();
+        CategoryDto existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         categories.remove(existedCategory);
     }
 
     @Override
-    public void create(MedicamentCategory entity) {
-        List<MedicamentCategory> categories = storage.getItemList();
+    public void create(CategoryDto entity) {
+        List<CategoryDto> categories = storage.getItemList();
         entity.setId(ID);
         ID++;
         categories.add(entity);
