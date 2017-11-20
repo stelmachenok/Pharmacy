@@ -40,6 +40,11 @@ public class MyAppServletContextListener implements ServletContextListener {
         medicamentDtos.add(new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, PackingForm.CAPSULE, "Дутастерид", ReleaseForm.WITHOUT_RECIPE));
         medicamentDtos.add(new MedicamentDto("АДАПТОЛ", "Мебикар", 500.0, PackingForm.TABLET, "Мебикар", ReleaseForm.WITHOUT_RECIPE));
 
+        medicamentDtos.add(new MedicamentDto("АЕВИТ", "Ретинол", 1.19, PackingForm.CAPSULE, "Ретинол", ReleaseForm.WITHOUT_RECIPE));
+        medicamentDtos.add(new MedicamentDto("АЕКОЛ", "Токоферол", 100.0, PackingForm.AEROSOL, "Токоферол", ReleaseForm.WITHOUT_RECIPE));
+        medicamentDtos.add(new MedicamentDto("АДВАНТАН", "Метилпреднизолона ацепонат", 20.0, PackingForm.EMULSION, "Метилпреднизолона ацепонат", ReleaseForm.WITHOUT_RECIPE));
+        medicamentDtos.add(new MedicamentDto("АДЕНИК", "Тамсулозин", 0.4, PackingForm.CAPSULE, "Тамсулозин", ReleaseForm.WITHOUT_RECIPE));
+        medicamentDtos.add(new MedicamentDto("АДИЦЕФ", "Цефдинир", 125.0, PackingForm.POWDER, "Цефдинир", ReleaseForm.WITHOUT_RECIPE));
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(arg0.getServletContext());
         arg0.getServletContext().setAttribute("context", context);

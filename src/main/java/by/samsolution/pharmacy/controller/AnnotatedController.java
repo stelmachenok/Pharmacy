@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -54,7 +53,9 @@ public class AnnotatedController {
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
-            BindingResult result, ModelMap model) {
+            BindingResult result, ModelMap model,
+            @RequestParam(value = "page-num", required = false) Integer pageNum,
+            @RequestParam(value = "page-size", required = false) Integer pageSize) {
 
         medicamentValidator.validate(medicamentDto, result);
         if (!result.hasErrors()) {
@@ -64,19 +65,40 @@ public class AnnotatedController {
             } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
-                model.addAttribute("medicaments", service.getAllMedicaments());
+                addAllAttribute(pageNum, pageSize, model);
                 return "medicaments";
             }
-            return "redirect:/medicaments";
+            return "redirect:/medicaments?page-num=" + pageNum + "&page-size=" + pageSize;
         }
-        model.addAttribute("medicaments", service.getAllMedicaments());
-        return "medicaments";
+        else {
+            addAllAttribute(pageNum, pageSize, model);
+            return "medicaments";
+        }
     }
 
     @RequestMapping(value = "/medicaments", method = RequestMethod.GET)
-    public String showAddUserForm(Model model) {
-        model.addAttribute("medicaments", service.getAllMedicaments());
+    public String showAddUserForm(ModelMap model,
+                                  @RequestParam(value = "page-num", required = false) Integer pageNum,
+                                  @RequestParam(value = "page-size", required = false) Integer pageSize) {
+        addAllAttribute(pageNum, pageSize, model);
         model.addAttribute("medicament", new MedicamentDto());
         return "medicaments";
+    }
+
+    private void addAllAttribute(Integer pageNum, Integer pageSize, ModelMap model){
+        if (pageNum == null)
+            pageNum = 1;
+        if (pageSize == null)
+            pageSize = 10;
+        int recordsCount = service.getAllMedicaments().size();
+        int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
+        int firstRecord = (pageNum - 1) * pageSize;
+        int lastRecord = (recordsCount - 1 < pageNum * pageSize - 1) ? recordsCount - 1 : pageNum * pageSize - 1;
+        model.addAttribute("pageNum", pageNum);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pagesCount", pagesCount);
+        model.addAttribute("firstRecord", firstRecord);
+        model.addAttribute("lastRecord", lastRecord);
+        model.addAttribute("medicaments", service.getAllMedicaments());
     }
 }
