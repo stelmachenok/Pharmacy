@@ -1,32 +1,47 @@
-package by.samsolution.pharmacy.entity;
+package by.samsolution.pharmacy.dto;
 
-import java.util.UUID;
+import by.samsolution.pharmacy.entity.MedicamentEntity;
+import by.samsolution.pharmacy.entity.PackingForm;
+import by.samsolution.pharmacy.entity.ReleaseForm;
 
-/**
- * Created by y50-70 on 20.10.2017.
- */
-public class Medicament {
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+public class MedicamentDto extends BasicDto{
+
     private String brandName;
     private String activeIngredient;
     private Double dosage;
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
-    private final UUID guid;
     private Long id;
 
-    public Medicament() {
-        this.guid = UUID.randomUUID();
+    public MedicamentDto() {
     }
 
-    public Medicament(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
-        this.guid = UUID.randomUUID();
+    }
+
+    public MedicamentDto(MedicamentEntity medicamentEntity) {
+        this.brandName = medicamentEntity.getBrandName();
+        this.activeIngredient = medicamentEntity.getActiveIngredient();
+        this.dosage = medicamentEntity.getDosage();
+        this.packingForm = medicamentEntity.getPackingForm();
+        this.internationalNonproprietaryName = medicamentEntity.getInternationalNonproprietaryName();
+        this.releaseForm = medicamentEntity.getReleaseForm();
+        this.id = medicamentEntity.getId();
+    }
+
+    public MedicamentEntity toEntity(){
+        return new MedicamentEntity(this);
     }
 
     public String getBrandName() {
@@ -53,16 +68,7 @@ public class Medicament {
         return releaseForm;
     }
 
-    public UUID getGuid() {
-        return guid;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
-
         return id;
     }
 
@@ -90,16 +96,20 @@ public class Medicament {
         this.releaseForm = releaseForm;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Medicament{" +
+        return "MedicamentDto{" +
                 "brandName='" + brandName + '\'' +
                 ", activeIngredient='" + activeIngredient + '\'' +
                 ", dosage='" + dosage + '\'' +
                 ", packingForm=" + packingForm +
                 ", internationalNonproprietaryName='" + internationalNonproprietaryName + '\'' +
                 ", releaseForm=" + releaseForm +
-                ", guid=" + guid +
+                ", id=" + id +
                 '}';
     }
 }

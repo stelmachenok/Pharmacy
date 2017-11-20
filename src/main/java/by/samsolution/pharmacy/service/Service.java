@@ -1,15 +1,18 @@
 package by.samsolution.pharmacy.service;
 
+import by.samsolution.pharmacy.converter.impl.MedicineConverter;
 import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
-import by.samsolution.pharmacy.entity.Medicament;
+import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
+import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.Pharmacy;
-import by.samsolution.pharmacy.exception.EntityAlreadyExistEsception;
+import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,53 +22,63 @@ public class Service {
     private MedicamentDAO medicamentDAO;
     private MedicamentCategoryDAO categoryDAO;
     private PharmacyDAO pharmacyDAO;
+    private MedicineConverter medicineConverter;
 
     private static Logger logger = LoggerFactory.getLogger(Service.class);
 
     public Service() {
-
-        medicamentDAO = new MedicamentDAO();
-        categoryDAO = new MedicamentCategoryDAO();
-        pharmacyDAO = new PharmacyDAO();
     }
 
-    public void addMedicament(Medicament medicament) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
-        Medicament existedMedicament = medicamentDAO.getEntityByName(medicament.getBrandName());
-        if (medicament.getDosage() < 0)
-            throw new ObjectValidationFailedException("Incorrect dosage " + medicament.getDosage());
-        if (!equalsMedicaments(existedMedicament, medicament)) {
-            medicamentDAO.create(medicament);
+    public Service(MedicamentDAO medicamentDAO, MedicamentCategoryDAO categoryDAO, PharmacyDAO pharmacyDAO, MedicineConverter medicineConverter) {
+        this.medicamentDAO = medicamentDAO;
+        this.categoryDAO = categoryDAO;
+        this.pharmacyDAO = pharmacyDAO;
+        this.medicineConverter = medicineConverter;
+    }
+
+    public void addMedicament(MedicamentDto medicamentDto) throws EntityAlreadyExistException, ObjectValidationFailedException {
+        MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
+        if (medicamentDto.getDosage() < 0) {
+            throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
+        }
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
+        if (!equalsMedicaments(existedMedicamentEntity, medicamentEntity)) {
+            medicamentDAO.create(medicamentEntity);
+            medicamentDto.setId(medicamentEntity.getId());
         } else {
-            throw new EntityAlreadyExistEsception("Medicament " + existedMedicament + " already exist!");
+            throw new EntityAlreadyExistException("MedicamentEntity " + existedMedicamentEntity + " already exist!");
         }
     }
 
-    public void updateMedicament(Medicament medicament) throws EntityNotFoundException, ObjectValidationFailedException {
-        Medicament existedMedicament = medicamentDAO.getEntityById(medicament.getId());
-        if (medicament.getDosage() < 0)
-            throw new ObjectValidationFailedException("Incorrect dosage " + medicament.getDosage());
-        if (existedMedicament != null) {
-            medicamentDAO.update(medicament);
+    public void updateMedicament(MedicamentDto medicamentDto) throws EntityNotFoundException, ObjectValidationFailedException {
+        MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
+        if (medicamentDto.getDosage() < 0) {
+            throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
+        }
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
+        if (existedMedicamentEntity != null) {
+            medicamentDAO.update(medicamentEntity);
         } else {
-            throw new EntityNotFoundException("Medicament " + medicament + " doesn't exist");
+            throw new EntityNotFoundException("MedicamentEntity " + medicamentDto + " doesn't exist");
         }
     }
 
-    public void deleteMedicament(Medicament medicament) throws EntityNotFoundException {
-        Medicament existedMedicament = medicamentDAO.getEntityById(medicament.getId());
-        if (existedMedicament != null) {
-            medicamentDAO.delete(medicament.getId());
+    public void deleteMedicament(MedicamentDto medicamentDto) throws EntityNotFoundException {
+        MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
+        MedicamentEntity medicamentEntity = medicineConverter.dtoToEntity(medicamentDto);
+        if (existedMedicamentEntity != null) {
+            medicamentDAO.delete(medicamentEntity.getId());
         } else {
-            throw new EntityNotFoundException("Medicament " + medicament + " doesn't exist");
+            throw new EntityNotFoundException("MedicamentEntity " + medicamentEntity + " doesn't exist");
         }
     }
 
-    public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistEsception {
+    public void addMedicamentCategory(MedicamentCategory category) throws EntityAlreadyExistException {
         MedicamentCategory existedCategory = categoryDAO.getEntityByName(category.getCategoryName());
-        if (!equalsCathegory(category, existedCategory)) {
+        if (!equalsCategory(category, existedCategory)) {
             categoryDAO.create(category);
         } else {
-            throw new EntityAlreadyExistEsception("Category " + existedCategory + " already exist!");
+            throw new EntityAlreadyExistException("Category " + existedCategory + " already exist!");
         }
     }
 
@@ -87,8 +100,7 @@ public class Service {
         }
     }
 
-
-    public void addPharmacy(Pharmacy pharmacy) throws EntityAlreadyExistEsception, ObjectValidationFailedException {
+    public void addPharmacy(Pharmacy pharmacy) throws EntityAlreadyExistException, ObjectValidationFailedException {
         Pharmacy existedPharmacy = pharmacyDAO.getEntityByName(pharmacy.getPharmacyName());
         Pattern mobilePhonePattern = Pattern.compile("\\+375-(\\d){2}-((\\d){3})-(\\d){2}-(\\d){2}");
         Pattern homePhonePattern = Pattern.compile("8\\s(\\d){3}\\s((\\d){3})-(\\d){2}-(\\d){2}");
@@ -100,7 +112,7 @@ public class Service {
         if (!equalsPharmacies(pharmacy, existedPharmacy)) {
             pharmacyDAO.create(pharmacy);
         } else {
-            throw new EntityAlreadyExistEsception("Pharmacy " + existedPharmacy + " already exist!");
+            throw new EntityAlreadyExistException("Pharmacy " + existedPharmacy + " already exist!");
         }
     }
 
@@ -129,18 +141,18 @@ public class Service {
         }
     }
 
-    public List<Medicament> getAllMedicaments() {
+    public List<MedicamentEntity> getAllMedicaments() {
         return medicamentDAO.getAll();
     }
 
-    private boolean equalsMedicaments(Medicament medicament, Medicament medicament2) {
-        return medicament != null && medicament2 != null &&
-                medicament.getBrandName().equals(medicament2.getBrandName()) &&
-                medicament.getActiveIngredient().equals(medicament2.getActiveIngredient()) &&
-                medicament.getDosage().equals(medicament2.getDosage()) &&
-                medicament.getPackingForm().equals(medicament2.getPackingForm()) &&
-                medicament.getInternationalNonproprietaryName().equals(medicament2.getInternationalNonproprietaryName()) &&
-                medicament.getReleaseForm().equals(medicament2.getReleaseForm());
+    private boolean equalsMedicaments(MedicamentEntity medicamentEntity, MedicamentEntity medicamentEntity2) {
+        return medicamentEntity != null && medicamentEntity2 != null &&
+                medicamentEntity.getBrandName().equals(medicamentEntity2.getBrandName()) &&
+                medicamentEntity.getActiveIngredient().equals(medicamentEntity2.getActiveIngredient()) &&
+                medicamentEntity.getDosage().equals(medicamentEntity2.getDosage()) &&
+                medicamentEntity.getPackingForm().equals(medicamentEntity2.getPackingForm()) &&
+                medicamentEntity.getInternationalNonproprietaryName().equals(medicamentEntity2.getInternationalNonproprietaryName()) &&
+                medicamentEntity.getReleaseForm().equals(medicamentEntity2.getReleaseForm());
     }
 
     private boolean equalsPharmacies(Pharmacy pharmacy, Pharmacy pharmacy2) {
@@ -149,10 +161,26 @@ public class Service {
                 pharmacy.getAddress().equals(pharmacy2.getAddress());
     }
 
-    private boolean equalsCathegory(MedicamentCategory category, MedicamentCategory category2) {
+    private boolean equalsCategory(MedicamentCategory category, MedicamentCategory category2) {
         return category != null && category2 != null &&
                 category.getCategoryName().equals(category2.getCategoryName()) &&
                 category.getDescription().equals(category2.getDescription());
+    }
+
+    public void setMedicamentDAO(MedicamentDAO medicamentDAO) {
+        this.medicamentDAO = medicamentDAO;
+    }
+
+    public void setCategoryDAO(MedicamentCategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
+    }
+
+    public void setPharmacyDAO(PharmacyDAO pharmacyDAO) {
+        this.pharmacyDAO = pharmacyDAO;
+    }
+
+    public void setMedicineConverter(MedicineConverter medicineConverter) {
+        this.medicineConverter = medicineConverter;
     }
 }
 

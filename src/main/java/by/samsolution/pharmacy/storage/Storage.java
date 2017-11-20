@@ -13,6 +13,10 @@ public class Storage<T>{
         itemList = new ArrayList<>();
     }
 
+    public void setItemList(List<T> itemList) {
+        this.itemList = itemList;
+    }
+
     public List<T> getItemList() {
         return itemList;
     }

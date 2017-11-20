@@ -20,6 +20,14 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
         ID = 0L;
     }
 
+    public void setStorage(Storage<MedicamentCategory> storage) {
+        this.storage = storage;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
+
     @Override
     public List<MedicamentCategory> getAll() {
         return storage.getItemList();

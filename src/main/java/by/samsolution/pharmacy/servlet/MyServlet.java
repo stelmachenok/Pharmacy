@@ -1,19 +1,20 @@
 package by.samsolution.pharmacy.servlet;
 
-import by.samsolution.pharmacy.entity.Medicament;
-import by.samsolution.pharmacy.entity.PackingForm;
-import by.samsolution.pharmacy.entity.ReleaseForm;
-import by.samsolution.pharmacy.exception.PharmacyApplicationException;
 import by.samsolution.pharmacy.service.Service;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.*;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintWriter;
 
 /**
  * Created by y50-70 on 20.10.2017.
@@ -28,34 +29,32 @@ public class MyServlet extends HttpServlet {
         super.doPost(request, response);
     }
 
-    @Override
-    public void init() throws ServletException {
-        List<Medicament> medicaments = new ArrayList<>();
-        medicaments.add(new Medicament("L-ОПТИК", "Левофлоксацин", 5.0, PackingForm.DROP, "Левофлоксацин", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("L-ТИРОКСИН", "Левотироксин натрия", 50.0, PackingForm.TABLET, "Левотироксин натрия", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("5-НОК", "Нитроксолин", 50.0, PackingForm.TABLET, "Нитроксолин", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АВАМИС", "Флутиказон", 27.5, PackingForm.AEROSOL, "Флутиказон", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АВЕЛОКС", "Моксифлоксацин", 400.0, PackingForm.TABLET, "Моксифлоксацин", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АВОДАРТ", "Дутастерид", 0.5, PackingForm.CAPSULE, "Дутастерид", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АВОДАРТ", "Дутастерид", 0.5, PackingForm.CAPSULE, "Дутастерид", ReleaseForm.WITHOUT_RECIPE));
-        medicaments.add(new Medicament("АДАПТОЛ", "Мебикар", 500.0, PackingForm.TABLET, "Мебикар", ReleaseForm.WITHOUT_RECIPE));
-
-        Service service = (Service) getServletContext().getAttribute("Service");
-        for (Medicament medicament : medicaments) {
-            try {
-                service.addMedicament(medicament);
-            } catch (PharmacyApplicationException e) {
-                logger.info(e.getMessage());
-            }
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Service service = (Service) getServletContext().getAttribute("Service");
-        service.getAllMedicaments().forEach(m->logger.info(String.valueOf(m)));
+
+        ApplicationContext context = (ApplicationContext) getServletContext().getAttribute("context");
+        Service service = (Service) context.getBean("Service");
+
+
+//        Service service = (Service) getServletContext().getAttribute("Service");
+        PrintWriter pw = response.getWriter();
+        VelocityEngine ve = new VelocityEngine();
+        ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        ve.init();
+
+        VelocityContext vc = new VelocityContext(); // создание контекста Velocity
+        vc.put("medicaments", service.getAllMedicaments()); // атрибут "name" связывается с именем переменной $foo в шаблоне и помещается в контекст
+
+        Template template = ve.getTemplate("/template.vm", "utf-8"); // загрузка шаблона с именем template.vm
+        template.merge(vc, pw); // метод merge() принимает набор данных в виде объекта "vc" и объект потока "bw"
+//        service.getAllMedicaments().forEach(m -> {
+//
+//            pw.write(m.toString());
+//            logger.info(String.valueOf(m));
+//        });
 
     }
 }
