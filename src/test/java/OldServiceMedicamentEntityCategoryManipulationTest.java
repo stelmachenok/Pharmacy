@@ -6,71 +6,71 @@ import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
-import by.samsolution.pharmacy.service.Service;
+import by.samsolution.pharmacy.service.OldService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ServiceMedicamentEntityCategoryManipulationTest {
-    Service service;
+public class OldServiceMedicamentEntityCategoryManipulationTest {
+    OldService oldService;
 
     @BeforeEach
     void serviceInit() {
-        service = new Service(new MedicamentDAO(), new MedicamentCategoryDAO(), new PharmacyDAO(), new MedicineConverter());
+        oldService = new OldService(new MedicamentDAO(), new MedicamentCategoryDAO(), new PharmacyDAO(), new MedicineConverter());
     }
 
     @Test
     void addOneMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException {
-        service.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
+        oldService.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
     }
 
     @Test
     void addTwoDiffMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException {
-        service.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
-        service.addMedicamentCategory(new CategoryDto("Категория B", "Описание 2"));
+        oldService.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
+        oldService.addMedicamentCategory(new CategoryDto("Категория B", "Описание 2"));
     }
 
     @Test
     void addTwoSameMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException {
-        service.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
+        oldService.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
         assertThrows(EntityAlreadyExistException.class, () -> {
-            service.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
+            oldService.addMedicamentCategory(new CategoryDto("Категория A", "Описание 1"));
         });
     }
 
     @Test
     void deleteExistedMedicamentCategory() throws EntityNotFoundException, EntityAlreadyExistException, ObjectValidationFailedException {
         CategoryDto category = new CategoryDto("Категория A", "Описание 1");
-        service.addMedicamentCategory(category);
-        service.deleteMedicamentCategory(category);
+        oldService.addMedicamentCategory(category);
+        oldService.deleteMedicamentCategory(category);
     }
 
     @Test
     void deleteNonexistentMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException {
         CategoryDto category = new CategoryDto("Категория A", "Описание 1");
         CategoryDto category2 = new CategoryDto("Категория B", "Описание 2");
-        service.addMedicamentCategory(category);
+        oldService.addMedicamentCategory(category);
         assertThrows(EntityNotFoundException.class, () -> {
-            service.deleteMedicamentCategory(category2);
+            oldService.deleteMedicamentCategory(category2);
         });
     }
 
     @Test
     void updateExistedMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException, EntityNotFoundException {
         CategoryDto category = new CategoryDto("Категория A", "Описание 1");
-        service.addMedicamentCategory(category);
+        oldService.addMedicamentCategory(category);
         category.setCategoryName("Категория B");
-        service.updateMedicamentCategory(category);
+        oldService.updateMedicamentCategory(category);
     }
 
     @Test
     void updateNonexistentMedicamentCategory() throws EntityAlreadyExistException, ObjectValidationFailedException {
         CategoryDto category = new CategoryDto("Категория A", "Описание 1");
         CategoryDto category2 = new CategoryDto("Категория B", "Описание 2");
-        service.addMedicamentCategory(category);
+        oldService.addMedicamentCategory(category);
         assertThrows(EntityNotFoundException.class, () -> {
-            service.updateMedicamentCategory(category2);
+            oldService.updateMedicamentCategory(category2);
         });
     }
 }

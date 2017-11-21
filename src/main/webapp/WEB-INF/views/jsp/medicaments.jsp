@@ -17,22 +17,50 @@
 </span>
 <table border="1" cellspacing="0" cellpadding="2">
     <tr>
-        <td><spring:message code="label.brandName"/></td>
-        <td><spring:message code="label.activeIngredient"/></td>
-        <td><spring:message code="label.dosage"/></td>
-        <td><spring:message code="label.packingForm"/></td>
-        <td><spring:message code="label.internationalNonproprietaryName"/></td>
-        <td><spring:message code="label.releaseForm"/></td>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=BRAND_NAME">
+            <spring:message code="label.brandName"/>
+        </a></th>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=ACTIVE_INGREDIENT">
+            <spring:message code="label.activeIngredient"/>
+        </a></th>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=DOSAGE">
+            <spring:message code="label.dosage"/>
+        </a></th>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=PACKING_FORM">
+            <spring:message code="label.packingForm"/>
+        </a></th>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=INTERNATIONAL_NONPROPRIENTARY_NAME">
+            <spring:message code="label.internationalNonproprietaryName"/>
+        </a></th>
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=RELEASE_FORM">
+            <spring:message code="label.releaseForm"/>
+        </a></th>
+
+        <th><spring:message code="title.edit"/></th>
+        <th><spring:message code="title.delete"/></th>
+
     </tr>
 
-    <c:forEach var="i" begin="${firstRecord}" end="${lastRecord}">
+    <c:forEach items="${medicaments}" var="medicament">
     <tr>
-        <td>${medicaments.get(i).brandName}</td>
-        <td>${medicaments.get(i).activeIngredient}</td>
-        <td>${medicaments.get(i).dosage}</td>
-        <td>${medicaments.get(i).packingForm}</td>
-        <td>${medicaments.get(i).internationalNonproprietaryName}</td>
-        <td>${medicaments.get(i).releaseForm}</td>
+        <td>${medicament.brandName}</td>
+        <td>${medicament.activeIngredient}</td>
+        <td>${medicament.dosage}</td>
+        <td>${medicament.packingForm}</td>
+        <td>${medicament.internationalNonproprietaryName}</td>
+        <td>${medicament.releaseForm}</td>
+
+        <td>
+            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?action=edit&id=${medicament.id}">
+                <spring:message code="title.edit"/>
+            </a>
+        </td>
+
+        <td>
+            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?action=delete&id=${medicament.id}">
+                <spring:message code="title.delete"/>
+            </a>
+        </td>
     </tr>
     </c:forEach>
 

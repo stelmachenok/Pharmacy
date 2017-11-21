@@ -1,11 +1,10 @@
 package by.samsolution.pharmacy.servlet;
 
 import by.samsolution.pharmacy.dto.MedicamentDto;
-import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 import by.samsolution.pharmacy.exception.PharmacyApplicationException;
-import by.samsolution.pharmacy.service.Service;
+import by.samsolution.pharmacy.service.MedicamentService;
 import org.slf4j.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -47,11 +46,10 @@ public class MyAppServletContextListener implements ServletContextListener {
         medicamentDtos.add(new MedicamentDto("АДИЦЕФ", "Цефдинир", 125.0, PackingForm.POWDER, "Цефдинир", ReleaseForm.WITHOUT_RECIPE));
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(arg0.getServletContext());
-        arg0.getServletContext().setAttribute("context", context);
-        Service service = (Service) context.getBean("Service");
+        MedicamentService medicamentService = context.getBean(MedicamentService.class);
         for (MedicamentDto medicamentDto : medicamentDtos) {
             try {
-                service.addMedicament(medicamentDto);
+                medicamentService.add(medicamentDto);
             } catch (PharmacyApplicationException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);

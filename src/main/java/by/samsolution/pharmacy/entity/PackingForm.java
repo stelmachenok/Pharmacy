@@ -1,6 +1,6 @@
 package by.samsolution.pharmacy.entity;
 
-public enum PackingForm {
+public enum PackingForm{
     TABLET, POWDER, CAPSULE, DRAGEES, GRANULE, CARAMEL, OINTMENT, CREAM, PASTE, GEL, SOLUTION, TINCTURE, SUSPENSION, EMULSION,
     DROP, SYRUP, POTION, AEROSOL;
 }

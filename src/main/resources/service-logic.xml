@@ -44,14 +44,14 @@
     <bean id="MedicineConverter" class="by.samsolution.pharmacy.converter.impl.MedicineConverter">
     </bean>
 
-    <bean id="Service" class="by.samsolution.pharmacy.service.Service">
-        <constructor-arg ref="CategoryDAO"/>
+    <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
-        <constructor-arg ref="PharmacyDAO"/>
-        <constructor-arg ref="MedicineConverter"/>
     </bean>
 
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
+    </bean>
+
+    <bean id="MedicamentsSearchRequest" class="by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest">
     </bean>
 
 </beans>
