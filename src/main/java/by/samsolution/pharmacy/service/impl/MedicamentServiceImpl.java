@@ -1,6 +1,5 @@
 package by.samsolution.pharmacy.service.impl;
 
-import by.samsolution.pharmacy.comparator.MedicamentBrandNameComparator;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
@@ -9,10 +8,7 @@ import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.service.MedicamentService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MedicamentServiceImpl implements MedicamentService{
     private MedicamentDAO medicamentDAO;
@@ -64,21 +60,7 @@ public class MedicamentServiceImpl implements MedicamentService{
 
     @Override
     public List<MedicamentDto> getAll(MedicamentsSearchRequest request) {
-        int from = request.getFrom();
-        int size = request.getSize();
-        List<MedicamentDto> medicaments = medicamentDAO.getAll();
-        int count = countOf();
-        int last = count < from + size ? count : from + size;
-        List<MedicamentDto> wantedMedicaments = new ArrayList<>();
-        for (int i = from; i <= last; i++){
-            wantedMedicaments.add(medicaments.get(i));
-        }
-        if (request.getSortField() != null){
-            return wantedMedicaments.stream().
-                    sorted(new MedicamentBrandNameComparator()).
-                    collect(Collectors.toList());
-        }
-        return wantedMedicaments;
+        return medicamentDAO.getAll(request);
     }
 
     @Override

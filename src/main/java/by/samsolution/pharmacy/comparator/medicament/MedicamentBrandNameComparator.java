@@ -1,4 +1,4 @@
-package by.samsolution.pharmacy.comparator;
+package by.samsolution.pharmacy.comparator.medicament;
 
 import by.samsolution.pharmacy.dto.MedicamentDto;
 

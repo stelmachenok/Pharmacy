@@ -17,22 +17,28 @@
 </span>
 <table border="1" cellspacing="0" cellpadding="2">
     <tr>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=BRAND_NAME">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=BRAND_NAME&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.brandName"/>
         </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=ACTIVE_INGREDIENT">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=ACTIVE_INGREDIENT&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.activeIngredient"/>
         </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=DOSAGE">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=DOSAGE&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.dosage"/>
         </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=PACKING_FORM">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=PACKING_FORM&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.packingForm"/>
         </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=INTERNATIONAL_NONPROPRIENTARY_NAME">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=INTERNATIONAL_NONPROPRIENTARY_NAME&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.internationalNonproprietaryName"/>
         </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=RELEASE_FORM">
+        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
+        /medicaments?sort-field=RELEASE_FORM&page-num=${pageNum}&page-size=${pageSize}">
             <spring:message code="label.releaseForm"/>
         </a></th>
 
