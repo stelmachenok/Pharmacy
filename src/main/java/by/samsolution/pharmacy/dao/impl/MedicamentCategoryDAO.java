@@ -3,7 +3,7 @@ package by.samsolution.pharmacy.dao.impl;
 import by.samsolution.pharmacy.comparator.category.CategoryDescriptionComparator;
 import by.samsolution.pharmacy.comparator.category.CategoryNameComparator;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.dto.CategoryDto;
+import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 /**
  * Created by y50-70 on 23.10.2017.
  */
-public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, String, CategorySearchRequest> {
-    private Storage<CategoryDto> storage;
+public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, Long, String, CategorySearchRequest> {
+    private Storage<MedicamentCategory> storage;
     private Long ID;
 
     public MedicamentCategoryDAO() {
@@ -23,7 +23,7 @@ public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, St
         ID = 0L;
     }
 
-    public void setStorage(Storage<CategoryDto> storage) {
+    public void setStorage(Storage<MedicamentCategory> storage) {
         this.storage = storage;
     }
 
@@ -32,18 +32,18 @@ public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, St
     }
 
     @Override
-    public List<CategoryDto> getAll() {
+    public List<MedicamentCategory> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public List<CategoryDto> getAll(CategorySearchRequest request) {
+    public List<MedicamentCategory> getAll(CategorySearchRequest request) {
         int from = request.getFrom();
         int size = request.getSize();
-        List<CategoryDto> categories = getAll();
+        List<MedicamentCategory> categories = getAll();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-        List<CategoryDto> wantedCategories = new ArrayList<>();
+        List<MedicamentCategory> wantedCategories = new ArrayList<>();
         for (int i = from; i <= last; i++){
             wantedCategories.add(categories.get(i));
         }
@@ -65,14 +65,14 @@ public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, St
     }
 
     @Override
-    public CategoryDto getEntityById(Long id) {
-        List<CategoryDto> categories = storage.getItemList();
+    public MedicamentCategory getEntityById(Long id) {
+        List<MedicamentCategory> categories = storage.getItemList();
         return categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public CategoryDto getEntityByName(String name) {
-        List<CategoryDto> categories = storage.getItemList();
+    public MedicamentCategory getEntityByName(String name) {
+        List<MedicamentCategory> categories = storage.getItemList();
         return categories.stream().filter(m -> m.getCategoryName().equals(name)).findAny().orElse(null);
     }
 
@@ -82,23 +82,23 @@ public class MedicamentCategoryDAO implements InterfaceDAO<CategoryDto, Long, St
     }
 
     @Override
-    public void update(CategoryDto entity){
-        List<CategoryDto> categories = storage.getItemList();
-        CategoryDto existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+    public void update(MedicamentCategory entity){
+        List<MedicamentCategory> categories = storage.getItemList();
+        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
         categories.remove(existedCategory);
         categories.add(entity);
     }
 
     @Override
     public void delete(Long id){
-        List<CategoryDto> categories = storage.getItemList();
-        CategoryDto existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        List<MedicamentCategory> categories = storage.getItemList();
+        MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         categories.remove(existedCategory);
     }
 
     @Override
-    public void create(CategoryDto entity) {
-        List<CategoryDto> categories = storage.getItemList();
+    public void create(MedicamentCategory entity) {
+        List<MedicamentCategory> categories = storage.getItemList();
         entity.setId(ID);
         ID++;
         categories.add(entity);

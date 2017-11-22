@@ -2,7 +2,7 @@ package by.samsolution.pharmacy.dao.impl;
 
 import by.samsolution.pharmacy.comparator.medicament.*;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.dto.MedicamentDto;
+import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 /**
  * Created by y50-70 on 20.10.2017.
  */
-public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String, MedicamentsSearchRequest> {
-    private Storage<MedicamentDto> storage;
+public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> {
+    private Storage<MedicamentEntity> storage;
     private Long ID;
 
     public MedicamentDAO() {
@@ -22,7 +22,7 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String, 
         ID = 0L;
     }
 
-    public void setStorage(Storage<MedicamentDto> storage) {
+    public void setStorage(Storage<MedicamentEntity> storage) {
         this.storage = storage;
     }
 
@@ -31,18 +31,18 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String, 
     }
 
     @Override
-    public List<MedicamentDto> getAll() {
+    public List<MedicamentEntity> getAll() {
         return storage.getItemList();
     }
 
     @Override
-    public List<MedicamentDto> getAll(MedicamentsSearchRequest request) {
+    public List<MedicamentEntity> getAll(MedicamentsSearchRequest request) {
         int from = request.getFrom();
         int size = request.getSize();
-        List<MedicamentDto> medicaments = getAll();
+        List<MedicamentEntity> medicaments = getAll();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-        List<MedicamentDto> wantedMedicaments = new ArrayList<>();
+        List<MedicamentEntity> wantedMedicaments = new ArrayList<>();
         for (int i = from; i <= last; i++){
             wantedMedicaments.add(medicaments.get(i));
         }
@@ -84,14 +84,14 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String, 
     }
 
     @Override
-    public MedicamentDto getEntityById(Long id) {
-        List<MedicamentDto> medicamentEntities = storage.getItemList();
+    public MedicamentEntity getEntityById(Long id) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
         return medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    public MedicamentDto getEntityByName(String name) {
-        List<MedicamentDto> medicamentEntities = storage.getItemList();
+    public MedicamentEntity getEntityByName(String name) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
         return medicamentEntities.stream().filter(m -> m.getBrandName().equals(name)).findAny().orElse(null);
     }
 
@@ -101,23 +101,23 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentDto, Long, String, 
     }
 
     @Override
-    public void update(MedicamentDto entity){
-        List<MedicamentDto> medicamentEntities = storage.getItemList();
-        MedicamentDto existedMedicamentDto = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
-        medicamentEntities.remove(existedMedicamentDto);
+    public void update(MedicamentEntity entity){
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentEntity);
         medicamentEntities.add(entity);
     }
 
     @Override
     public void delete(Long id) {
-        List<MedicamentDto> medicamentEntities = storage.getItemList();
-        MedicamentDto existedMedicamentDto = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
-        medicamentEntities.remove(existedMedicamentDto);
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
+        MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        medicamentEntities.remove(existedMedicamentEntity);
     }
 
     @Override
-    public void create(MedicamentDto entity) {
-        List<MedicamentDto> medicamentEntities = storage.getItemList();
+    public void create(MedicamentEntity entity) {
+        List<MedicamentEntity> medicamentEntities = storage.getItemList();
         entity.setId(ID);
         ID++;
         medicamentEntities.add(entity);

@@ -1,12 +1,12 @@
 package by.samsolution.pharmacy.comparator.category;
 
-import by.samsolution.pharmacy.dto.CategoryDto;
+import by.samsolution.pharmacy.entity.MedicamentCategory;
 
 import java.util.Comparator;
 
-public class CategoryDescriptionComparator implements Comparator<CategoryDto> {
+public class CategoryDescriptionComparator implements Comparator<MedicamentCategory> {
     @Override
-    public int compare(CategoryDto o1, CategoryDto o2) {
+    public int compare(MedicamentCategory o1, MedicamentCategory o2) {
         return o1.getDescription().compareTo(o2.getDescription());
     }
 }

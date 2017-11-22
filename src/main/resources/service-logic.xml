@@ -46,6 +46,7 @@
 
     <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
+        <constructor-arg ref="MedicineConverter"/>
     </bean>
 
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
