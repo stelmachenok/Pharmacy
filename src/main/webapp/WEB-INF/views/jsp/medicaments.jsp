@@ -57,13 +57,15 @@
         <td>${medicament.releaseForm}</td>
 
         <td>
-            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?action=edit&id=${medicament.id}">
+            <a href="<%= pageContext.getServletContext().getContextPath() %>
+            /medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=edit&id=${medicament.id}">
                 <spring:message code="title.edit"/>
             </a>
         </td>
 
         <td>
-            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?action=delete&id=${medicament.id}">
+            <a href="<%= pageContext.getServletContext().getContextPath() %>
+            /medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=${medicament.id}">
                 <spring:message code="title.delete"/>
             </a>
         </td>
@@ -74,7 +76,8 @@
         <c:forEach var="i" begin="1" end="${pagesCount}">
             <tr>
                 <td>
-                    <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?page-num=${i}&page-size=${pageSize}">
+                    <a href="<%= pageContext.getServletContext().getContextPath() %>
+                    /medicaments?sort-field=${sortField}&page-num=${i}&page-size=${pageSize}">
                         <spring:message code="title.page"/> ${i}
                     </a>
                 </td>

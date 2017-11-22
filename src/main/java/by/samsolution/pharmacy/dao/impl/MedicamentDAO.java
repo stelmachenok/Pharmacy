@@ -37,48 +37,54 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
 
     @Override
     public List<MedicamentEntity> getAll(MedicamentsSearchRequest request) {
+
+        List<MedicamentEntity> medicaments = getAll();
+        List<MedicamentEntity> wantedMedicaments = new ArrayList<>();
+        switch (request.getSortField()) {
+            case BRAND_NAME: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentBrandNameComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+            case ACTIVE_INGREDIENT: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentActiveIngredientComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+            case DOSAGE: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentDosageComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+            case PACKING_FORM: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentPackingFormComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+            case INTERNATIONAL_NONPROPRIENTARY_NAME: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentInternationalNonproprietaryNameComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+            case RELEASE_FORM: {
+                medicaments = medicaments.stream().
+                        sorted(new MedicamentReleaseFormComparator()).
+                        collect(Collectors.toList());
+                break;
+            }
+        }
         int from = request.getFrom();
         int size = request.getSize();
-        List<MedicamentEntity> medicaments = getAll();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-        List<MedicamentEntity> wantedMedicaments = new ArrayList<>();
-        for (int i = from; i <= last; i++){
+
+        for (int i = from; i <= last; i++) {
             wantedMedicaments.add(medicaments.get(i));
-        }
-        if (request.getSortField() != null){
-            switch (request.getSortField()){
-                case BRAND_NAME:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentBrandNameComparator()).
-                            collect(Collectors.toList());
-                }
-                case ACTIVE_INGREDIENT:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentActiveIngredientComparator()).
-                            collect(Collectors.toList());
-                }
-                case DOSAGE:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentDosageComparator()).
-                            collect(Collectors.toList());
-                }
-                case PACKING_FORM:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentPackingFormComparator()).
-                            collect(Collectors.toList());
-                }
-                case INTERNATIONAL_NONPROPRIENTARY_NAME:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentInternationalNonproprietaryNameComparator()).
-                            collect(Collectors.toList());
-                }
-                case RELEASE_FORM:{
-                    return wantedMedicaments.stream().
-                            sorted(new MedicamentReleaseFormComparator()).
-                            collect(Collectors.toList());
-                }
-            }
         }
         return wantedMedicaments;
     }
@@ -101,7 +107,7 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
     }
 
     @Override
-    public void update(MedicamentEntity entity){
+    public void update(MedicamentEntity entity) {
         List<MedicamentEntity> medicamentEntities = storage.getItemList();
         MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
         medicamentEntities.remove(existedMedicamentEntity);

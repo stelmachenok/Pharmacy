@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import static by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum.BRAND_NAME;
 
 @Controller
 public class MedicamentsController {
@@ -61,7 +61,11 @@ public class MedicamentsController {
                 addAllAttributes(pageNum, pageSize, model, sortField, action, id);
                 return "medicaments";
             }
-            return "redirect:/medicaments?page-num=" + pageNum + "&page-size=" + pageSize;
+            return "redirect:/medicaments?page-num=" + pageNum +
+                    "&page-size=" + pageSize +
+                    "&sort-field=" + sortField +
+                    "&action=" + action +
+                    "&id=" + id;
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, action, id);
             return "medicaments";
@@ -85,6 +89,13 @@ public class MedicamentsController {
             pageNum = 1;
         if (pageSize == null)
             pageSize = 10;
+        if (sortField != null) {
+            request.setSortField(sortField);
+        }
+        else{
+            request.setSortField(BRAND_NAME);
+            sortField = BRAND_NAME;
+        }
         int recordsCount = medicamentService.getAll().size();
         int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
         int firstRecord = (pageNum - 1) * pageSize;
@@ -94,11 +105,10 @@ public class MedicamentsController {
         model.addAttribute("pagesCount", pagesCount);
         model.addAttribute("firstRecord", firstRecord);
         model.addAttribute("lastRecord", lastRecord);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("action", action);
         request.setFrom(firstRecord);
         request.setSize(lastRecord - firstRecord);
-        if (sortField != null) {
-            request.setSortField(sortField);
-        }
         model.addAttribute("medicaments", medicamentService.getAll(request));
     }
 }

@@ -1,5 +1,6 @@
 package by.samsolution.pharmacy.service.impl;
 
+import by.samsolution.pharmacy.converter.impl.CategoryConverter;
 import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
@@ -10,6 +11,14 @@ import by.samsolution.pharmacy.service.CategoryService;
 import java.util.List;
 
 public class CategoryServiceImpl implements CategoryService{
+    private CategoryDto categoryDto;
+    private CategoryConverter medicineConverter;
+
+    public CategoryServiceImpl(CategoryDto categoryDto, CategoryConverter medicineConverter) {
+        this.categoryDto = categoryDto;
+        this.medicineConverter = medicineConverter;
+    }
+
     @Override
     public void add(CategoryDto dto) throws ObjectValidationFailedException, EntityAlreadyExistException {
 

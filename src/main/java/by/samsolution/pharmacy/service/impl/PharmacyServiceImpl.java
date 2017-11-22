@@ -1,5 +1,7 @@
 package by.samsolution.pharmacy.service.impl;
 
+import by.samsolution.pharmacy.converter.impl.PharmacyConverter;
+import by.samsolution.pharmacy.dao.impl.PharmacyDAO;
 import by.samsolution.pharmacy.dto.PharmacyDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
@@ -10,6 +12,14 @@ import by.samsolution.pharmacy.service.PharmacyService;
 import java.util.List;
 
 public class PharmacyServiceImpl implements PharmacyService {
+    private PharmacyDAO pharmacyDAO;
+    private PharmacyConverter pharmacyConverter;
+
+    public PharmacyServiceImpl(PharmacyDAO pharmacyDAO, PharmacyConverter pharmacyConverter) {
+        this.pharmacyDAO = pharmacyDAO;
+        this.pharmacyConverter = pharmacyConverter;
+    }
+
     @Override
     public void add(PharmacyDto dto) throws ObjectValidationFailedException, EntityAlreadyExistException {
 
