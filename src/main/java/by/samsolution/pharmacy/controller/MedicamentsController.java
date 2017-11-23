@@ -2,6 +2,7 @@ package by.samsolution.pharmacy.controller;
 
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
+import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
@@ -79,6 +80,13 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
+        if (action != null && id != null){
+            try {
+                medicamentService.delete(id);
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("exceptionText", e.getMessage());
+            }
+        }
         addAllAttributes(pageNum, pageSize, model, sortField, action, id);
         model.addAttribute("medicament", new MedicamentDto());
         return "medicaments";
