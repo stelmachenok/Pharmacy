@@ -19,6 +19,8 @@ public interface Service<T extends BasicDto, R extends SearchRequest> {
 
     List<T> getAll(R request);
 
+    T getById(Long id);
+
     int countOf(R request);
 
     int countOf();

@@ -76,6 +76,11 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
+    public MedicamentDto getById(Long id) {
+        return medicineConverter.entityToDto(medicamentDAO.getEntityById(id));
+    }
+
+    @Override
     public int countOf(MedicamentsSearchRequest request) {
         return medicamentDAO.getAll().size();
     }

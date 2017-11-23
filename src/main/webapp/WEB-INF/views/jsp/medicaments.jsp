@@ -85,7 +85,7 @@
         </c:forEach>
 
 
-        <c:url var="post_url" value="/formExecute?page-num=${pageNum}&page-size=${pageSize}"/>
+        <c:url var="post_url" value="/formExecute?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=${action}&id=${medicament.id}"/>
         <form:form method="POST" modelAttribute="medicament" action="${post_url}">
             <table border="0">
 
@@ -94,7 +94,7 @@
                     <td>
                         <spring:bind path="brandName">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" value="АВОДАРТ" size="70" path="brandName"/>
+                                <form:input type="text" value="${medicament.brandName}" size="70" path="brandName"/>
                                 <form:errors path="brandName"/>
                             </div>
                         </spring:bind>
@@ -106,7 +106,7 @@
                     <td>
                         <spring:bind path="activeIngredient">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" value="Дутастерид" size="70" path="activeIngredient"/>
+                                <form:input type="text" value="${medicament.activeIngredient}" size="70" path="activeIngredient"/>
                                 <form:errors path="activeIngredient"/>
                             </div>
                         </spring:bind>
@@ -118,7 +118,7 @@
                     <td>
                         <spring:bind path="dosage">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" value="0.5" size="70" path="dosage"/>
+                                <form:input type="text" value="${medicament.dosage}" size="70" path="dosage"/>
                                 <form:errors path="dosage"/>
                             </div>
                         </spring:bind>
@@ -156,7 +156,7 @@
                     <td>
                         <spring:bind path="internationalNonproprietaryName">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" value="Дутастерид" size="70"
+                                <form:input type="text" value="${medicament.internationalNonproprietaryName}" size="70"
                                             path="internationalNonproprietaryName"/>
                                 <form:errors path="internationalNonproprietaryName"/>
                             </div>

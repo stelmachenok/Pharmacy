@@ -1,6 +1,7 @@
 package by.samsolution.pharmacy.service.impl;
 
 import by.samsolution.pharmacy.converter.impl.CategoryConverter;
+import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
 import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
@@ -11,11 +12,11 @@ import by.samsolution.pharmacy.service.CategoryService;
 import java.util.List;
 
 public class CategoryServiceImpl implements CategoryService{
-    private CategoryDto categoryDto;
+    private MedicamentCategoryDAO categoryDAO;
     private CategoryConverter medicineConverter;
 
-    public CategoryServiceImpl(CategoryDto categoryDto, CategoryConverter medicineConverter) {
-        this.categoryDto = categoryDto;
+    public CategoryServiceImpl(MedicamentCategoryDAO categoryDAO, CategoryConverter medicineConverter) {
+        this.categoryDAO = categoryDAO;
         this.medicineConverter = medicineConverter;
     }
 
@@ -42,6 +43,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public List<CategoryDto> getAll(CategorySearchRequest request) {
         return null;
+    }
+
+    @Override
+    public CategoryDto getById(Long id) {
+        return medicineConverter.entityToDto(categoryDAO.getEntityById(id));
     }
 
     @Override

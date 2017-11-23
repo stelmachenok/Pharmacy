@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static by.samsolution.pharmacy.entity.PackingForm.CAPSULE;
+import static by.samsolution.pharmacy.entity.ReleaseForm.WITHOUT_RECIPE;
 import static by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum.BRAND_NAME;
 
 @Controller
@@ -54,9 +56,14 @@ public class MedicamentsController {
         medicamentValidator.validate(medicamentDto, result);
         if (!result.hasErrors()) {
             try {
-                medicamentService.add(medicamentDto);
-                logger.info("Medicament " + medicamentDto + " pushed successfully");
-            } catch (EntityAlreadyExistException | ObjectValidationFailedException e) {
+                if (action.equals("edit")) {
+                    medicamentService.update(medicamentDto);
+                    logger.info("Medicament " + medicamentDto + " edited successfully");
+                } else {
+                    medicamentService.add(medicamentDto);
+                    logger.info("Medicament " + medicamentDto + " pushed successfully");
+                }
+            } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
                 addAllAttributes(pageNum, pageSize, model, sortField, action, id);
@@ -65,7 +72,7 @@ public class MedicamentsController {
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
-                    "&action=" + action +
+                    "&action=" + ((action.equals("edit")) ? "": action) +
                     "&id=" + id;
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, action, id);
@@ -80,15 +87,19 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
-        if (action != null && id != null){
+        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE));
+        if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);
             } catch (EntityNotFoundException e) {
                 model.addAttribute("exceptionText", e.getMessage());
             }
         }
+        if (action != null && action.equals("edit") && id != null) {
+            model.addAttribute("medicament", medicamentService.getById(id));
+        }
+
         addAllAttributes(pageNum, pageSize, model, sortField, action, id);
-        model.addAttribute("medicament", new MedicamentDto());
         return "medicaments";
     }
 
@@ -99,8 +110,7 @@ public class MedicamentsController {
             pageSize = 10;
         if (sortField != null) {
             request.setSortField(sortField);
-        }
-        else{
+        } else {
             request.setSortField(BRAND_NAME);
             sortField = BRAND_NAME;
         }

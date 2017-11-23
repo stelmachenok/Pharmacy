@@ -18,7 +18,7 @@ public class OldServiceMedicamentEntityCategoryManipulationTest {
 
     @BeforeEach
     void serviceInit() {
-        service = new CategoryServiceImpl(new CategoryDto(), new CategoryConverter());
+        service = new CategoryServiceImpl(new MedicamentCategoryDAO(), new CategoryConverter());
 
     }
 

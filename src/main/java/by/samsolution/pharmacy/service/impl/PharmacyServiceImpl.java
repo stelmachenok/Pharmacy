@@ -46,6 +46,11 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    public PharmacyDto getById(Long id) {
+        return pharmacyConverter.entityToDto(pharmacyDAO.getEntityById(id));
+    }
+
+    @Override
     public int countOf(PharmacySearchRequest request) {
         return 0;
     }
