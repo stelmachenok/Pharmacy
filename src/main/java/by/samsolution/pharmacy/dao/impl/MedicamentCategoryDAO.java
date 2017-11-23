@@ -1,5 +1,6 @@
 package by.samsolution.pharmacy.dao.impl;
 
+import by.samsolution.pharmacy.comparator.ComparatorChooser;
 import by.samsolution.pharmacy.comparator.category.CategoryDescriptionComparator;
 import by.samsolution.pharmacy.comparator.category.CategoryNameComparator;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
@@ -38,28 +39,18 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
 
     @Override
     public List<MedicamentCategory> getAll(CategorySearchRequest request) {
+        List<MedicamentCategory> categories = getAll();
+        List<MedicamentCategory> wantedCategories = new ArrayList<>();
+        ComparatorChooser chooser = new ComparatorChooser();
+        categories = (List<MedicamentCategory>) categories.stream().
+                sorted(chooser.choose(request.getSortField())).
+                collect(Collectors.toList());
         int from = request.getFrom();
         int size = request.getSize();
-        List<MedicamentCategory> categories = getAll();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-        List<MedicamentCategory> wantedCategories = new ArrayList<>();
-        for (int i = from; i <= last; i++){
+        for (int i = from; i <= last; i++) {
             wantedCategories.add(categories.get(i));
-        }
-        if (request.getSortField() != null){
-            switch (request.getSortField()){
-                case CATEGORY_NAME:{
-                    return wantedCategories.stream().
-                            sorted(new CategoryNameComparator()).
-                            collect(Collectors.toList());
-                }
-                case DESCRIPTION:{
-                    return wantedCategories.stream().
-                            sorted(new CategoryDescriptionComparator()).
-                            collect(Collectors.toList());
-                }
-            }
         }
         return wantedCategories;
     }
@@ -82,7 +73,7 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
-    public void update(MedicamentCategory entity){
+    public void update(MedicamentCategory entity) {
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);
         categories.remove(existedCategory);
@@ -90,7 +81,7 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
-    public void delete(Long id){
+    public void delete(Long id) {
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         categories.remove(existedCategory);

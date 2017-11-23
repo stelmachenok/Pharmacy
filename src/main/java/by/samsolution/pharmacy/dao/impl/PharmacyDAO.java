@@ -1,5 +1,6 @@
 package by.samsolution.pharmacy.dao.impl;
 
+import by.samsolution.pharmacy.comparator.ComparatorChooser;
 import by.samsolution.pharmacy.comparator.pharmacy.*;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.Pharmacy;
@@ -38,45 +39,21 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
 
     @Override
     public List<Pharmacy> getAll(PharmacySearchRequest request) {
+        List<Pharmacy> pharmacies = getAll();
+        List<Pharmacy> wantedPharmacies = new ArrayList<>();
+        ComparatorChooser chooser = new ComparatorChooser();
+        pharmacies = (List<Pharmacy>) pharmacies.stream().
+                sorted(chooser.choose(request.getSortField())).
+                collect(Collectors.toList());
         int from = request.getFrom();
         int size = request.getSize();
-        List<Pharmacy> pharmacies = getAll();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-        List<Pharmacy> wantedPharmacy = new ArrayList<>();
+
         for (int i = from; i <= last; i++) {
-            wantedPharmacy.add(pharmacies.get(i));
+            wantedPharmacies.add(pharmacies.get(i));
         }
-        if (request.getSortField() != null) {
-            switch (request.getSortField()) {
-                case PHARMACY_NAME: {
-                    return wantedPharmacy.stream().
-                            sorted(new PharmacyNameComparator()).
-                            collect(Collectors.toList());
-                }
-                case ADDRESS: {
-                    return wantedPharmacy.stream().
-                            sorted(new PharmacyAddressComparator()).
-                            collect(Collectors.toList());
-                }
-                case PHARMACIST_NAME: {
-                    return wantedPharmacy.stream().
-                            sorted(new PharmacyPharmacistNameComparator()).
-                            collect(Collectors.toList());
-                }
-                case CONTACT_NUMBER: {
-                    return wantedPharmacy.stream().
-                            sorted(new PharmacyContactNumberComparator()).
-                            collect(Collectors.toList());
-                }
-                case CATEGORY: {
-                    return wantedPharmacy.stream().
-                            sorted(new PharmacyCategoryComparator()).
-                            collect(Collectors.toList());
-                }
-            }
-        }
-        return wantedPharmacy;
+        return wantedPharmacies;
     }
 
     @Override
