@@ -3,6 +3,7 @@ package by.samsolution.pharmacy.dto;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
+import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,6 +18,10 @@ public class MedicamentDto extends BasicDto{
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
     private Long id;
+    private MedicineSearchFieldEnum sortField;
+    private Integer pageNum;
+    private Integer pageSize;
+    private String action;
 
     public MedicamentDto() {
     }
@@ -28,6 +33,52 @@ public class MedicamentDto extends BasicDto{
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
+    }
+
+    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, MedicineSearchFieldEnum sortField, Integer pageNum, Integer pageSize, String action) {
+        this.brandName = brandName;
+        this.activeIngredient = activeIngredient;
+        this.dosage = dosage;
+        this.packingForm = packingForm;
+        this.internationalNonproprietaryName = internationalNonproprietaryName;
+        this.releaseForm = releaseForm;
+        this.id = id;
+        this.sortField = sortField;
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.action = action;
+    }
+
+    public void setSortField(MedicineSearchFieldEnum sortField) {
+        this.sortField = sortField;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public MedicineSearchFieldEnum getSortField() {
+        return sortField;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public String getAction() {
+        return action;
     }
 
     public String getBrandName() {

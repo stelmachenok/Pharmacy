@@ -83,10 +83,24 @@
                 </td>
             </tr>
         </c:forEach>
-
-
-        <c:url var="post_url" value="/formExecute?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=${action}&id=${medicament.id}"/>
+        <c:url var="post_url"
+               value="/formExecute"/> <%--?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=${action}&id=${medicament.id}--%>
         <form:form method="POST" modelAttribute="medicament" action="${post_url}">
+            <spring:bind path="id">
+                <form:input type="hidden" vaslue="${medicament.id}" path="id"/>
+            </spring:bind>
+            <spring:bind path="sortField">
+                <form:input name="sortField" type="hidden" value="${sortField}" path="sortField"/>
+            </spring:bind>
+            <spring:bind path="pageNum">
+                <form:input name="pageNum" type="hidden" value="${pageNum}" path="pageNum"/>
+            </spring:bind>
+            <spring:bind path="pageSize">
+                <form:input name="pageSize" type="hidden" value="${pageSize}" path="pageSize"/>
+            </spring:bind>
+            <spring:bind path="action">
+                <form:input name="action" type="hidden" value="${action}" path="action"/>
+            </spring:bind>
             <table border="0">
 
                 <tr>
@@ -106,7 +120,8 @@
                     <td>
                         <spring:bind path="activeIngredient">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" value="${medicament.activeIngredient}" size="70" path="activeIngredient"/>
+                                <form:input type="text" value="${medicament.activeIngredient}" size="70"
+                                            path="activeIngredient"/>
                                 <form:errors path="activeIngredient"/>
                             </div>
                         </spring:bind>

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,17 +47,16 @@ public class MedicamentsController {
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
-            BindingResult result, ModelMap model,
-            @RequestParam(value = "page-num", required = false) Integer pageNum,
-            @RequestParam(value = "page-size", required = false) Integer pageSize,
-            @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
-            @RequestParam(value = "action", required = false) String action,
-            @RequestParam(value = "id", required = false) Long id) {
-
+            BindingResult result, ModelMap model) {
+        Integer pageNum = medicamentDto.getPageNum();
+        Integer pageSize = medicamentDto.getPageSize();
+        MedicineSearchFieldEnum sortField = medicamentDto.getSortField();
+        String action = medicamentDto.getAction();
         medicamentValidator.validate(medicamentDto, result);
+        Long id = medicamentDto.getId();
         if (!result.hasErrors()) {
             try {
-                if (action.equals("edit")) {
+                if (action != null && action.equals("edit")) {
                     medicamentService.update(medicamentDto);
                     logger.info("Medicament " + medicamentDto + " edited successfully");
                 } else {
@@ -72,7 +72,7 @@ public class MedicamentsController {
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
-                    "&action=" + ((action.equals("edit")) ? "": action) +
+                    "&action=" + ((action != null && action.equals("edit")) ? "" : action) +
                     "&id=" + id;
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, action, id);
@@ -87,7 +87,7 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE));
+        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE, sortField, pageNum, pageSize, action));
         if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);
@@ -96,6 +96,11 @@ public class MedicamentsController {
             }
         }
         if (action != null && action.equals("edit") && id != null) {
+            MedicamentDto medicamentDto = medicamentService.getById(id);
+            medicamentDto.setAction(action);
+            medicamentDto.setPageNum(pageNum);
+            medicamentDto.setPageSize(pageSize);
+            medicamentDto.setSortField(sortField);
             model.addAttribute("medicament", medicamentService.getById(id));
         }
 
@@ -121,12 +126,13 @@ public class MedicamentsController {
         model.addAttribute("pageNum", pageNum);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pagesCount", pagesCount);
-        model.addAttribute("firstRecord", firstRecord);
-        model.addAttribute("lastRecord", lastRecord);
         model.addAttribute("sortField", sortField);
         model.addAttribute("action", action);
+
         request.setFrom(firstRecord);
         request.setSize(lastRecord - firstRecord);
         model.addAttribute("medicaments", medicamentService.getAll(request));
     }
+
+
 }
