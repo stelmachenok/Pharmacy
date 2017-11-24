@@ -9,7 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class MedicamentDto extends BasicDto{
+public class MedicamentDto extends BasicDto {
 
     private String brandName;
     private String activeIngredient;
@@ -18,10 +18,6 @@ public class MedicamentDto extends BasicDto{
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
     private Long id;
-    private MedicineSearchFieldEnum sortField;
-    private Integer pageNum;
-    private Integer pageSize;
-    private String action;
 
     public MedicamentDto() {
     }
@@ -33,52 +29,6 @@ public class MedicamentDto extends BasicDto{
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
-    }
-
-    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, MedicineSearchFieldEnum sortField, Integer pageNum, Integer pageSize, String action) {
-        this.brandName = brandName;
-        this.activeIngredient = activeIngredient;
-        this.dosage = dosage;
-        this.packingForm = packingForm;
-        this.internationalNonproprietaryName = internationalNonproprietaryName;
-        this.releaseForm = releaseForm;
-        this.id = id;
-        this.sortField = sortField;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
-        this.action = action;
-    }
-
-    public void setSortField(MedicineSearchFieldEnum sortField) {
-        this.sortField = sortField;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public MedicineSearchFieldEnum getSortField() {
-        return sortField;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public String getAction() {
-        return action;
     }
 
     public String getBrandName() {

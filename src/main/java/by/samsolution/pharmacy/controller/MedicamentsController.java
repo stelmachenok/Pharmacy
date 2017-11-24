@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,14 +28,12 @@ public class MedicamentsController {
 
     private MedicamentService medicamentService;
     private MedicamentValidator medicamentValidator;
-    private MedicamentsSearchRequest request;
     private static Logger logger = LoggerFactory.getLogger(MedicamentsController.class);
 
     @Autowired
-    public MedicamentsController(MedicamentService service, MedicamentValidator medicamentValidator, MedicamentsSearchRequest request) {
+    public MedicamentsController(MedicamentService service, MedicamentValidator medicamentValidator) {
         this.medicamentService = service;
         this.medicamentValidator = medicamentValidator;
-        this.request = request;
     }
 
     @RequestMapping("/")
@@ -47,11 +44,11 @@ public class MedicamentsController {
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
+            @RequestParam("sortField") MedicineSearchFieldEnum sortField,
+            @RequestParam("pageNum") Integer pageNum,
+            @RequestParam("pageSize") Integer pageSize,
+            @RequestParam("action") String action,
             BindingResult result, ModelMap model) {
-        Integer pageNum = medicamentDto.getPageNum();
-        Integer pageSize = medicamentDto.getPageSize();
-        MedicineSearchFieldEnum sortField = medicamentDto.getSortField();
-        String action = medicamentDto.getAction();
         medicamentValidator.validate(medicamentDto, result);
         Long id = medicamentDto.getId();
         if (!result.hasErrors()) {
@@ -87,7 +84,7 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE, sortField, pageNum, pageSize, action));
+        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE));
         if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);
@@ -97,10 +94,6 @@ public class MedicamentsController {
         }
         if (action != null && action.equals("edit") && id != null) {
             MedicamentDto medicamentDto = medicamentService.getById(id);
-            medicamentDto.setAction(action);
-            medicamentDto.setPageNum(pageNum);
-            medicamentDto.setPageSize(pageSize);
-            medicamentDto.setSortField(sortField);
             model.addAttribute("medicament", medicamentService.getById(id));
         }
 
@@ -109,6 +102,7 @@ public class MedicamentsController {
     }
 
     private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, MedicineSearchFieldEnum sortField, String action, Long id) {
+        MedicamentsSearchRequest request = new MedicamentsSearchRequest();
         if (pageNum == null)
             pageNum = 1;
         if (pageSize == null)

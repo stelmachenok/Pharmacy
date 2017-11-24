@@ -52,7 +52,4 @@
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
 
-    <bean id="MedicamentsSearchRequest" class="by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest">
-    </bean>
-
 </beans>

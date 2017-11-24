@@ -7,9 +7,23 @@
 <html>
 <head>
     <title><spring:message code="title.medicaments"/></title>
+    <link rel='stylesheet' href='/webjars/bootstrap/3.3.7/css/bootstrap.min.css'>
+    <script src="/webjars/jquery/3.2.1/jquery.js"></script>
+    <script>
+        // по окончанию загрузки страницы
+        $(document).ready(function(){
+            setInterval (function(){
+                $('#time').load('/getTime');
+            }, 1000);
+
+
+        });
+    </script>
 </head>
 
 <body>
+
+<span id = "time"></span>
 <span style="float: right">
     <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?lang=en">en</a>
     |
@@ -57,15 +71,13 @@
         <td>${medicament.releaseForm}</td>
 
         <td>
-            <a href="<%= pageContext.getServletContext().getContextPath() %>
-            /medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=edit&id=${medicament.id}">
+            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=edit&id=${medicament.id}">
                 <spring:message code="title.edit"/>
             </a>
         </td>
 
         <td>
-            <a href="<%= pageContext.getServletContext().getContextPath() %>
-            /medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=${medicament.id}">
+            <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=${medicament.id}">
                 <spring:message code="title.delete"/>
             </a>
         </td>
@@ -84,23 +96,15 @@
             </tr>
         </c:forEach>
         <c:url var="post_url"
-               value="/formExecute"/> <%--?sort-field=${sortField}&page-num=${pageNum}&page-size=${pageSize}&action=${action}&id=${medicament.id}--%>
+               value="/formExecute"/>
         <form:form method="POST" modelAttribute="medicament" action="${post_url}">
             <spring:bind path="id">
-                <form:input type="hidden" vaslue="${medicament.id}" path="id"/>
+                <form:input type="hidden" value="${medicament.id}" path="id"/>
             </spring:bind>
-            <spring:bind path="sortField">
-                <form:input name="sortField" type="hidden" value="${sortField}" path="sortField"/>
-            </spring:bind>
-            <spring:bind path="pageNum">
-                <form:input name="pageNum" type="hidden" value="${pageNum}" path="pageNum"/>
-            </spring:bind>
-            <spring:bind path="pageSize">
-                <form:input name="pageSize" type="hidden" value="${pageSize}" path="pageSize"/>
-            </spring:bind>
-            <spring:bind path="action">
-                <form:input name="action" type="hidden" value="${action}" path="action"/>
-            </spring:bind>
+            <input name="sortField" type="hidden" value="${sortField}"/>
+            <input name="pageNum" type="hidden" value="${pageNum}"/>
+            <input name="pageSize" type="hidden" value="${pageSize}"/>
+            <input name="action" type="hidden" value="${action}"/>
             <table border="0">
 
                 <tr>
