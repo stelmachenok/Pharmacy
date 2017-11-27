@@ -69,8 +69,8 @@ public class MedicamentsController {
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
-                    "&action=" + ((action != null && action.equals("edit")) ? "" : action) +
-                    "&id=" + id;
+                    ((action != null && action.equals("&action=edit")) ? "" : action) +
+                    ((id != null ) ? "&id=" + id : "");
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, action, id);
             return "medicaments";
