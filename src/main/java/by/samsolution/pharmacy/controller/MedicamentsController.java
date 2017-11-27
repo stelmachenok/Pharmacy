@@ -44,11 +44,11 @@ public class MedicamentsController {
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
+            BindingResult result, ModelMap model,
             @RequestParam("sortField") MedicineSearchFieldEnum sortField,
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("action") String action,
-            BindingResult result, ModelMap model) {
+            @RequestParam("action") String action) {
         medicamentValidator.validate(medicamentDto, result);
         Long id = medicamentDto.getId();
         if (!result.hasErrors()) {
@@ -69,8 +69,7 @@ public class MedicamentsController {
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
-                    ((action != null && action.equals("&action=edit")) ? "" : action) +
-                    ((id != null ) ? "&id=" + id : "");
+                    ((action != null && action.equals("edit")) ? "" : "&action=" + action);
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, action, id);
             return "medicaments";
@@ -94,7 +93,7 @@ public class MedicamentsController {
         }
         if (action != null && action.equals("edit") && id != null) {
             MedicamentDto medicamentDto = medicamentService.getById(id);
-            model.addAttribute("medicament", medicamentService.getById(id));
+            model.addAttribute("medicament", medicamentDto);
         }
 
         addAllAttributes(pageNum, pageSize, model, sortField, action, id);
