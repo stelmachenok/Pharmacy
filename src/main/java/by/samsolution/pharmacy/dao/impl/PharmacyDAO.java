@@ -9,6 +9,7 @@ import by.samsolution.pharmacy.searchrequest.impl.PharmacySearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,9 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
         pharmacies = (List<Pharmacy>) pharmacies.stream().
                 sorted(chooser.choose(request.getSortField())).
                 collect(Collectors.toList());
+        if (!request.getDirection()){
+            Collections.reverse(pharmacies);
+        }
         int from = request.getFrom();
         int size = request.getSize();
         int count = countOf();

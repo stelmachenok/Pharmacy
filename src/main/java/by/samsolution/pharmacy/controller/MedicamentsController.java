@@ -46,6 +46,7 @@ public class MedicamentsController {
             @ModelAttribute("medicament") MedicamentDto medicamentDto,
             BindingResult result, ModelMap model,
             @RequestParam("sortField") MedicineSearchFieldEnum sortField,
+            @RequestParam("sortDir") Boolean sortDir,
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("action") String action) {
@@ -63,7 +64,7 @@ public class MedicamentsController {
             } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
-                addAllAttributes(pageNum, pageSize, model, sortField, action, id);
+                addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
                 return "medicaments";
             }
             return "redirect:/medicaments?page-num=" + pageNum +
@@ -71,7 +72,7 @@ public class MedicamentsController {
                     "&sort-field=" + sortField +
                     ((action != null && action.equals("edit")) ? "" : "&action=" + action);
         } else {
-            addAllAttributes(pageNum, pageSize, model, sortField, action, id);
+            addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
             return "medicaments";
         }
     }
@@ -81,6 +82,7 @@ public class MedicamentsController {
                                   @RequestParam(value = "page-num", required = false) Integer pageNum,
                                   @RequestParam(value = "page-size", required = false) Integer pageSize,
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,
+                                  @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
         model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE));
@@ -96,11 +98,11 @@ public class MedicamentsController {
             model.addAttribute("medicament", medicamentDto);
         }
 
-        addAllAttributes(pageNum, pageSize, model, sortField, action, id);
+        addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
         return "medicaments";
     }
 
-    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, MedicineSearchFieldEnum sortField, String action, Long id) {
+    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, MedicineSearchFieldEnum sortField, Boolean sortDir, String action, Long id) {
         MedicamentsSearchRequest request = new MedicamentsSearchRequest();
         if (pageNum == null)
             pageNum = 1;
@@ -112,6 +114,13 @@ public class MedicamentsController {
             request.setSortField(BRAND_NAME);
             sortField = BRAND_NAME;
         }
+        if (sortDir != null) {
+            request.setDirection(sortDir);
+        } else {
+            request.setDirection(true);
+            sortDir = true;
+        }
+
         int recordsCount = medicamentService.getAll().size();
         int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
         int firstRecord = (pageNum - 1) * pageSize;
@@ -120,6 +129,7 @@ public class MedicamentsController {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pagesCount", pagesCount);
         model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
         model.addAttribute("action", action);
 
         request.setFrom(firstRecord);
