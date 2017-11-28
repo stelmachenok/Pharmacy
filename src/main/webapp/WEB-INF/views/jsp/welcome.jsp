@@ -1,4 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="ex" uri="/WEB-INF/tags/implicit.tld" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -12,7 +14,9 @@
     <a href="<%= pageContext.getServletContext().getContextPath() %>/?lang=ru">ru</a>
 </span>
 
-<a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments"><spring:message
+<c:url var="get_url" value=""/>
+
+<a href="<ex:ref pageContext="${get_url}/medicaments" sortField="BRAND_NAME" sortDir="true" pageNum="1" pageSize="10"/>"><spring:message
         code="title.medicaments"/></a>
 <br/>
 <a href="<%= pageContext.getServletContext().getContextPath() %>/categories"><spring:message

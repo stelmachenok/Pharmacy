@@ -70,6 +70,7 @@ public class MedicamentsController {
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
+                    "sort-dir" + sortDir +
                     ((action != null && action.equals("edit")) ? "" : "&action=" + action);
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);

@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ex" uri="/WEB-INF/tags/implicit.tld" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,42 +19,48 @@
         setInterval(function () {
             $('#time').load('/getTime');
         }, 1000);
-
-
     });
+
+    function deleteConfirmation(brandName, id) {
+        if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
+            window.location.href = "<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=" + id;
+        }
+    }
 </script>
+<c:url var="get_url" value="/medicaments"/>
+
 <span id="time"></span>
 <span style="float: right">
-    <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?lang=en">en</a>
+    <a href="<ex:ref pageContext="${get_url}" lang="en"/>">en</a>
     |
-    <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?lang=ru">ru</a>
+    <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
 </span>
 <table class="table">
     <tr>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=BRAND_NAME&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.brandName"/>
-        </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=ACTIVE_INGREDIENT&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.activeIngredient"/>
-        </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=DOSAGE&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.dosage"/>
-        </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=PACKING_FORM&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.packingForm"/>
-        </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=INTERNATIONAL_NONPROPRIENTARY_NAME&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.internationalNonproprietaryName"/>
-        </a></th>
-        <th><a href="<%= pageContext.getServletContext().getContextPath() %>
-        /medicaments?sort-field=RELEASE_FORM&sort-direction=${!sortDir}&page-num=${pageNum}&page-size=${pageSize}">
-            <spring:message code="label.releaseForm"/>
-        </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="BRAND_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.brandName"/>
+            </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="ACTIVE_INGREDIENT" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.activeIngredient"/>
+            </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="DOSAGE" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.dosage"/>
+            </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="PACKING_FORM" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.packingForm"/>
+            </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="INTERNATIONAL_NONPROPRIENTARY_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.internationalNonproprietaryName"/>
+            </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="RELEASE_FORM" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.releaseForm"/>
+            </a></th>
 
         <th><spring:message code="title.edit"/></th>
         <th><spring:message code="title.delete"/></th>
@@ -69,13 +77,13 @@
             <td>${medicament.releaseForm}</td>
 
             <td>
-                <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=edit&id=${medicament.id}">
+                <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
 
             <td>
-                <a href="<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=${medicament.id}">
+                <a id="delete" onclick="deleteConfirmation('${medicament.brandName}', '${medicament.id}')">
                     <spring:message code="title.delete"/>
                 </a>
             </td>
@@ -85,8 +93,8 @@
 
 <c:forEach var="i" begin="1" end="${pagesCount}">
     <div class="row">
-        <a class="col-sm-2" href="<%= pageContext.getServletContext().getContextPath() %>
-                    /medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${i}&page-size=${pageSize}">
+        <a class="col-sm-2"
+           href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">
             <spring:message code="title.page"/> ${i}
         </a>
     </div>
@@ -216,7 +224,6 @@
         </div>
     </div>
 </form:form>
-</table>
 <b>${exceptionText}</b>
 </body>
 </html>
