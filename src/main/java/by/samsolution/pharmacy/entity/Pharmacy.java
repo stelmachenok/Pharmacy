@@ -12,7 +12,7 @@ public class Pharmacy extends BasicEntity{
     private String contactNumber;
     private String login;
     private String password;
-    private String category;
+    private String category;    //change to enum
     private UUID uuid;
     private Long id;
 

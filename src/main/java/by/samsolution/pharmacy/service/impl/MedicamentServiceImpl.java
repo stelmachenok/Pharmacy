@@ -1,6 +1,7 @@
 package by.samsolution.pharmacy.service.impl;
 
 import by.samsolution.pharmacy.converter.impl.MedicineConverter;
+import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MedicamentServiceImpl implements MedicamentService {
-    private MedicamentDAO medicamentDAO;
+    private InterfaceDAO <MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO;
     private MedicineConverter medicineConverter;
 
-    public MedicamentServiceImpl(MedicamentDAO medicamentDAO, MedicineConverter medicineConverter) {
+    public MedicamentServiceImpl(InterfaceDAO medicamentDAO, MedicineConverter medicineConverter) {
         this.medicamentDAO = medicamentDAO;
         this.medicineConverter = medicineConverter;
     }
@@ -70,7 +71,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public List<MedicamentDto> getAll(MedicamentsSearchRequest request) {
-        return medicamentDAO.getAll(request).stream()
+        return medicamentDAO.getAll().stream()
                 .map((m) -> medicineConverter.entityToDto(m))
                 .collect(Collectors.toList());
     }

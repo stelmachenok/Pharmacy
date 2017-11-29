@@ -14,8 +14,10 @@ public class MedicamentEntity extends BasicEntity{
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
-    private final UUID guid;
+    private UUID guid;
     private Long id;
+    //add category
+
 
     public MedicamentEntity() {
         this.guid = UUID.randomUUID();
@@ -90,6 +92,10 @@ public class MedicamentEntity extends BasicEntity{
 
     public void setReleaseForm(ReleaseForm releaseForm) {
         this.releaseForm = releaseForm;
+    }
+
+    public void setGuid(UUID guid) {
+        this.guid = guid;
     }
 
     @Override
