@@ -19,5 +19,5 @@
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="eventListenerBean" class="by.samsolution.pharmacy.servlet.ApplicationListenerBean"/>
+    <!--<bean id="eventListenerBean" class="by.samsolution.pharmacy.servlet.ApplicationListenerBean"/>-->
 </beans>

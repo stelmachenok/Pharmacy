@@ -12,7 +12,7 @@ public class Pharmacy extends BasicEntity{
     private String contactNumber;
     private String login;
     private String password;
-    private String category;    //change to enum
+    private PharmacyCategory category;
     private UUID uuid;
     private Long id;
 
@@ -20,7 +20,7 @@ public class Pharmacy extends BasicEntity{
         uuid = UUID.randomUUID();
     }
 
-    public Pharmacy(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, String category) {
+    public Pharmacy(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, PharmacyCategory category) {
         this.pharmacyName = pharmacyName;
         this.address = address;
         this.pharmacistName = pharmacistName;
@@ -67,7 +67,7 @@ public class Pharmacy extends BasicEntity{
         this.password = password;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(PharmacyCategory category) {
         this.category = category;
     }
 
@@ -95,7 +95,7 @@ public class Pharmacy extends BasicEntity{
         return password;
     }
 
-    public String getCategory() {
+    public PharmacyCategory getCategory() {
         return category;
     }
 }

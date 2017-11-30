@@ -3,8 +3,10 @@ package by.samsolution.pharmacy.converter.impl;
 import by.samsolution.pharmacy.converter.InterfaceConverter;
 import by.samsolution.pharmacy.dto.PharmacyDto;
 import by.samsolution.pharmacy.entity.Pharmacy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PharmacyConverter implements InterfaceConverter<PharmacyDto, Pharmacy>{
+
     @Override
     public PharmacyDto entityToDto(Pharmacy entity) {
         PharmacyDto dto = new PharmacyDto();

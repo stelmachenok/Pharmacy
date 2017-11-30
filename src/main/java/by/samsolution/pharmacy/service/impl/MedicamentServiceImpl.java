@@ -4,6 +4,7 @@ import by.samsolution.pharmacy.converter.impl.MedicineConverter;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
+import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MedicamentServiceImpl implements MedicamentService {
-    private InterfaceDAO <MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO;
+    private InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO;
     private MedicineConverter medicineConverter;
 
     public MedicamentServiceImpl(InterfaceDAO medicamentDAO, MedicineConverter medicineConverter) {
@@ -71,7 +72,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public List<MedicamentDto> getAll(MedicamentsSearchRequest request) {
-        return medicamentDAO.getAll().stream()
+        return medicamentDAO.getAll(request).stream()
                 .map((m) -> medicineConverter.entityToDto(m))
                 .collect(Collectors.toList());
     }
@@ -98,6 +99,13 @@ public class MedicamentServiceImpl implements MedicamentService {
                 medicamentEntity.getDosage().equals(medicamentEntity2.getDosage()) &&
                 medicamentEntity.getPackingForm().equals(medicamentEntity2.getPackingForm()) &&
                 medicamentEntity.getInternationalNonproprietaryName().equals(medicamentEntity2.getInternationalNonproprietaryName()) &&
-                medicamentEntity.getReleaseForm().equals(medicamentEntity2.getReleaseForm());
+                medicamentEntity.getReleaseForm().equals(medicamentEntity2.getReleaseForm()) &&
+                equalsCategory(medicamentEntity.getCategory(), medicamentEntity2.getCategory());
+    }
+
+    private boolean equalsCategory(MedicamentCategory category, MedicamentCategory category2) {
+        return category != null && category2 != null &&
+                category.getDescription().equals(category2.getDescription()) &&
+                category.getCategoryName().equals(category2.getCategoryName());
     }
 }

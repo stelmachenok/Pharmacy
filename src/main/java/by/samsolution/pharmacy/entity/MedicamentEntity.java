@@ -16,20 +16,21 @@ public class MedicamentEntity extends BasicEntity{
     private ReleaseForm releaseForm;
     private UUID guid;
     private Long id;
-    //add category
+    private MedicamentCategory category;
 
 
     public MedicamentEntity() {
         this.guid = UUID.randomUUID();
     }
 
-    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, MedicamentCategory category) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
+        this.category = category;
         this.guid = UUID.randomUUID();
     }
 
@@ -70,6 +71,10 @@ public class MedicamentEntity extends BasicEntity{
         return id;
     }
 
+    public MedicamentCategory getCategory() {
+        return category;
+    }
+
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
@@ -96,6 +101,10 @@ public class MedicamentEntity extends BasicEntity{
 
     public void setGuid(UUID guid) {
         this.guid = guid;
+    }
+
+    public void setCategory(MedicamentCategory category) {
+        this.category = category;
     }
 
     @Override

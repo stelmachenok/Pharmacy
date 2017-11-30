@@ -1,5 +1,6 @@
 package by.samsolution.pharmacy.controller;
 
+import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
@@ -86,7 +87,7 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE));
+        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE, new CategoryDto("Категоря 1", "Описание 1")));
         if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);

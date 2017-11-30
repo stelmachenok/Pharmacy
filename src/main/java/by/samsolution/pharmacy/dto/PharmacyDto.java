@@ -1,5 +1,7 @@
 package by.samsolution.pharmacy.dto;
 
+import by.samsolution.pharmacy.entity.PharmacyCategory;
+
 public class PharmacyDto extends BasicDto{
     private String pharmacyName;
     private String address;
@@ -7,13 +9,13 @@ public class PharmacyDto extends BasicDto{
     private String contactNumber;
     private String login;
     private String password;
-    private String category;
+    private PharmacyCategory category;
     private Long id;
 
     public PharmacyDto() {
     }
 
-    public PharmacyDto(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, String category) {
+    public PharmacyDto(String pharmacyName, String address, String pharmacistName, String contactNumber, String login, String password, PharmacyCategory category) {
         this.pharmacyName = pharmacyName;
         this.address = address;
         this.pharmacistName = pharmacistName;
@@ -47,7 +49,7 @@ public class PharmacyDto extends BasicDto{
         return password;
     }
 
-    public String getCategory() {
+    public PharmacyCategory getCategory() {
         return category;
     }
 
@@ -79,7 +81,7 @@ public class PharmacyDto extends BasicDto{
         this.password = password;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(PharmacyCategory category) {
         this.category = category;
     }
 

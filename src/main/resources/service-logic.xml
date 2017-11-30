@@ -12,7 +12,11 @@
     <import resource="classpath:in-memory-dao.xml"/>
     <import resource="classpath:jdbc-dao.xml"/>
 
+    <bean id="CategoryConverter" class="by.samsolution.pharmacy.converter.impl.CategoryConverter">
+    </bean>
+
     <bean id="MedicineConverter" class="by.samsolution.pharmacy.converter.impl.MedicineConverter">
+        <constructor-arg name="categoryConverter" ref="CategoryConverter"/>
     </bean>
 
     <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
@@ -22,5 +26,6 @@
 
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
+
 
 </beans>

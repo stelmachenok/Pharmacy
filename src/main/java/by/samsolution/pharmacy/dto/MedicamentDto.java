@@ -17,18 +17,20 @@ public class MedicamentDto extends BasicDto {
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
+    private CategoryDto category;
     private Long id;
 
     public MedicamentDto() {
     }
 
-    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, CategoryDto category) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
+        this.category = category;
     }
 
     public String getBrandName() {
@@ -59,6 +61,10 @@ public class MedicamentDto extends BasicDto {
         return id;
     }
 
+    public CategoryDto getCategory() {
+        return category;
+    }
+
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
@@ -85,6 +91,10 @@ public class MedicamentDto extends BasicDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCategory(CategoryDto category) {
+        this.category = category;
     }
 
     @Override
