@@ -2,7 +2,6 @@ package by.samsolution.pharmacy.service.impl;
 
 import by.samsolution.pharmacy.converter.impl.MedicineConverter;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
-import by.samsolution.pharmacy.dao.impl.MedicamentDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
@@ -19,7 +18,8 @@ public class MedicamentServiceImpl implements MedicamentService {
     private InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO;
     private MedicineConverter medicineConverter;
 
-    public MedicamentServiceImpl(InterfaceDAO medicamentDAO, MedicineConverter medicineConverter) {
+    public MedicamentServiceImpl(InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO,
+                                 MedicineConverter medicineConverter) {
         this.medicamentDAO = medicamentDAO;
         this.medicineConverter = medicineConverter;
     }
@@ -100,10 +100,10 @@ public class MedicamentServiceImpl implements MedicamentService {
                 medicamentEntity.getPackingForm().equals(medicamentEntity2.getPackingForm()) &&
                 medicamentEntity.getInternationalNonproprietaryName().equals(medicamentEntity2.getInternationalNonproprietaryName()) &&
                 medicamentEntity.getReleaseForm().equals(medicamentEntity2.getReleaseForm()) &&
-                equalsCategory(medicamentEntity.getCategory(), medicamentEntity2.getCategory());
+                equalsCategories(medicamentEntity.getCategory(), medicamentEntity2.getCategory());
     }
 
-    private boolean equalsCategory(MedicamentCategory category, MedicamentCategory category2) {
+    private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
         return category != null && category2 != null &&
                 category.getDescription().equals(category2.getDescription()) &&
                 category.getCategoryName().equals(category2.getCategoryName());

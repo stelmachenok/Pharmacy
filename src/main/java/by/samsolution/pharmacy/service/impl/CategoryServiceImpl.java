@@ -1,8 +1,9 @@
 package by.samsolution.pharmacy.service.impl;
 
 import by.samsolution.pharmacy.converter.impl.CategoryConverter;
-import by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO;
+import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.dto.CategoryDto;
+import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
@@ -10,19 +11,26 @@ import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import by.samsolution.pharmacy.service.CategoryService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class CategoryServiceImpl implements CategoryService{
-    private MedicamentCategoryDAO categoryDAO;
-    private CategoryConverter medicineConverter;
+public class CategoryServiceImpl implements CategoryService {
+    private InterfaceDAO<MedicamentCategory, Long, String, CategorySearchRequest> categoryDAO;
+    private CategoryConverter categoryConverter;
 
-    public CategoryServiceImpl(MedicamentCategoryDAO categoryDAO, CategoryConverter medicineConverter) {
+    public CategoryServiceImpl(InterfaceDAO<MedicamentCategory, Long, String, CategorySearchRequest> categoryDAO, CategoryConverter categoryConverter) {
         this.categoryDAO = categoryDAO;
-        this.medicineConverter = medicineConverter;
+        this.categoryConverter = categoryConverter;
     }
 
     @Override
-    public void add(CategoryDto dto) throws ObjectValidationFailedException, EntityAlreadyExistException {
-
+    public void add(CategoryDto categoryDto) throws ObjectValidationFailedException, EntityAlreadyExistException {
+        MedicamentCategory category = categoryConverter.dtoToEntity(categoryDto);
+        MedicamentCategory existedCategory = categoryDAO.getEntityByName(categoryDto.getCategoryName());
+        if (!equalsCategories(category, existedCategory)) {
+            categoryDAO.create(category);
+        } else {
+            throw new EntityAlreadyExistException("Category " + existedCategory + " already exist!");
+        }
     }
 
     @Override
@@ -37,7 +45,9 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public List<CategoryDto> getAll() {
-        return null;
+        return categoryDAO.getAll().stream()
+                .map(c -> categoryConverter.entityToDto(c))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryDto getById(Long id) {
-        return medicineConverter.entityToDto(categoryDAO.getEntityById(id));
+        return categoryConverter.entityToDto(categoryDAO.getEntityById(id));
     }
 
     @Override
@@ -58,5 +68,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public int countOf() {
         return 0;
+    }
+
+    private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
+        return category != null && category2 != null &&
+                category.getDescription().equals(category2.getDescription()) &&
+                category.getCategoryName().equals(category2.getCategoryName());
     }
 }

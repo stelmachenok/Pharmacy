@@ -26,6 +26,10 @@
             window.location.href = "<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=" + id;
         }
     }
+
+    function changeSelectedCategory(id) {
+        $('#categoryMedicament').val(id);
+    }
 </script>
 <c:url var="get_url" value="/medicaments"/>
 
@@ -61,6 +65,10 @@
             <a href="<ex:ref pageContext="${get_url}" sortField="RELEASE_FORM" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
                 <spring:message code="label.releaseForm"/>
             </a></th>
+        <th>
+            <a href="<ex:ref pageContext="${get_url}" sortField="MEDICAMENT_CATEGORY" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
+                <spring:message code="label.medicamentCategory"/>
+            </a></th>
 
         <th><spring:message code="title.edit"/></th>
         <th><spring:message code="title.delete"/></th>
@@ -75,9 +83,11 @@
             <td>${medicament.packingForm}</td>
             <td>${medicament.internationalNonproprietaryName}</td>
             <td>${medicament.releaseForm}</td>
+            <td>${medicament.category.categoryName}</td>
 
             <td>
-                <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
+                <a onclick="changeSelectedCategory('${medicament.categoryDtoId}')"
+                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
@@ -217,6 +227,20 @@
         </div>
     </div>
 
+    <div class="row">
+        <label for="categoryDtoId" class="col-sm-2 control-label">
+            <spring:message code="label.medicamentCategory"/>
+        </label>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <form:select id="categoryMedicament" class="form-control" name="categoryDtoId" path="categoryDtoId">
+                    <c:forEach items="${categories}" var="category">
+                        <option value="${category.id}">${category.categoryName}</option>
+                    </c:forEach>
+                </form:select>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-offset-2 col-sm-2 button">

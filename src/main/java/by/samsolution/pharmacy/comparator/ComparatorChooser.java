@@ -16,7 +16,7 @@ import static by.samsolution.pharmacy.searchrequest.CategorySearchFieldEnum.DESC
 import static by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum.*;
 import static by.samsolution.pharmacy.searchrequest.PharmacySearchFieldEnum.*;
 
-public class ComparatorChooser{
+public class ComparatorChooser {
 
     private Map<ISearchFieldEnum, Comparator> map;
 
@@ -35,6 +35,7 @@ public class ComparatorChooser{
         map.put(PACKING_FORM, new MedicamentPackingFormComparator());
         map.put(INTERNATIONAL_NONPROPRIENTARY_NAME, new MedicamentInternationalNonproprietaryNameComparator());
         map.put(RELEASE_FORM, new MedicamentReleaseFormComparator());
+        map.put(MEDICAMENT_CATEGORY, new MedicamentCategoryComparator());
     }
 
     public Comparator choose(ISearchFieldEnum fieldEnum) {

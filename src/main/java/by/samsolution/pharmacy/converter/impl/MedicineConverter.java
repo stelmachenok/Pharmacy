@@ -3,7 +3,6 @@ package by.samsolution.pharmacy.converter.impl;
 import by.samsolution.pharmacy.converter.InterfaceConverter;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class MedicineConverter implements InterfaceConverter<MedicamentDto, MedicamentEntity> {
     private CategoryConverter categoryConverter;
@@ -22,6 +21,7 @@ public class MedicineConverter implements InterfaceConverter<MedicamentDto, Medi
         dto.setInternationalNonproprietaryName(entity.getInternationalNonproprietaryName());
         dto.setReleaseForm(entity.getReleaseForm());
         dto.setCategory(categoryConverter.entityToDto(entity.getCategory()));
+        dto.setCategoryDtoId(entity.getCategory().getId());
         dto.setId(entity.getId());
         return dto;
     }

@@ -1,13 +1,7 @@
 package by.samsolution.pharmacy.dto;
 
-import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
-import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 public class MedicamentDto extends BasicDto {
 
@@ -18,6 +12,7 @@ public class MedicamentDto extends BasicDto {
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
     private CategoryDto category;
+    private Long categoryDtoId;
     private Long id;
 
     public MedicamentDto() {
@@ -65,6 +60,10 @@ public class MedicamentDto extends BasicDto {
         return category;
     }
 
+    public Long getCategoryDtoId() {
+        return categoryDtoId;
+    }
+
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
@@ -95,6 +94,10 @@ public class MedicamentDto extends BasicDto {
 
     public void setCategory(CategoryDto category) {
         this.category = category;
+    }
+
+    public void setCategoryDtoId(Long categoryDtoId) {
+        this.categoryDtoId = categoryDtoId;
     }
 
     @Override

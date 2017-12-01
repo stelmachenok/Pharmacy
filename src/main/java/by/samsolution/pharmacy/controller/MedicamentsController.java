@@ -7,6 +7,7 @@ import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
+import by.samsolution.pharmacy.service.CategoryService;
 import by.samsolution.pharmacy.service.MedicamentService;
 import by.samsolution.pharmacy.formvalidator.MedicamentValidator;
 import org.slf4j.Logger;
@@ -28,12 +29,14 @@ import static by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum.BRAN
 public class MedicamentsController {
 
     private MedicamentService medicamentService;
+    private CategoryService categoryService;
     private MedicamentValidator medicamentValidator;
     private static Logger logger = LoggerFactory.getLogger(MedicamentsController.class);
 
     @Autowired
-    public MedicamentsController(MedicamentService service, MedicamentValidator medicamentValidator) {
-        this.medicamentService = service;
+    public MedicamentsController(MedicamentService medicamentService, CategoryService categoryService, MedicamentValidator medicamentValidator) {
+        this.medicamentService = medicamentService;
+        this.categoryService = categoryService;
         this.medicamentValidator = medicamentValidator;
     }
 
@@ -52,6 +55,8 @@ public class MedicamentsController {
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("action") String action) {
         medicamentValidator.validate(medicamentDto, result);
+        CategoryDto categoryDto = categoryService.getById(medicamentDto.getCategoryDtoId());
+        medicamentDto.setCategory(categoryDto);
         Long id = medicamentDto.getId();
         if (!result.hasErrors()) {
             try {
@@ -133,6 +138,7 @@ public class MedicamentsController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("action", action);
+        model.addAttribute("categories", categoryService.getAll());
 
         request.setFrom(firstRecord);
         request.setSize(lastRecord - firstRecord);
