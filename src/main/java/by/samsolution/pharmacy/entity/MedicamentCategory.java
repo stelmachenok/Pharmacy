@@ -37,6 +37,10 @@ public class MedicamentCategory extends BasicEntity{
         return id;
     }
 
+    public void setGuid(UUID guid) {
+        this.guid = guid;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

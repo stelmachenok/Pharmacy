@@ -8,9 +8,11 @@ public class CategoryConverter implements InterfaceConverter<CategoryDto, Medica
     @Override
     public CategoryDto entityToDto(MedicamentCategory entity) {
         CategoryDto dto = new CategoryDto();
-        dto.setCategoryName(entity.getCategoryName());
-        dto.setDescription(entity.getDescription());
-        dto.setId(entity.getId());
+        if (entity != null) {
+            dto.setCategoryName(entity.getCategoryName());
+            dto.setDescription(entity.getDescription());
+            dto.setId(entity.getId());
+        }
         return dto;
     }
 

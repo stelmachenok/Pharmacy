@@ -32,9 +32,7 @@
         <property name="storage" ref="PharmacyStorage"/>
     </bean>
 
-    <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO">
-        <property name="ID" value="0"/>
-        <property name="storage" ref="CategoryStorage"/>
+    <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryJdbcDao">
     </bean>
 
 </beans>

@@ -21,7 +21,9 @@ public class MedicineConverter implements InterfaceConverter<MedicamentDto, Medi
         dto.setInternationalNonproprietaryName(entity.getInternationalNonproprietaryName());
         dto.setReleaseForm(entity.getReleaseForm());
         dto.setCategory(categoryConverter.entityToDto(entity.getCategory()));
-        dto.setCategoryDtoId(entity.getCategory().getId());
+        if (entity.getCategory() != null) {
+            dto.setCategoryDtoId(entity.getCategory().getId());
+        }
         dto.setId(entity.getId());
         return dto;
     }

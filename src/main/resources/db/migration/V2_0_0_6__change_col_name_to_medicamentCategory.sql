@@ -1,0 +1,1 @@
+ALTER TABLE medicament CHANGE categoryId medicamentCategory VARCHAR(64);
