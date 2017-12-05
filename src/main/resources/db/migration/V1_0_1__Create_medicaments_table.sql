@@ -5,6 +5,8 @@ create table Medicament  (
     dosage DOUBLE,
     packingForm VARCHAR(20),
     internationalNonproprietaryName VARCHAR(64),
+    releaseForm CHAR(64),
+    medicamentCategory BIGINT,
     guid VARCHAR(64),
     INDEX(brandName),
     INDEX(internationalNonproprietaryName)
