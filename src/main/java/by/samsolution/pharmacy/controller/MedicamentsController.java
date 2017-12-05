@@ -5,6 +5,7 @@ import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
 import by.samsolution.pharmacy.service.CategoryService;
@@ -72,6 +73,8 @@ public class MedicamentsController {
                 logger.error(e.getMessage());
                 addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
                 return "medicaments";
+            } catch (JdbcManipulationException e) {
+                logger.error("Updated more or less than 1 record!");
             }
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
@@ -96,7 +99,8 @@ public class MedicamentsController {
         if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);
-            } catch (EntityNotFoundException e) {
+            } catch (EntityNotFoundException | JdbcManipulationException e) {
+                logger.error(e.getMessage());
                 model.addAttribute("exceptionText", e.getMessage());
             }
         }

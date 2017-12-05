@@ -1,6 +1,7 @@
 package by.samsolution.pharmacy.dao;
 
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 
 import java.util.List;
 
@@ -14,13 +15,13 @@ public interface InterfaceDAO<E, K, N, R> {
 
     E getEntityById(K id);
 
-    E getEntityByName(N name);
+    List<E> getEntityByName(N name);
 
     int countOf();
 
-    void update(E entity) throws EntityNotFoundException;
+    void update(E entity) throws EntityNotFoundException, JdbcManipulationException;
 
-    void delete(K id) throws EntityNotFoundException;
+    void delete(K id) throws EntityNotFoundException, JdbcManipulationException;
 
-    void create(E entity);
+    void create(E entity) throws JdbcManipulationException;
 }

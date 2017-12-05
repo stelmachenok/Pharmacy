@@ -4,16 +4,17 @@ import by.samsolution.pharmacy.dto.BasicDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.SearchRequest;
 
 import java.util.List;
 
 public interface Service<T extends BasicDto, R extends SearchRequest> {
-    void add(T dto) throws ObjectValidationFailedException, EntityAlreadyExistException;
+    void add(T dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException;
 
-    void update(T dto) throws ObjectValidationFailedException, EntityNotFoundException;
+    void update(T dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException;
 
-    void delete(Long id) throws EntityNotFoundException;
+    void delete(Long id) throws EntityNotFoundException, JdbcManipulationException;
 
     List<T> getAll();
 

@@ -46,7 +46,7 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
         pharmacies = (List<Pharmacy>) pharmacies.stream().
                 sorted(chooser.choose(request.getSortField())).
                 collect(Collectors.toList());
-        if (!request.getDirection()){
+        if (!request.getDirection()) {
             Collections.reverse(pharmacies);
         }
         int from = request.getFrom();
@@ -67,9 +67,10 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
     }
 
     @Override
-    public Pharmacy getEntityByName(String name) {
+    public List<Pharmacy> getEntityByName(String name) {
         List<Pharmacy> pharmacies = storage.getItemList();
-        return pharmacies.stream().filter(m -> m.getPharmacyName().equals(name)).findAny().orElse(null);
+        return pharmacies.stream().filter(m -> m.getPharmacyName().equals(name)).
+                collect(Collectors.toList());
     }
 
     @Override

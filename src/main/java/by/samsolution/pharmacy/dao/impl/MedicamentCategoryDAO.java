@@ -66,9 +66,10 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
-    public MedicamentCategory getEntityByName(String name) {
+    public List<MedicamentCategory> getEntityByName(String name) {
         List<MedicamentCategory> categories = storage.getItemList();
-        return categories.stream().filter(m -> m.getCategoryName().equals(name)).findAny().orElse(null);
+        return categories.stream().filter(m -> m.getCategoryName().equals(name)).
+                collect(Collectors.toList());
     }
 
     @Override

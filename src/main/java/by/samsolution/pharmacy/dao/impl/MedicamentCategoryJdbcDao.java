@@ -55,7 +55,7 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
     }
 
     @Override
-    public MedicamentCategory getEntityByName(String name) {
+    public List<MedicamentCategory> getEntityByName(String name) {
         return null;
     }
 

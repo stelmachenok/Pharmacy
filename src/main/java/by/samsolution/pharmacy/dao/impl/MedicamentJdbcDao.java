@@ -5,15 +5,21 @@ import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> {
@@ -21,6 +27,8 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private MedicamentCategoryJdbcDao categoryJdbcDao;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     class Mapper implements RowMapper<MedicamentEntity> {
 
@@ -44,31 +52,20 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
 
     @Override
     public List<MedicamentEntity> getAll() {
-        return jdbcTemplate.query(
-                "select * from medicament", mapper
-        );
+        String SQL = "SELECT * FROM medicament";
+        return namedParameterJdbcTemplate.query(SQL, mapper);
     }
 
     @Override
     public List<MedicamentEntity> getAll(MedicamentsSearchRequest request) {
-        List<MedicamentEntity> medicaments;
-        List<MedicamentEntity> wantedMedicaments = new ArrayList<>();
-        if (request.getDirection()) {
-            medicaments = jdbcTemplate.query(
-                    "select * from medicament ORDER BY " + request.getSortField().getFieldName(),
-                    mapper
-            );
-        } else {
-            medicaments = jdbcTemplate.query(
-                    "select * from medicament ORDER BY " + request.getSortField().getFieldName() + " DESC",
-                    mapper
-            );
-        }
+        String SQL = "SELECT * FROM medicament ORDER BY " + request.getSortField().getFieldName() + (!request.getDirection() ? " DESC" : "");
+        Map namedParameters = new HashMap();
+        List<MedicamentEntity> medicaments = namedParameterJdbcTemplate.query(SQL, namedParameters, mapper);
         int from = request.getFrom();
         int size = request.getSize();
         int count = countOf();
         int last = count < from + size ? count : from + size;
-
+        List<MedicamentEntity> wantedMedicaments = new ArrayList<>();
         for (int i = from; i <= last; i++) {
             wantedMedicaments.add(medicaments.get(i));
         }
@@ -77,15 +74,18 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
 
     @Override
     public MedicamentEntity getEntityById(Long id) {
-        return jdbcTemplate.queryForObject(
-                "select * from medicament WHERE id = ?",
-                mapper, id
-        );
+        String SQL = "SELECT * FROM medicament WHERE id = :id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        return namedParameterJdbcTemplate.queryForObject(SQL, namedParameters, mapper);
     }
 
     @Override
-    public MedicamentEntity getEntityByName(String name) {
-        return null;
+    public List<MedicamentEntity> getEntityByName(String name) {
+        return jdbcTemplate.query(
+                "SELECT * FROM medicament WHERE brandName = ?",
+                mapper,
+                name
+        );
     }
 
     @Override
@@ -94,17 +94,60 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
     }
 
     @Override
-    public void update(MedicamentEntity entity) throws EntityNotFoundException {
-
+    public void update(MedicamentEntity entity) throws EntityNotFoundException, JdbcManipulationException {
+        String SQL = "UPDATE Medicament SET " +
+                "brandName = :brandName, " +
+                "activeIngredient = :activeIngredient, " +
+                "dosage = :dosage, " +
+                "packingForm = :packingForm,  " +
+                "internationalNonproprietaryName = :internationalNonproprietaryName, " +
+                "releaseForm = :releaseForm, " +
+                "guid = :guid, " +
+                "medicamentCategory = :medicamentCategory " +
+                "WHERE id = :id";
+        Map namedParameters = new HashMap();
+        namedParameters.put("brandName", entity.getBrandName());
+        namedParameters.put("activeIngredient", entity.getActiveIngredient());
+        namedParameters.put("dosage", entity.getDosage());
+        namedParameters.put("packingForm", String.valueOf(entity.getPackingForm()));
+        namedParameters.put("internationalNonproprietaryName", entity.getInternationalNonproprietaryName());
+        namedParameters.put("releaseForm", String.valueOf(entity.getReleaseForm()));
+        namedParameters.put("guid", String.valueOf(entity.getGuid()));
+        namedParameters.put("id", String.valueOf(entity.getId()));
+        namedParameters.put("medicamentCategory", entity.getCategory().getId());
+        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
+        if (changedRecords != 1) {
+            throw new JdbcManipulationException("Updated more or less than 1 record!");
+        }
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
-
+    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+        String SQL = "DELETE FROM Medicament WHERE id = :id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
+        if (changedRecords != 1) {
+            throw new JdbcManipulationException("Deleted more or less than 1 record!");
+        }
     }
 
     @Override
-    public void create(MedicamentEntity entity) {
+    public void create(MedicamentEntity entity) throws JdbcManipulationException {
+        String SQL = "INSERT INTO medicament (brandName, activeIngredient, dosage, packingForm, internationalNonproprietaryName, releaseForm, guid, medicamentCategory)" +
+                " VALUES (:brandName, :activeIngredient, :dosage, :packingForm, :internationalNonproprietaryName, :releaseForm, :guid, :medicamentCategory)";
+        Map namedParameters = new HashMap();
+        namedParameters.put("brandName", entity.getBrandName());
+        namedParameters.put("activeIngredient", entity.getActiveIngredient());
+        namedParameters.put("dosage", entity.getDosage());
+        namedParameters.put("packingForm", String.valueOf(entity.getPackingForm()));
+        namedParameters.put("internationalNonproprietaryName", entity.getInternationalNonproprietaryName());
+        namedParameters.put("releaseForm", String.valueOf(entity.getReleaseForm()));
+        namedParameters.put("guid", String.valueOf(entity.getGuid()));
+        namedParameters.put("medicamentCategory", entity.getCategory().getId());
+        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
 
+        if (changedRecords != 1) {
+            throw new JdbcManipulationException("Created more or less than 1 record!");
+        }
     }
 }

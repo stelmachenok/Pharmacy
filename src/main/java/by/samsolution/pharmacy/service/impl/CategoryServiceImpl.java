@@ -6,6 +6,7 @@ import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import by.samsolution.pharmacy.service.CategoryService;
@@ -23,13 +24,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void add(CategoryDto categoryDto) throws ObjectValidationFailedException, EntityAlreadyExistException {
+    public void add(CategoryDto categoryDto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException {
         MedicamentCategory category = categoryConverter.dtoToEntity(categoryDto);
-        MedicamentCategory existedCategory = categoryDAO.getEntityByName(categoryDto.getCategoryName());
-        if (!equalsCategories(category, existedCategory)) {
+        List<MedicamentCategory> existedCategories = categoryDAO.getEntityByName(categoryDto.getCategoryName());
+        if (!equalsCategories(existedCategories, category)) {
             categoryDAO.create(category);
         } else {
-            throw new EntityAlreadyExistException("Category " + existedCategory + " already exist!");
+            throw new EntityAlreadyExistException("Category " + category + " already exist!");
         }
     }
 
@@ -70,9 +71,14 @@ public class CategoryServiceImpl implements CategoryService {
         return 0;
     }
 
-    private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
-        return category != null && category2 != null &&
-                category.getDescription().equals(category2.getDescription()) &&
-                category.getCategoryName().equals(category2.getCategoryName());
+    private boolean equalsCategories(List<MedicamentCategory> categories, MedicamentCategory category) {
+        if (categories != null && category != null){
+            for (MedicamentCategory c:categories) {
+                if (c.getDescription().equals(category.getDescription()) &&
+                        c.getCategoryName().equals(category.getCategoryName()))
+                    return true;
+            }
+        }
+        return false;
     }
 }

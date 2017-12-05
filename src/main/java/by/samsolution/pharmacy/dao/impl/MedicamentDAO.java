@@ -67,9 +67,10 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
     }
 
     @Override
-    public MedicamentEntity getEntityByName(String name) {
+    public List<MedicamentEntity> getEntityByName(String name) {
         List<MedicamentEntity> medicamentEntities = storage.getItemList();
-        return medicamentEntities.stream().filter(m -> m.getBrandName().equals(name)).findAny().orElse(null);
+        return medicamentEntities.stream().filter(m -> m.getBrandName().equals(name)).
+        collect(Collectors.toList());
     }
 
     @Override

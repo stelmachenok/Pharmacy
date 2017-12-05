@@ -8,6 +8,7 @@ import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.service.MedicamentService;
 
@@ -25,22 +26,21 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void add(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityAlreadyExistException {
+    public void add(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException {
         if (medicamentDto.getDosage() < 0) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
         MedicamentEntity entity = medicineConverter.dtoToEntity(medicamentDto);
-        MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
-        if (!equalsMedicaments(existedMedicamentEntity, entity)) {
-
+        List<MedicamentEntity> existedMedicamentEntities = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
+        if (!equalsMedicaments(existedMedicamentEntities, entity)) {
             medicamentDAO.create(entity);
         } else {
-            throw new EntityAlreadyExistException("MedicamentEntity " + existedMedicamentEntity + " already exist!");
+            throw new EntityAlreadyExistException("MedicamentEntity " + entity + " already exist!");
         }
     }
 
     @Override
-    public void update(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityNotFoundException {
+    public void update(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException {
         if (medicamentDto.getDosage() < 0) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
@@ -54,7 +54,7 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
+    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(id);
         if (existedMedicamentEntity != null) {
             medicamentDAO.delete(id);
@@ -84,7 +84,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public int countOf(MedicamentsSearchRequest request) {
-        return medicamentDAO.getAll().size();
+        return medicamentDAO.getAll(request).size();
     }
 
     @Override
@@ -92,15 +92,21 @@ public class MedicamentServiceImpl implements MedicamentService {
         return medicamentDAO.getAll().size();
     }
 
-    private boolean equalsMedicaments(MedicamentEntity medicamentEntity, MedicamentEntity medicamentEntity2) {
-        return medicamentEntity != null && medicamentEntity2 != null &&
-                medicamentEntity.getBrandName().equals(medicamentEntity2.getBrandName()) &&
-                medicamentEntity.getActiveIngredient().equals(medicamentEntity2.getActiveIngredient()) &&
-                medicamentEntity.getDosage().equals(medicamentEntity2.getDosage()) &&
-                medicamentEntity.getPackingForm().equals(medicamentEntity2.getPackingForm()) &&
-                medicamentEntity.getInternationalNonproprietaryName().equals(medicamentEntity2.getInternationalNonproprietaryName()) &&
-                medicamentEntity.getReleaseForm().equals(medicamentEntity2.getReleaseForm()) &&
-                equalsCategories(medicamentEntity.getCategory(), medicamentEntity2.getCategory());
+    private boolean equalsMedicaments(List<MedicamentEntity> medicamentEntities, MedicamentEntity medicamentEntity) {
+
+        if (medicamentEntities != null && medicamentEntity != null) {
+            for (MedicamentEntity e : medicamentEntities) {
+                if (e.getBrandName().equals(medicamentEntity.getBrandName()) &&
+                        e.getActiveIngredient().equals(medicamentEntity.getActiveIngredient()) &&
+                        e.getDosage().equals(medicamentEntity.getDosage()) &&
+                        e.getPackingForm().equals(medicamentEntity.getPackingForm()) &&
+                        e.getInternationalNonproprietaryName().equals(medicamentEntity.getInternationalNonproprietaryName()) &&
+                        e.getReleaseForm().equals(medicamentEntity.getReleaseForm()) &&
+                        equalsCategories(e.getCategory(), medicamentEntity.getCategory()))
+                    return true;
+            }
+        }
+        return false;
     }
 
     private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
