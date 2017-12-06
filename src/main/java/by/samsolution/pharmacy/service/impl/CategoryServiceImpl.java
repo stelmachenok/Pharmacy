@@ -35,13 +35,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void update(CategoryDto dto) throws ObjectValidationFailedException, EntityNotFoundException {
-
+    public void update(CategoryDto dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException {
+        MedicamentCategory entity = categoryConverter.dtoToEntity(dto);
+        MedicamentCategory existedCategoryEntity = categoryDAO.getEntityById(dto.getId());
+        if (existedCategoryEntity != null) {
+            categoryDAO.update(entity);
+        } else {
+            throw new EntityNotFoundException("Category " + dto + " doesn't exist");
+        }
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
-
+    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+        MedicamentCategory existedCategoryEntity = categoryDAO.getEntityById(id);
+        if (existedCategoryEntity != null){
+            categoryDAO.delete(id);
+        }else {
+            throw new EntityNotFoundException("Category with id " + id + " doesn't exist");
+        }
     }
 
     @Override
@@ -53,7 +64,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll(CategorySearchRequest request) {
-        return null;
+        return categoryDAO.getAll(request).stream()
+                .map(c -> categoryConverter.entityToDto(c))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,12 +76,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public int countOf(CategorySearchRequest request) {
-        return 0;
+        return categoryDAO.getAll(request).size();
     }
 
     @Override
     public int countOf() {
-        return 0;
+        return categoryDAO.getAll().size();
     }
 
     private boolean equalsCategories(List<MedicamentCategory> categories, MedicamentCategory category) {

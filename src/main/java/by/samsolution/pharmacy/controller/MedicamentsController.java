@@ -93,7 +93,7 @@ public class MedicamentsController {
     }
 
     @RequestMapping(value = "/medicaments", method = RequestMethod.GET)
-    public String showAddUserForm(ModelMap model,
+    public String showMedicaments(ModelMap model,
                                   @RequestParam(value = "page-num", required = false) Integer pageNum,
                                   @RequestParam(value = "page-size", required = false) Integer pageSize,
                                   @RequestParam(value = "sort-field", required = false) MedicineSearchFieldEnum sortField,

@@ -32,5 +32,8 @@
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
 
+    <bean id="CategoryValidator" class="by.samsolution.pharmacy.formvalidator.CategoryValidator">
+    </bean>
+
 
 </beans>
