@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Welcome</title>
+    <title>Welcome to ${appName}</title>
     <%@ include file="styles.jsp" %>
 </head>
 <body>

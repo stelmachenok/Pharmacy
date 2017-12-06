@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
 
 import static by.samsolution.pharmacy.entity.PackingForm.CAPSULE;
 import static by.samsolution.pharmacy.entity.ReleaseForm.WITHOUT_RECIPE;
@@ -42,8 +45,10 @@ public class MedicamentsController {
     }
 
     @RequestMapping("/")
-    public String home() {
-        return "welcome";
+    public ModelAndView home() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("appName", "Pharmacy");
+        return new ModelAndView("welcome", data);
     }
 
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)

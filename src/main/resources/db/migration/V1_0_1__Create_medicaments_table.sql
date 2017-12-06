@@ -7,7 +7,8 @@ create table Medicament  (
     internationalNonproprietaryName VARCHAR(64),
     releaseForm CHAR(64),
     medicamentCategory BIGINT,
-    guid VARCHAR(64),
-    INDEX(brandName),
-    INDEX(internationalNonproprietaryName)
+    guid VARCHAR(64)
 );
+
+CREATE INDEX index1 ON Medicament (brandName);
+CREATE INDEX index2 ON Medicament (internationalNonproprietaryName);
