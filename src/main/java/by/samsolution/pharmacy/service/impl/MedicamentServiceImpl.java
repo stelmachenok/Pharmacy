@@ -40,12 +40,16 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void update(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException {
+    public void update(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException, EntityAlreadyExistException {
         if (medicamentDto.getDosage() < 0) {
             throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
         }
         MedicamentEntity entity = medicineConverter.dtoToEntity(medicamentDto);
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
+        List<MedicamentEntity> existedMedicaments = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
+        if (equalsMedicaments(existedMedicaments, entity)){
+            throw new EntityAlreadyExistException("MedicamentEntity with same characteristics already exist");
+        }
         if (existedMedicamentEntity != null) {
             medicamentDAO.update(entity);
         } else {
@@ -111,7 +115,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
         return category != null && category2 != null &&
-                category.getDescription().equals(category2.getDescription()) &&
+                /*category.getDescription().equals(category2.getDescription()) &&*/
                 category.getCategoryName().equals(category2.getCategoryName());
     }
 }

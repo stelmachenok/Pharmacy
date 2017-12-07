@@ -19,6 +19,9 @@
         <constructor-arg name="categoryConverter" ref="CategoryConverter"/>
     </bean>
 
+    <bean id="PharmacyConverter" class="by.samsolution.pharmacy.converter.impl.PharmacyConverter">
+    </bean>
+
     <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
         <constructor-arg ref="MedicineConverter"/>
@@ -29,10 +32,18 @@
         <constructor-arg ref="CategoryConverter"/>
     </bean>
 
+    <bean id="PharmacyServiceImpl" class="by.samsolution.pharmacy.service.impl.PharmacyServiceImpl">
+        <constructor-arg ref="PharmacyDAO"/>
+        <constructor-arg ref="PharmacyConverter"/>
+    </bean>
+
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
 
     <bean id="CategoryValidator" class="by.samsolution.pharmacy.formvalidator.CategoryValidator">
+    </bean>
+
+    <bean id="PharmacyValidator" class="by.samsolution.pharmacy.formvalidator.PharmacyValidator">
     </bean>
 
 

@@ -43,6 +43,10 @@ public class Pharmacy extends BasicEntity{
         return uuid;
     }
 
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public void setPharmacyName(String pharmacyName) {
         this.pharmacyName = pharmacyName;
     }

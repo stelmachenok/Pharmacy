@@ -52,4 +52,14 @@ public class MedicamentCategory extends BasicEntity{
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "MedicamentCategory{" +
+                "categoryName='" + categoryName + '\'' +
+                ", description='" + description + '\'' +
+                ", guid=" + guid +
+                ", id=" + id +
+                '}';
+    }
 }

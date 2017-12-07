@@ -27,7 +27,7 @@ VALUES
   ('АЕКОЛ', 'Токоферол', 100.0, 'AEROSOL', 'Токоферол', 'WITHOUT_RECIPE', 1, UUID());
 INSERT INTO Medicament (brandName, activeIngredient, dosage, packingForm, internationalNonproprietaryName, releaseForm, medicamentCategory, guid)
 VALUES ('АДВАНТАН', 'Метилпреднизолона ацепонат', 20.0, 'EMULSION', 'Метилпреднизолона ацепонат', 'WITHOUT_RECIPE', 1,
-        '7dc53df5-703e-49b3-8670-b1c468f47f1f');
+        UUID());
 INSERT INTO Medicament (brandName, activeIngredient, dosage, packingForm, internationalNonproprietaryName, releaseForm, medicamentCategory, guid)
 VALUES
   ('АДЕНИК', 'Тамсулозин', 0.4, 'CAPSULE', 'Тамсулозин', 'WITHOUT_RECIPE', 1, UUID());

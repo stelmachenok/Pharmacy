@@ -14,7 +14,7 @@ public class CategoryValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         CategoryDto categoryDto = (CategoryDto) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "categoryName", "NotEmpty.medicament.brandName");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty.medicament.activeIngredient");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "categoryName", "NotEmpty.category.categoryName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty.category.description");
     }
 }

@@ -6,6 +6,7 @@ import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -44,7 +45,7 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
     @Override
     public List<MedicamentCategory> getAll() {
         return jdbcTemplate.query(
-                "select * from category",
+                "SELECT * FROM category",
                 mapper
         );
     }
@@ -67,11 +68,16 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
 
     @Override
     public MedicamentCategory getEntityById(Long id) {
-        return jdbcTemplate.queryForObject(
-                "select * from category WHERE id = ?",
-                mapper,
-                id
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM category WHERE id = ?",
+                    mapper,
+                    id
+            );
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     @Override
@@ -113,6 +119,8 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
         if (changedRecords != 1) {
             throw new JdbcManipulationException("Deleted more or less than 1 record!");
         }
+        SQL = "UPDATE medicament SET medicamentCategory = NULL WHERE medicamentCategory = :id";
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override

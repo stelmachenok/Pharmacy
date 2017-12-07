@@ -137,9 +137,5 @@ public class CategoriesController {
         model.addAttribute("categories", categoryService.getAll(request));
     }
 
-    @RequestMapping("/categories")
-    public String categories() {
-        return "categories";
-    }
 }
 

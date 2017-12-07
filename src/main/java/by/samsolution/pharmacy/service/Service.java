@@ -12,7 +12,7 @@ import java.util.List;
 public interface Service<T extends BasicDto, R extends SearchRequest> {
     void add(T dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException;
 
-    void update(T dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException;
+    void update(T dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException, EntityAlreadyExistException;
 
     void delete(Long id) throws EntityNotFoundException, JdbcManipulationException;
 

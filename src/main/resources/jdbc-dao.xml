@@ -27,9 +27,7 @@
     <bean id="MedicamentDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentJdbcDao">
     </bean>
 
-    <bean id="PharmacyDAO" class="by.samsolution.pharmacy.dao.impl.PharmacyDAO">
-        <property name="ID" value="0"/>
-        <property name="storage" ref="PharmacyStorage"/>
+    <bean id="PharmacyDAO" class="by.samsolution.pharmacy.dao.impl.PharmacyJdbcDao">
     </bean>
 
     <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryJdbcDao">
