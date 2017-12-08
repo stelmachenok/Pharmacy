@@ -1,3 +1,3 @@
-INSERT INTO UserTable (login, password, role, pharmacyId)
+INSERT INTO UserTable (login, password, role, pharmacyId, enabled)
 VALUES
-  ('root', 'root', 'ADMINISTRATOR', 1);
+  ('root', 'root', 'ROLE_ADMIN', 1, TRUE);

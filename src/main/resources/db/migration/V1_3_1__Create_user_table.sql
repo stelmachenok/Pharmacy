@@ -3,5 +3,6 @@ CREATE TABLE UserTable (
   login      VARCHAR(64) NOT NULL UNIQUE,
   password   VARCHAR(64) NOT NULL,
   role       VARCHAR(64) NOT NULL,
-  pharmacyId BIGINT
+  pharmacyId BIGINT,
+  enabled    BOOL NOT NULL DEFAULT TRUE
 );

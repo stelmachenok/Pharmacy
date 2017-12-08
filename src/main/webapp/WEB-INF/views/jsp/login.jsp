@@ -16,7 +16,8 @@
     <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
 </span>
 <c:url var="post_url"
-       value="/userLogin"/>
+       value="/login"/>
+<b>${error}</b>
 <form:form class="form-horizontal" method="POST" modelAttribute="user" action="${post_url}">
     <div class="row">
         <label for="login" class="col-sm-offset-3 col-sm-2 control-label">
@@ -26,7 +27,7 @@
             <spring:bind path="login">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input class="form-control" type="text" size="70"
-                                path="login" id="login"/>
+                                path="login" id="login"  />
                     <form:errors path="login"/>
                 </div>
             </spring:bind>
@@ -41,7 +42,7 @@
             <spring:bind path="password">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input class="form-control" type="text" size="70"
-                                path="password" id="password"/>
+                                path="password" id="j_password"/>
                     <form:errors path="password"/>
                 </div>
             </spring:bind>
@@ -54,5 +55,7 @@
         </div>
     </div>
 </form:form>
+
+
 </body>
 </html>

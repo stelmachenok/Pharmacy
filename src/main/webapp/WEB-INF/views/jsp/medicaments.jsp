@@ -31,6 +31,8 @@
         $('#categoryMedicament').val(id);
     }
 </script>
+
+<%@ include file="logout.jsp" %>
 <c:url var="get_url" value="/medicaments"/>
 
 <span id="time"></span>
