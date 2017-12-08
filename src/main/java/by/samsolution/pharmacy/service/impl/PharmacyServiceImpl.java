@@ -42,7 +42,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         Pharmacy entity = pharmacyConverter.dtoToEntity(dto);
         Pharmacy existedPharmacyEntity = pharmacyDAO.getEntityById(dto.getId());
         List<Pharmacy> existedPharmacies = pharmacyDAO.getEntityByName(dto.getPharmacyName());
-        if (equalsPharmacies(existedPharmacies, entity)){
+        if (equalsPharmacies(existedPharmacies, entity)) {
             throw new EntityAlreadyExistException("Pharmacy with same characteristics already exist");
         }
         if (existedPharmacyEntity != null) {
@@ -91,11 +91,14 @@ public class PharmacyServiceImpl implements PharmacyService {
         return pharmacyDAO.getAll().size();
     }
 
-    private boolean equalsPharmacies(List<Pharmacy> pharmacyEntities, Pharmacy pharmacy){
+    private boolean equalsPharmacies(List<Pharmacy> pharmacyEntities, Pharmacy pharmacy) {
         if (pharmacyEntities != null && pharmacy != null) {
             for (Pharmacy p : pharmacyEntities) {
                 if (p.getPharmacyName().equals(pharmacy.getPharmacyName()) &&
-                        p.getAddress().equals(pharmacy.getAddress()))
+                        p.getAddress().equals(pharmacy.getAddress()) &&
+                        p.getPharmacistName().equals(pharmacy.getPharmacistName()) &&
+                        p.getContactNumber().equals(pharmacy.getContactNumber()) &&
+                        p.getCategory().equals(pharmacy.getCategory()))
                     return true;
             }
         }

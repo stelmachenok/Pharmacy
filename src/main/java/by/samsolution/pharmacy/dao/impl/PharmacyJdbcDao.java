@@ -105,7 +105,7 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
         Map namedParameters = new HashMap();
         namedParameters.put("pharmacyName", entity.getPharmacyName());
         namedParameters.put("address", entity.getAddress());
-        namedParameters.put("pharmacistName", entity.getPharmacyName());
+        namedParameters.put("pharmacistName", entity.getPharmacistName());
         namedParameters.put("contactNumber", entity.getContactNumber());
         namedParameters.put("login", entity.getLogin());
         namedParameters.put("password", entity.getPassword());
