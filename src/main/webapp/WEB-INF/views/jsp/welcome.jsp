@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Welcome to ${appName}</title>
+    <title><spring:message code="title.welcome"/>}</title>
     <%@ include file="styles.jsp" %>
 </head>
 <body>

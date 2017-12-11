@@ -1,5 +1,5 @@
 package by.samsolution.pharmacy.entity;
 
 public enum UserRole {
-    ADMINISTRATOR, PROVISOR
+    ROLE_ADMIN, ROLE_PHARMACIST
 }

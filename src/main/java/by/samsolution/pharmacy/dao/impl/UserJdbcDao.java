@@ -10,19 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchRequest>{
+public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchRequest> {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    class Mapper implements RowMapper<User> {
+    class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User();
@@ -31,20 +33,27 @@ public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchR
             user.setPassword(rs.getString("password"));
             user.setRole(UserRole.valueOf(rs.getString("role")));
             user.setPharmacyId(rs.getLong("pharmacyId"));
+            user.setEnabled(rs.getBoolean("enabled"));
             return user;
         }
     }
 
-    private final Mapper mapper = new Mapper();
+    private final UserMapper mapper = new UserMapper();
 
     @Override
     public List<User> getAll() {
-        return null;
+        String SQL = "SELECT * FROM usertable";
+        return namedParameterJdbcTemplate.query(SQL, mapper);
     }
 
     @Override
     public List<User> getAll(UserSearchRequest request) {
-        return null;
+        String SQL = "SELECT * FROM usertable";
+        List<User> users = namedParameterJdbcTemplate.query(SQL, mapper);
+        return users.stream().filter((u) -> ((request.getId() == null || request.getId() != null && u.getId().equals(request.getId())) &&
+                (request.getLogin() == null || request.getLogin() != null && u.getLogin().equals(request.getLogin())) &&
+                (request.getRole() == null || request.getRole() != null && u.getRole().equals(request.getRole()))))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -21,6 +21,13 @@
         }, 1000);
     });
 
+//    var date = new Date(('/getTime'));
+//    var curr_date = date.getDate();
+//    var curr_month = date.getMonth() + 1;
+//    var curr_year = date.getFullYear();
+//    $('#time').load(curr_year + "-" + curr_month + "-" + curr_date);
+//    }, 5000);
+
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
             window.location.href = "<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=" + id;
@@ -77,25 +84,25 @@
 
     </tr>
 
-    <c:forEach items="${medicaments}" var="medicament">
+    <c:forEach items="${medicaments}" var="available">
         <tr>
-            <td>${medicament.brandName}</td>
-            <td>${medicament.activeIngredient}</td>
-            <td>${medicament.dosage}</td>
-            <td>${medicament.packingForm}</td>
-            <td>${medicament.internationalNonproprietaryName}</td>
-            <td>${medicament.releaseForm}</td>
-            <td>${medicament.category.categoryName}</td>
+            <td>${available.brandName}</td>
+            <td>${available.activeIngredient}</td>
+            <td>${available.dosage}</td>
+            <td>${available.packingForm}</td>
+            <td>${available.internationalNonproprietaryName}</td>
+            <td>${available.releaseForm}</td>
+            <td>${available.category.categoryName}</td>
 
             <td>
-                <a onclick="changeSelectedCategory('${medicament.categoryDtoId}')"
-                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
+                <a onclick="changeSelectedCategory('${available.categoryDtoId}')"
+                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${available.id}"/>">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
 
             <td>
-                <a id="delete" onclick="deleteConfirmation('${medicament.brandName}', '${medicament.id}')">
+                <a id="delete" onclick="deleteConfirmation('${available.brandName}', '${available.id}')">
                     <spring:message code="title.delete"/>
                 </a>
             </td>

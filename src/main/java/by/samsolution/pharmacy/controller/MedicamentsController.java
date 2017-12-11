@@ -45,10 +45,8 @@ public class MedicamentsController {
     }
 
     @RequestMapping("/")
-    public ModelAndView home() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("appName", "Pharmacy");
-        return new ModelAndView("welcome", data);
+    public ModelAndView welcome() {
+        return new ModelAndView("welcome");
     }
 
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)

@@ -1,25 +1,15 @@
-package by.samsolution.pharmacy.entity;
+package by.samsolution.pharmacy.dto;
 
-import by.samsolution.pharmacy.dto.BasicDto;
+import by.samsolution.pharmacy.entity.UserRole;
 
-public class User extends BasicEntity {
+public class UserDto extends BasicDto {
     private Long id;
     private String login;
-    private String password;
     private UserRole role;
     private Long pharmacyId;
     private Boolean enabled;
 
-    public User() {
-    }
-
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
+    public UserDto() {
     }
 
     public Long getId() {
@@ -30,10 +20,6 @@ public class User extends BasicEntity {
         return login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public UserRole getRole() {
         return role;
     }
@@ -42,8 +28,8 @@ public class User extends BasicEntity {
         return pharmacyId;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
     public void setId(Long id) {
@@ -54,10 +40,6 @@ public class User extends BasicEntity {
         this.login = login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void setRole(UserRole role) {
         this.role = role;
     }
@@ -65,5 +47,8 @@ public class User extends BasicEntity {
     public void setPharmacyId(Long pharmacyId) {
         this.pharmacyId = pharmacyId;
     }
-}
 
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+}

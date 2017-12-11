@@ -37,4 +37,9 @@ public class LoginController {
         model.addAttribute("user", user);
         return "login";
     }
+
+    @RequestMapping(value = "/error403", method = RequestMethod.GET)
+    public String error403(){
+        return "error403";
+    }
 }
