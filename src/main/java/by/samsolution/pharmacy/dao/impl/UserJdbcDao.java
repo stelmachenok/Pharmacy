@@ -52,7 +52,9 @@ public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchR
         List<User> users = namedParameterJdbcTemplate.query(SQL, mapper);
         return users.stream().filter((u) -> ((request.getId() == null || request.getId() != null && u.getId().equals(request.getId())) &&
                 (request.getLogin() == null || request.getLogin() != null && u.getLogin().equals(request.getLogin())) &&
-                (request.getRole() == null || request.getRole() != null && u.getRole().equals(request.getRole()))))
+                (request.getRole() == null || request.getRole() != null && u.getRole().equals(request.getRole())) &&
+                (request.getPharmacyId() == null || request.getPharmacyId() != null && u.getPharmacyId().equals(request.getPharmacyId())) &&
+                (request.getEnabled() == null || request.getEnabled() != null && u.getEnabled().equals(request.getEnabled()))))
                 .collect(Collectors.toList());
     }
 

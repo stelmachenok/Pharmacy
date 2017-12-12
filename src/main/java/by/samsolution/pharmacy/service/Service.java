@@ -10,7 +10,7 @@ import by.samsolution.pharmacy.searchrequest.SearchRequest;
 import java.util.List;
 
 public interface Service<T extends BasicDto, R extends SearchRequest> {
-    void add(T dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException;
+    void add(T dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException, EntityNotFoundException;
 
     void update(T dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException, EntityAlreadyExistException;
 

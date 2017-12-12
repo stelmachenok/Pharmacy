@@ -25,7 +25,7 @@
 <a href="<%= pageContext.getServletContext().getContextPath() %>/pharmacies"><spring:message
         code="title.pharmacies"/></a>
 <br/>
-<a href="<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs"><spring:message
+<a href="<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?action=1"><spring:message
         code="title.availability_of_drugs"/></a>
 </body>
 </html>

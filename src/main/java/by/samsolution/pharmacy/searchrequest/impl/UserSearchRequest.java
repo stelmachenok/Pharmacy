@@ -9,6 +9,8 @@ public class UserSearchRequest extends AbstractSearchRequest<UserSearchFieldEnum
     private String login;
     private String password;
     private UserRole role;
+    private Long pharmacyId;
+    private Boolean enabled;
 
     public UserSearchRequest() {
     }
@@ -36,6 +38,14 @@ public class UserSearchRequest extends AbstractSearchRequest<UserSearchFieldEnum
         return role;
     }
 
+    public Long getPharmacyId() {
+        return pharmacyId;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -50,5 +60,13 @@ public class UserSearchRequest extends AbstractSearchRequest<UserSearchFieldEnum
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public void setPharmacyId(Long pharmacyId) {
+        this.pharmacyId = pharmacyId;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

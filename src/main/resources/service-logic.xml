@@ -26,6 +26,9 @@
     <bean id="UserConverter" class="by.samsolution.pharmacy.converter.impl.UserConverter">
     </bean>
 
+    <bean id="AvailabilityConverter" class="by.samsolution.pharmacy.converter.impl.AvailabilityConverter">
+    </bean>
+
     <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
         <constructor-arg ref="MedicineConverter"/>
@@ -46,6 +49,11 @@
         <constructor-arg ref="UserConverter"/>
     </bean>
 
+    <bean id="AvailabilityService" class="by.samsolution.pharmacy.service.impl.AvailabilityServiceImpl">
+        <constructor-arg ref="AvailabilityDAO"/>
+        <constructor-arg ref="AvailabilityConverter"/>
+    </bean>
+
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
 
@@ -53,6 +61,9 @@
     </bean>
 
     <bean id="PharmacyValidator" class="by.samsolution.pharmacy.formvalidator.PharmacyValidator">
+    </bean>
+
+    <bean id="AvailabilityValidator" class="by.samsolution.pharmacy.formvalidator.AvailabilityValidator">
     </bean>
 
 

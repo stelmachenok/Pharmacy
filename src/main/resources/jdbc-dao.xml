@@ -14,5 +14,7 @@
 
     <bean id="UserDAO" class="by.samsolution.pharmacy.dao.impl.UserJdbcDao">
     </bean>
+    <bean id="AvailabilityDAO" class="by.samsolution.pharmacy.dao.impl.AvailabilityJdbcDao">
+    </bean>
 
 </beans>
