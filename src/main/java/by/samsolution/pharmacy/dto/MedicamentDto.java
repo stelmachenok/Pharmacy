@@ -28,6 +28,10 @@ public class MedicamentDto extends BasicDto {
         this.category = category;
     }
 
+    public String getLabel() {
+        return brandName + " " + category.getCategoryName() + " " + activeIngredient;
+    }
+
     public String getBrandName() {
         return brandName;
     }

@@ -16,16 +16,20 @@
 
 <c:url var="get_url" value=""/>
 
-<a href="<ex:ref pageContext="${get_url}/medicaments" sortField="BRAND_NAME" sortDir="true" pageNum="1" pageSize="10"/>"><spring:message
-        code="title.medicaments"/></a>
+<a href="<ex:ref pageContext="${get_url}/medicaments" sortField="BRAND_NAME" sortDir="true" pageNum="1" pageSize="10"/>">
+    <spring:message code="title.medicaments"/>
+</a>
 <br/>
-<a href="<%= pageContext.getServletContext().getContextPath() %>/categories"><spring:message
-        code="title.categories"/></a>
+<a href="<%= pageContext.getServletContext().getContextPath() %>/categories">
+    <spring:message code="title.categories"/>
+</a>
 <br/>
-<a href="<%= pageContext.getServletContext().getContextPath() %>/pharmacies"><spring:message
-        code="title.pharmacies"/></a>
+<a href="<%= pageContext.getServletContext().getContextPath() %>/pharmacies">
+    <spring:message code="title.pharmacies"/></a>
 <br/>
-<a href="<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?action=1"><spring:message
-        code="title.availability_of_drugs"/></a>
+
+<a href="<ex:ref pageContext="${get_url}/availabilityOfDrugs" sortField="MEDICAMENT_ID" sortDir="true" pageNum="1" pageSize="10"/>">
+    <spring:message code="title.availability_of_drugs"/>
+</a>
 </body>
 </html>

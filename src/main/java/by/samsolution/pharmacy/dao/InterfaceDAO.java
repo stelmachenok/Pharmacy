@@ -19,6 +19,8 @@ public interface InterfaceDAO<E, K, N, R> {
 
     int countOf();
 
+    int countOf(R request);
+
     void update(E entity) throws EntityNotFoundException, JdbcManipulationException;
 
     void delete(K id) throws EntityNotFoundException, JdbcManipulationException;

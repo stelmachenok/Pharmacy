@@ -79,6 +79,11 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
     }
 
     @Override
+    public int countOf(PharmacySearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(Pharmacy entity) throws EntityNotFoundException {
         List<Pharmacy> pharmacies = storage.getItemList();
         Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);

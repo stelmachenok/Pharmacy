@@ -5,7 +5,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ include file="styles.jsp" %>
 
-<c:url var="get_url" value="/logout"/>
-<a href="<ex:ref pageContext="${get_url}"/>">
+<c:url var="logout_url" value="/logout"/>
+<a href="<ex:ref pageContext="${logout_url}"/>">
     <spring:message code="label.logout"/>
 </a>

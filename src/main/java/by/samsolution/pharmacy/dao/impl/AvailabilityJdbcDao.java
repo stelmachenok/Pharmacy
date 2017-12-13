@@ -8,7 +8,9 @@ import by.samsolution.pharmacy.searchrequest.impl.AvailabilitySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,19 +47,30 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
 
     @Override
     public List<AvailabilityEntity> getAll(AvailabilitySearchRequest request) {
-        String SQL = "SELECT * FROM availability";
-        List<AvailabilityEntity> entities = namedParameterJdbcTemplate.query(SQL, mapper);
-
-        return entities.stream().filter((u) -> ((request.getPharmacyId() == null || request.getPharmacyId() != null && u.getPharmacyId().equals(request.getPharmacyId())) &&
-                (request.getMedicamentId() == null || request.getMedicamentId() != null && u.getMedicamentId().equals(request.getMedicamentId())) &&
-                (request.getCount() == null || request.getCount() != null && u.getCount().equals(request.getCount())) &&
-                (request.getLastUpdate() == null || request.getLastUpdate() != null && u.getLastUpdate().equals(request.getLastUpdate()))))
-                .collect(Collectors.toList());
+        String SQL = "SELECT * FROM availability ";
+        if (request.getPharmacyId() != null){
+            SQL += " WHERE pharmacyId=" + request.getPharmacyId();
+        }
+        if (request.getSortField() != null) {
+            SQL += " ORDER BY " + request.getSortField().getFieldName();
+            if (request.getDirection() != null && !request.getDirection()){
+                SQL += " DESC ";
+            }
+        }
+        if (request.getSize() != null) {
+            SQL += " LIMIT " + request.getSize();
+        }
+        if (request.getFrom() != null) {
+            SQL += " OFFSET " + request.getFrom();
+        }
+        return namedParameterJdbcTemplate.query(SQL, mapper);
     }
 
     @Override
     public AvailabilityEntity getEntityById(Long id) {
-        return null;
+        String SQL = "SELECT * FROM availability WHERE medicamentId=:id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        return namedParameterJdbcTemplate.queryForObject(SQL, namedParameters, mapper);
     }
 
     @Override
@@ -68,6 +81,28 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
     @Override
     public int countOf() {
         return 0;
+    }
+
+    @Override
+    public int countOf(AvailabilitySearchRequest request) {
+        String SQL = "SELECT COUNT(*) FROM availability ";
+        if (request.getPharmacyId() != null){
+            SQL += " WHERE pharmacyId=" + request.getPharmacyId();
+        }
+        if (request.getSortField() != null) {
+            SQL += " ORDER BY " + request.getSortField().getFieldName();
+            if (request.getDirection() != null && !request.getDirection()){
+                SQL += " DESC ";
+            }
+        }
+        if (request.getSize() != null) {
+            SQL += " LIMIT " + request.getSize();
+        }
+        if (request.getFrom() != null) {
+            SQL += " OFFSET " + request.getFrom();
+        }
+        int count = jdbcTemplate.queryForObject(SQL, Integer.class);
+        return count;
     }
 
     @Override
@@ -85,7 +120,12 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
 
     @Override
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
-
+        String SQL = "DELETE FROM availability WHERE medicamentId = :id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
+        if (changedRecords != 1) {
+            throw new JdbcManipulationException("Deleted more or less than 1 record!");
+        }
     }
 
     @Override

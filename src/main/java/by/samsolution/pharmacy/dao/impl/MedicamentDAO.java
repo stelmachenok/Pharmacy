@@ -79,6 +79,11 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
     }
 
     @Override
+    public int countOf(MedicamentsSearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(MedicamentEntity entity) {
         List<MedicamentEntity> medicamentEntities = storage.getItemList();
         MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);

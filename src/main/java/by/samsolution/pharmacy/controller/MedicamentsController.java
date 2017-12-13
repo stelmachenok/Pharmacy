@@ -1,7 +1,13 @@
 package by.samsolution.pharmacy.controller;
 
+import by.samsolution.pharmacy.converter.impl.PackingFormConverter;
+import by.samsolution.pharmacy.converter.impl.ReleaseFormConverter;
 import by.samsolution.pharmacy.dto.CategoryDto;
 import by.samsolution.pharmacy.dto.MedicamentDto;
+import by.samsolution.pharmacy.dto.PackingFormDto;
+import by.samsolution.pharmacy.dto.ReleaseFormDto;
+import by.samsolution.pharmacy.entity.PackingForm;
+import by.samsolution.pharmacy.entity.ReleaseForm;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
@@ -22,8 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static by.samsolution.pharmacy.entity.PackingForm.CAPSULE;
 import static by.samsolution.pharmacy.entity.ReleaseForm.WITHOUT_RECIPE;
@@ -35,13 +42,17 @@ public class MedicamentsController {
     private MedicamentService medicamentService;
     private CategoryService categoryService;
     private MedicamentValidator medicamentValidator;
+    private PackingFormConverter packingFormConverter;
+    private ReleaseFormConverter releaseFormConverter;
     private static Logger logger = LoggerFactory.getLogger(MedicamentsController.class);
 
     @Autowired
-    public MedicamentsController(MedicamentService medicamentService, CategoryService categoryService, MedicamentValidator medicamentValidator) {
+    public MedicamentsController(MedicamentService medicamentService, CategoryService categoryService, MedicamentValidator medicamentValidator, PackingFormConverter packingFormConverter, ReleaseFormConverter releaseFormConverter) {
         this.medicamentService = medicamentService;
         this.categoryService = categoryService;
         this.medicamentValidator = medicamentValidator;
+        this.packingFormConverter = packingFormConverter;
+        this.releaseFormConverter = releaseFormConverter;
     }
 
     @RequestMapping("/")
@@ -61,7 +72,6 @@ public class MedicamentsController {
         medicamentValidator.validate(medicamentDto, result);
         CategoryDto categoryDto = categoryService.getById(medicamentDto.getCategoryDtoId());
         medicamentDto.setCategory(categoryDto);
-        Long id = medicamentDto.getId();
         if (!result.hasErrors()) {
             try {
                 if (action != null && action.equals("edit")) {
@@ -74,7 +84,7 @@ public class MedicamentsController {
             } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
                 model.addAttribute("exceptionText", e.getMessage());
                 logger.error(e.getMessage());
-                addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+                addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
                 return "medicaments";
             } catch (JdbcManipulationException e) {
                 logger.error("Updated more or less than 1 record!");
@@ -85,7 +95,7 @@ public class MedicamentsController {
                     "&sort-dir=" + sortDir /*+
                     ((action != null && action.equals("edit")) ? "" : "&action=" + action)*/;
         } else {
-            addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+            addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
             return "medicaments";
         }
     }
@@ -112,11 +122,11 @@ public class MedicamentsController {
             model.addAttribute("medicament", medicamentDto);
         }
 
-        addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+        addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
         return "medicaments";
     }
 
-    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, MedicineSearchFieldEnum sortField, Boolean sortDir, String action, Long id) {
+    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, MedicineSearchFieldEnum sortField, Boolean sortDir, String action) {
         MedicamentsSearchRequest request = new MedicamentsSearchRequest();
         if (pageNum == null)
             pageNum = 1;
@@ -146,6 +156,10 @@ public class MedicamentsController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("action", action);
         model.addAttribute("categories", categoryService.getAll());
+        List<PackingFormDto> packingFormDtoList = Arrays.stream(PackingForm.values()).map((p)->packingFormConverter.entityToDto(p)).collect(Collectors.toList());
+        model.addAttribute("packingFormValues", packingFormDtoList);
+        List<ReleaseFormDto> releaseFormDtoList = Arrays.stream(ReleaseForm.values()).map((p)->releaseFormConverter.entityToDto(p)).collect(Collectors.toList());
+        model.addAttribute("releaseFormValues", releaseFormDtoList);
 
         request.setFrom(firstRecord);
         request.setSize(lastRecord - firstRecord);

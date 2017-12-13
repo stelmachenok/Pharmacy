@@ -1,7 +1,10 @@
 package by.samsolution.pharmacy.controller;
 
+import by.samsolution.pharmacy.converter.impl.PharmacyCategoryConverter;
+import by.samsolution.pharmacy.dto.PharmacyCategoryDto;
 import by.samsolution.pharmacy.dto.PharmacyDto;
 import by.samsolution.pharmacy.entity.Pharmacy;
+import by.samsolution.pharmacy.entity.PharmacyCategory;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.JdbcManipulationException;
@@ -21,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static by.samsolution.pharmacy.entity.PharmacyCategory.FIRST;
 import static by.samsolution.pharmacy.searchrequest.PharmacySearchFieldEnum.PHARMACY_NAME;
 
@@ -28,12 +35,14 @@ import static by.samsolution.pharmacy.searchrequest.PharmacySearchFieldEnum.PHAR
 public class PharmaciesController {
     private PharmacyService pharmacyService;
     private PharmacyValidator validator;
+    private PharmacyCategoryConverter pharmacyCategoryConverter;
     private static Logger logger = LoggerFactory.getLogger(PharmaciesController.class);
 
     @Autowired
-    public PharmaciesController(PharmacyService pharmacyService, PharmacyValidator validator) {
+    public PharmaciesController(PharmacyService pharmacyService, PharmacyValidator validator, PharmacyCategoryConverter pharmacyCategoryConverter) {
         this.pharmacyService = pharmacyService;
         this.validator = validator;
+        this.pharmacyCategoryConverter = pharmacyCategoryConverter;
     }
 
     @RequestMapping(value = "/pharmaciesFormExecute", method = RequestMethod.POST)
@@ -73,8 +82,6 @@ public class PharmaciesController {
             return "pharmacies";
         }
     }
-
-
 
 
     @RequestMapping(value = "/pharmacies", method = RequestMethod.GET)
@@ -133,6 +140,8 @@ public class PharmaciesController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("action", action);
+        List<PharmacyCategoryDto> pharmacyCategoryDtoList = Arrays.stream(PharmacyCategory.values()).map((p) -> pharmacyCategoryConverter.entityToDto(p)).collect(Collectors.toList());
+        model.addAttribute("pharmacyCategoryValues", pharmacyCategoryDtoList);
 
         request.setFrom(firstRecord);
         request.setSize(lastRecord - firstRecord);

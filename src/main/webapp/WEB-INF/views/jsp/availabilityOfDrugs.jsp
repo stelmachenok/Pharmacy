@@ -9,49 +9,36 @@
     <%@ include file="styles.jsp" %>
 </head>
 <body>
-<c:url var="get_url" value="/availabilityOfDrugs"/>
-<c:set var="selectedMedicament" scope="session" value="${selectedMedicamentDto}"/>
 <script>
-    $(document).ready(function () {
-        $("#medicamentId").val(${selectedMedicament});
-        $("#action").value = ${selectedMedicament};
-    });
-
-    function changeSelectValue(id) {
-        //$("#myRef").attr("action", id);
-        $("#action").value = id;
-        var str = '<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?action=';
-        str += id;
-        alert('<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?action='+id);
-        window.location.href = '<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?action='+id;
+    function deleteConfirmation(brandName, id) {
+        if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
+            window.location.href = "<%= pageContext.getServletContext().getContextPath() %>/availabilityOfDrugs?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=" + id;
+        }
     }
 </script>
 
-
 <h5><p class="text-center"><spring:message code="title.yourPharmacy"/> : ${pharmacyName}</p></h5>
-
-
 <%@ include file="logout.jsp" %>
-
-
+<c:url var="get_url" value="/availabilityOfDrugs"/>
 <span id="time"></span>
 <span style="float: right">
     <a href="<ex:ref pageContext="${get_url}" lang="en"/>">en</a>
     |
     <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
 </span>
+
 <table class="table">
     <tr>
         <th>
-            <a href="<ex:ref pageContext="${get_url}"/>">
+            <a href="<ex:ref pageContext="${get_url}" sortField="MEDICAMENT_ID" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
                 <spring:message code="label.brandName"/>
             </a></th>
         <th>
-            <a href="<ex:ref pageContext="${get_url}"/>">
+            <a href="<ex:ref pageContext="${get_url}" sortField="COUNT" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
                 <spring:message code="label.count"/>
             </a></th>
         <th>
-            <a href="<ex:ref pageContext="${get_url}"/>">
+            <a href="<ex:ref pageContext="${get_url}" sortField="LAST_UPDATE" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
                 <spring:message code="label.lastUpdate"/>
             </a></th>
 
@@ -66,7 +53,8 @@
             <td>${availability.lastUpdate}</td>
 
             <td>
-                <a id="delete" onclick="">
+                <a id="delete"
+                   onclick="deleteConfirmation('${availability.brandName}', '${availability.medicamentId}')">
                     <spring:message code="title.delete"/>
                 </a>
             </td>
@@ -74,6 +62,14 @@
     </c:forEach>
 </table>
 
+<c:forEach var="i" begin="1" end="${pagesCount}">
+    <div class="row">
+        <a class="col-sm-2"
+           href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">
+            <spring:message code="title.page"/> ${i}
+        </a>
+    </div>
+</c:forEach>
 
 <c:url var="post_url"
        value="/availabilityFormExecute"/>
@@ -84,7 +80,7 @@
     <input name="sortField" type="hidden" value="${sortField}"/>
     <input name="pageNum" type="hidden" value="${pageNum}"/>
     <input name="pageSize" type="hidden" value="${pageSize}"/>
-    <input id="action" name="action" type="hidden" value="${selectedMedicament}"/>
+    <%--<input id="action" name="action" type="hidden" value="${action}"/>--%>
     <input name="sortDir" type="hidden" value="${sortDir}"/>
 
     <div class="row">
@@ -93,12 +89,8 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select id="medicamentId" class="form-control" name="medicamentId" path="medicamentId">
-                    <c:forEach items="${medicaments}" var="medicament">
-                        <option onclick="changeSelectValue('${medicament.id}')" value="${medicament.id}">
-                                ${medicament.brandName}, ${medicament.category.categoryName}, ${medicament.activeIngredient}
-                        </option>
-                    </c:forEach>
+                <form:select itemLabel="label" itemValue="id" items="${medicaments}" id="medicamentId"
+                             class="form-control" name="medicamentId" path="medicamentId">
                 </form:select>
             </div>
         </div>

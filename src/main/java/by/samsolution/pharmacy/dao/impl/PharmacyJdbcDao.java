@@ -91,6 +91,11 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     }
 
     @Override
+    public int countOf(PharmacySearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(Pharmacy entity) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "UPDATE pharmacy SET " +
                 "pharmacyName = :pharmacyName, " +

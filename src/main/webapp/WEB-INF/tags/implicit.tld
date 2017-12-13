@@ -11,7 +11,7 @@
     <uri>http://www.stefanolocati.it/</uri>
     <tag>
         <name>ref</name>
-        <tag-class>by.samsolution.pharmacy.tag.HelloTag</tag-class>
+        <tag-class>by.samsolution.pharmacy.tag.RefTag</tag-class>
         <body-content>empty</body-content>
         <dynamic-attributes>true</dynamic-attributes>
     </tag>

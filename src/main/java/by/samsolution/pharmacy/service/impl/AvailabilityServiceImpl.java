@@ -2,6 +2,7 @@ package by.samsolution.pharmacy.service.impl;
 
 import by.samsolution.pharmacy.converter.impl.AvailabilityConverter;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
+import by.samsolution.pharmacy.dao.impl.AvailabilityJdbcDao;
 import by.samsolution.pharmacy.dto.AvailabilityDto;
 import by.samsolution.pharmacy.entity.AvailabilityEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
@@ -26,8 +27,8 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Override
     public void add(AvailabilityDto dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException, EntityNotFoundException {
         AvailabilityEntity entity = availabilityConverter.dtoToEntity(dto);
-        AvailabilityEntity existedMedicamentEntities = availabilityDAO.getEntityById(dto.getPharmacyId());
-        if (!equalsAvailabilities(existedMedicamentEntities, entity)) {
+        AvailabilityEntity existedAvailabilityEntities = availabilityDAO.getEntityById(dto.getPharmacyId());
+        if (!equalsAvailabilities(existedAvailabilityEntities, entity)) {
             availabilityDAO.create(entity);
         } else {
             availabilityDAO.update(entity);
@@ -41,12 +42,19 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
     @Override
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
-
+        AvailabilityEntity existedAvailabilityEntity = availabilityDAO.getEntityById(id);
+        if (existedAvailabilityEntity != null) {
+            availabilityDAO.delete(id);
+        } else {
+            throw new EntityNotFoundException("Availability with id " + id + " doesn't exist");
+        }
     }
 
     @Override
     public List<AvailabilityDto> getAll() {
-        return null;
+        return availabilityDAO.getAll().stream()
+                .map((m) -> availabilityConverter.entityToDto(m))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,7 +71,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
     @Override
     public int countOf(AvailabilitySearchRequest request) {
-        return 0;
+        return availabilityDAO.countOf(request);
     }
 
     @Override

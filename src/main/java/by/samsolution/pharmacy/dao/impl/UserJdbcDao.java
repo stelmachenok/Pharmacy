@@ -78,6 +78,11 @@ public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchR
     }
 
     @Override
+    public int countOf(UserSearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(User entity) throws EntityNotFoundException, JdbcManipulationException {
 
     }

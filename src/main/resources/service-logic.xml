@@ -29,6 +29,15 @@
     <bean id="AvailabilityConverter" class="by.samsolution.pharmacy.converter.impl.AvailabilityConverter">
     </bean>
 
+    <bean id="PackingFormConverter" class="by.samsolution.pharmacy.converter.impl.PackingFormConverter">
+    </bean>
+
+    <bean id="ReleaseFormConverter" class="by.samsolution.pharmacy.converter.impl.ReleaseFormConverter">
+    </bean>
+
+    <bean id="PharmacyCategoryConverter" class="by.samsolution.pharmacy.converter.impl.PharmacyCategoryConverter">
+    </bean>
+
     <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
         <constructor-arg ref="MedicineConverter"/>

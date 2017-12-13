@@ -1,19 +1,19 @@
 package by.samsolution.pharmacy.searchrequest;
 
 public interface SearchRequest<T extends ISearchFieldEnum> {
-    void setFrom(int from);
+    void setFrom(Integer from);
 
-    void setSize(int size);
+    void setSize(Integer size);
 
     void setSortField(T sortField);
 
-    void setDirection(boolean direction);
+    void setDirection(Boolean direction);
 
-    int getFrom();
+    Integer getFrom();
 
-    int getSize();
+    Integer getSize();
 
     T getSortField();
 
-    boolean getDirection();
+    Boolean getDirection();
 }

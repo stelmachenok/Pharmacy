@@ -95,6 +95,11 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
     }
 
     @Override
+    public int countOf(CategorySearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(MedicamentCategory entity) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "UPDATE Category SET " +
                 "categoryName = :categoryName, " +

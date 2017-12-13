@@ -60,7 +60,7 @@
             <td>${pharmacy.address}</td>
             <td>${pharmacy.pharmacistName}</td>
             <td>${pharmacy.contactNumber}</td>
-            <td>${pharmacy.category}</td>
+            <td><spring:message code="label.pharmacyCategory.${pharmacy.category}"/></td>
 
             <td>
                 <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${pharmacy.id}"/>">
@@ -170,13 +170,16 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select class="form-control" name="category" path="category">
-                    <option value="FIRST">FIRST</option>
-                    <option value="SECOND">SECOND</option>
-                    <option value="THIRD">THIRD</option>
-                    <option value="FOURTH">FOURTH</option>
-                    <option value="FIFTH">FIFTH</option>
+                <form:select itemLabel="resPath" itemValue="fieldName" items="${pharmacyCategoryValues}"
+                             class="form-control" name="category" path="category">
                 </form:select>
+                <%--<form:select class="form-control" name="category" path="category">--%>
+                    <%--<option value="FIRST"><spring:message code="label.pharmacyCategory.FIRST"/></option>--%>
+                    <%--<option value="SECOND"><spring:message code="label.pharmacyCategory.SECOND"/></option>--%>
+                    <%--<option value="THIRD"><spring:message code="label.pharmacyCategory.THIRD"/></option>--%>
+                    <%--<option value="FOURTH"><spring:message code="label.pharmacyCategory.FOURTH"/></option>--%>
+                    <%--<option value="FIFTH"><spring:message code="label.pharmacyCategory.FIFTH"/></option>--%>
+                <%--</form:select>--%>
             </div>
         </div>
     </div>

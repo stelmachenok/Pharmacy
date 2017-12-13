@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HelloTag extends SimpleTagSupport implements DynamicAttributes {
+public class RefTag extends SimpleTagSupport implements DynamicAttributes {
     private Map<String, Object> map = new HashMap<String, Object>();
 
     public void doTag() throws JspException, IOException {

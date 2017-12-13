@@ -21,12 +21,12 @@
         }, 1000);
     });
 
-//    var date = new Date(('/getTime'));
-//    var curr_date = date.getDate();
-//    var curr_month = date.getMonth() + 1;
-//    var curr_year = date.getFullYear();
-//    $('#time').load(curr_year + "-" + curr_month + "-" + curr_date);
-//    }, 5000);
+    //    var date = new Date(('/getTime'));
+    //    var curr_date = date.getDate();
+    //    var curr_month = date.getMonth() + 1;
+    //    var curr_year = date.getFullYear();
+    //    $('#time').load(curr_year + "-" + curr_month + "-" + curr_date);
+    //    }, 5000);
 
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
@@ -84,25 +84,25 @@
 
     </tr>
 
-    <c:forEach items="${medicaments}" var="available">
+    <c:forEach items="${medicaments}" var="medicament">
         <tr>
-            <td>${available.brandName}</td>
-            <td>${available.activeIngredient}</td>
-            <td>${available.dosage}</td>
-            <td>${available.packingForm}</td>
-            <td>${available.internationalNonproprietaryName}</td>
-            <td>${available.releaseForm}</td>
-            <td>${available.category.categoryName}</td>
+            <td>${medicament.brandName}</td>
+            <td>${medicament.activeIngredient}</td>
+            <td>${medicament.dosage}</td>
+            <td><spring:message code="label.packingForm.${medicament.packingForm}"/></td>
+            <td>${medicament.internationalNonproprietaryName}</td>
+            <td><spring:message code="label.releaseForm.${medicament.releaseForm}"/></td>
+            <td>${medicament.category.categoryName}</td>
 
             <td>
-                <a onclick="changeSelectedCategory('${available.categoryDtoId}')"
-                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${available.id}"/>">
+                <a onclick="changeSelectedCategory('${medicament.categoryDtoId}')"
+                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
 
             <td>
-                <a id="delete" onclick="deleteConfirmation('${available.brandName}', '${available.id}')">
+                <a id="delete" onclick="deleteConfirmation('${medicament.brandName}', '${medicament.id}')">
                     <spring:message code="title.delete"/>
                 </a>
             </td>
@@ -182,26 +182,29 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select class="form-control" name="packingForm" path="packingForm">
-                    <option value="CAPSULE">CAPSULE</option>
-                    <option value="POWDER">POWDER</option>
-                    <option value="TABLET">TABLET</option>
-                    <option value="DRAGEES">DRAGEES</option>
-                    <option value="GRANULE">GRANULE</option>
-                    <option value="CARAMEL">CARAMEL</option>
-                    <option value="OINTMENT">OINTMENT</option>
-                    <option value="CREAM">CREAM</option>
-                    <option value="PASTE">PASTE</option>
-                    <option value="GEL">GEL</option>
-                    <option value="SOLUTION">SOLUTION</option>
-                    <option value="TINCTURE">TINCTURE</option>
-                    <option value="SUSPENSION">SUSPENSION</option>
-                    <option value="EMULSION">EMULSION</option>
-                    <option value="DROP">DROP</option>
-                    <option value="SYRUP">SYRUP</option>
-                    <option value="POTION">POTION</option>
-                    <option value="AEROSOL">AEROSOL</option>
+                <form:select itemLabel="resPath" itemValue="fieldName" items="${packingFormValues}"
+                             class="form-control" name="packingForm" path="packingForm">
                 </form:select>
+                    <%--<form:select class="form-control" name="packingForm" path="packingForm">--%>
+                    <%--<option value="CAPSULE"><spring:message code="label.packingForm.CAPSULE"/></option>--%>
+                    <%--<option value="POWDER"><spring:message code="label.packingForm.POWDER"/></option>--%>
+                    <%--<option value="TABLET"><spring:message code="label.packingForm.TABLET"/></option>--%>
+                    <%--<option value="DRAGEES"><spring:message code="label.packingForm.DRAGEES"/></option>--%>
+                    <%--<option value="GRANULE"><spring:message code="label.packingForm.GRANULE"/></option>--%>
+                    <%--<option value="CARAMEL"><spring:message code="label.packingForm.CARAMEL"/></option>--%>
+                    <%--<option value="OINTMENT"><spring:message code="label.packingForm.OINTMENT"/></option>--%>
+                    <%--<option value="CREAM"><spring:message code="label.packingForm.CREAM"/></option>--%>
+                    <%--<option value="PASTE"><spring:message code="label.packingForm.PASTE"/></option>--%>
+                    <%--<option value="GEL"><spring:message code="label.packingForm.GEL"/></option>--%>
+                    <%--<option value="SOLUTION"><spring:message code="label.packingForm.SOLUTION"/></option>--%>
+                    <%--<option value="TINCTURE"><spring:message code="label.packingForm.TINCTURE"/></option>--%>
+                    <%--<option value="SUSPENSION"><spring:message code="label.packingForm.SUSPENSION"/></option>--%>
+                    <%--<option value="EMULSION"><spring:message code="label.packingForm.EMULSION"/></option>--%>
+                    <%--<option value="DROP"><spring:message code="label.packingForm.DROP"/></option>--%>
+                    <%--<option value="SYRUP"><spring:message code="label.packingForm.SYRUP"/></option>--%>
+                    <%--<option value="POTION"><spring:message code="label.packingForm.POTION"/></option>--%>
+                    <%--<option value="AEROSOL"><spring:message code="label.packingForm.AEROSOL"/></option>--%>
+                    <%--</form:select>--%>
             </div>
         </div>
     </div>
@@ -227,11 +230,18 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select class="form-control" name="releaseForm" path="releaseForm">
-                    <option value="WITHOUT_RECIPE">WITHOUT RECIPE</option>
-                    <option value="USUAL_RECIPE">USUAL RECIPE</option>
-                    <option value="PINK_RECIPE">PINK RECIPE</option>
+                <form:select itemLabel="resPath" itemValue="fieldName" items="${releaseFormValues}"
+                             class="form-control" name="releaseForm" path="releaseForm">
                 </form:select>
+                <%--<form:select class="form-control" name="releaseForm" path="releaseForm">--%>
+                    <%--<option value="WITHOUT_RECIPE"><spring:message code="label.releaseForm.WITHOUT_RECIPE"/></option>--%>
+                    <%--<option value="USUAL_RECIPE"><spring:message code="label.releaseForm.USUAL_RECIPE"/></option>--%>
+                    <%--<option value="PINK_RECIPE"><spring:message code="label.releaseForm.PINK_RECIPE"/></option>--%>
+                <%--</form:select>--%>
+
+                    <%--<form:select itemLabel="name" itemValue="name" items="${releaseFormValues}"--%>
+                    <%--class="form-control" name="releaseForm" path="releaseForm">--%>
+                    <%--</form:select>--%>
             </div>
         </div>
     </div>
@@ -243,9 +253,8 @@
         <div class="col-sm-2">
             <div class="form-group">
                 <form:select id="categoryMedicament" class="form-control" name="categoryDtoId" path="categoryDtoId">
-                    <c:forEach items="${categories}" var="category">
-                        <option value="${category.id}">${category.categoryName}</option>
-                    </c:forEach>
+                    <form:option value="" label="--- Select ---"/>
+                    <form:options itemLabel="categoryName" itemValue="id" items="${categories}"/>
                 </form:select>
             </div>
         </div>

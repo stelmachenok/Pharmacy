@@ -78,6 +78,11 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
     }
 
     @Override
+    public int countOf(CategorySearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(MedicamentCategory entity) {
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(entity.getId())).findAny().orElse(null);

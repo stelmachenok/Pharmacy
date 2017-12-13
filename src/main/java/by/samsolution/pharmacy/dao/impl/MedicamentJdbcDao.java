@@ -94,6 +94,11 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
     }
 
     @Override
+    public int countOf(MedicamentsSearchRequest request) {
+        return 0;
+    }
+
+    @Override
     public void update(MedicamentEntity entity) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "UPDATE Medicament SET " +
                 "brandName = :brandName, " +

@@ -3,12 +3,12 @@ package by.samsolution.pharmacy.controller;
 import by.samsolution.pharmacy.dto.AvailabilityDto;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.dto.UserDto;
-import by.samsolution.pharmacy.entity.AvailabilityEntity;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.formvalidator.AvailabilityValidator;
+import by.samsolution.pharmacy.searchrequest.AvailabilitySearchFieldEnum;
 import by.samsolution.pharmacy.searchrequest.impl.AvailabilitySearchRequest;
 import by.samsolution.pharmacy.searchrequest.impl.UserSearchRequest;
 import by.samsolution.pharmacy.service.AvailabilityService;
@@ -27,9 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static by.samsolution.pharmacy.searchrequest.AvailabilitySearchFieldEnum.MEDICAMENT_ID;
 
 
 @Controller
@@ -53,9 +54,12 @@ public class AvailabilityOfDrugsController {
     @RequestMapping(value = "/availabilityFormExecute", method = RequestMethod.POST)
     public String submit(@ModelAttribute("availability") AvailabilityDto availabilityDto,
                          BindingResult result,
-                         @RequestParam("action") Long action,
                          ModelMap model,
-                         Authentication authentication) {
+                         Authentication authentication,
+                         @RequestParam("sortField") AvailabilitySearchFieldEnum sortField,
+                         @RequestParam("sortDir") Boolean sortDir,
+                         @RequestParam("pageNum") Integer pageNum,
+                         @RequestParam("pageSize") Integer pageSize) {
         availabilityValidator.validate(availabilityDto, result);
         availabilityDto.setLastUpdate(new Date());
         if (!result.hasErrors()) {
@@ -63,34 +67,45 @@ public class AvailabilityOfDrugsController {
                 availabilityService.add(availabilityDto);
             } catch (ObjectValidationFailedException | EntityAlreadyExistException | JdbcManipulationException | EntityNotFoundException e) {
                 e.printStackTrace();
-                addAttributes(model, authentication, action);
+                addAttributes(model, authentication, pageNum, pageSize, sortField, sortDir);
                 return "availabilityOfDrugs";
             }
             return "redirect:/availabilityOfDrugs";
         }
-        addAttributes(model, authentication, action);
+        addAttributes(model, authentication, pageNum, pageSize, sortField, sortDir);
         return "availabilityOfDrugs";
     }
 
     @RequestMapping(value = "/availabilityOfDrugs", method = RequestMethod.GET)
-    public String availabilityOfDrugs(@RequestParam("action") Long action,
-                                      ModelMap model,
-                                      Authentication authentication) {
+    public String availabilityOfDrugs(ModelMap model,
+                                      Authentication authentication,
+                                      @RequestParam(value = "page-num", required = false) Integer pageNum,
+                                      @RequestParam(value = "page-size", required = false) Integer pageSize,
+                                      @RequestParam(value = "sort-field", required = false) AvailabilitySearchFieldEnum sortField,
+                                      @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
+                                      @RequestParam(value = "action", required = false) String action,
+                                      @RequestParam(value = "id", required = false) Long id) {
 
+        if (action != null && action.equals("delete") && id != null) {
+            try {
+                availabilityService.delete(id);
+            } catch (EntityNotFoundException | JdbcManipulationException e) {
+                e.printStackTrace();
+            }
+        }
         addPharmacyIdAttribute(model, authentication);
         addAvailabilityAttribute(model);
-        addAttributes(model, authentication, action);
+        addAttributes(model, authentication, pageNum, pageSize, sortField, sortDir);
         return "availabilityOfDrugs";
     }
 
-    private void addAttributes(ModelMap model, Authentication authentication, Long action) {
-        addAvailabilitiesAttribute(model, authentication);
+    private void addAttributes(ModelMap model, Authentication authentication, Integer pageNum, Integer pageSize, AvailabilitySearchFieldEnum sortField, Boolean sortDir) {
         addMedicamentsAttribute(model);
         addPharmacyNameAttribute(model, authentication);
-        model.addAttribute("selectedMedicamentDto", action);
+        addRefAttributes(model, authentication, pageNum, pageSize, sortField, sortDir);
     }
 
-    private void addPharmacyIdAttribute(ModelMap model, Authentication authentication){
+    private void addPharmacyIdAttribute(ModelMap model, Authentication authentication) {
         String userName = authentication.getName();
         UserSearchRequest request = new UserSearchRequest();
         request.setLogin(userName);
@@ -98,7 +113,7 @@ public class AvailabilityOfDrugsController {
         model.addAttribute("pharmacyId", pharmacyService.getById(userDto.getPharmacyId()).getId());
     }
 
-    private void addPharmacyNameAttribute(ModelMap model, Authentication authentication){
+    private void addPharmacyNameAttribute(ModelMap model, Authentication authentication) {
         String userName = authentication.getName();
         UserSearchRequest request = new UserSearchRequest();
         request.setLogin(userName);
@@ -106,25 +121,68 @@ public class AvailabilityOfDrugsController {
         model.addAttribute("pharmacyName", pharmacyService.getById(userDto.getPharmacyId()).getPharmacyName());
     }
 
-    private void addAvailabilitiesAttribute(ModelMap model, Authentication authentication){
+    private void addMedicamentsAttribute(ModelMap model) {
+        List<MedicamentDto> medicaments = medicamentService.getAll();
+        model.addAttribute("medicaments", medicaments);
+    }
+
+    private void addAvailabilityAttribute(ModelMap model) {
+        AvailabilityDto availabilityDto = new AvailabilityDto();
+        model.addAttribute("availability", availabilityDto);
+    }
+
+    private void addRefAttributes(ModelMap model, Authentication authentication, Integer pageNum, Integer pageSize, AvailabilitySearchFieldEnum sortField, Boolean sortDir) {
+        AvailabilitySearchRequest request = new AvailabilitySearchRequest();
+        if (pageNum == null)
+            pageNum = 1;
+        if (pageSize == null)
+            pageSize = 10;
+        if (sortField != null) {
+            request.setSortField(sortField);
+        } else {
+            request.setSortField(MEDICAMENT_ID);
+            sortField = MEDICAMENT_ID;
+        }
+        if (sortDir != null) {
+            request.setDirection(sortDir);
+        } else {
+            request.setDirection(true);
+            sortDir = true;
+        }
+
+        AvailabilitySearchRequest availabilitySizeRequest = getAvailabilitySizeRequest(authentication);
+        int recordsCount = availabilityService.countOf(availabilitySizeRequest);
+        int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
+        int firstRecord = (pageNum - 1) * pageSize;
+        int recordsOnPage = pageSize;
+        model.addAttribute("pageNum", pageNum);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pagesCount", pagesCount);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        request.setFrom(firstRecord);
+        request.setSize(recordsOnPage);
+        addAvailabilitiesAttribute(model, authentication, request);
+    }
+
+    private void addAvailabilitiesAttribute(ModelMap model, Authentication authentication, AvailabilitySearchRequest availabilityRequest) {
         String userName = authentication.getName();
         UserSearchRequest request = new UserSearchRequest();
         request.setLogin(userName);
         UserDto userDto = userService.getAll(request).stream().findAny().get();
-        AvailabilitySearchRequest availabilityRequest = new AvailabilitySearchRequest();
         availabilityRequest.setPharmacyId(userDto.getPharmacyId());
         List<AvailabilityDto> availabilities = availabilityService.getAll(availabilityRequest);
         availabilities.forEach((a) -> a.setBrandName(medicamentService.getById(a.getMedicamentId()).getBrandName()));
         model.addAttribute("availabilities", availabilities);
     }
 
-    private void addMedicamentsAttribute(ModelMap model){
-        List<MedicamentDto> medicaments = medicamentService.getAll();
-        model.addAttribute("medicaments", medicaments);
-    }
-
-    private void addAvailabilityAttribute(ModelMap model){
-        AvailabilityDto availabilityDto = new AvailabilityDto();
-        model.addAttribute("availability", availabilityDto);
+    private AvailabilitySearchRequest getAvailabilitySizeRequest(Authentication authentication){
+        String userName = authentication.getName();
+        UserSearchRequest request = new UserSearchRequest();
+        request.setLogin(userName);
+        UserDto userDto = userService.getAll(request).stream().findAny().get();
+        AvailabilitySearchRequest availabilityRequest = new AvailabilitySearchRequest();
+        availabilityRequest.setPharmacyId(userDto.getPharmacyId());
+        return availabilityRequest;
     }
 }

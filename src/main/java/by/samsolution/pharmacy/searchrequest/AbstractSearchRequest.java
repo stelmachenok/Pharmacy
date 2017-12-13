@@ -1,24 +1,24 @@
 package by.samsolution.pharmacy.searchrequest;
 
 public class AbstractSearchRequest<T extends ISearchFieldEnum> implements SearchRequest<T> {
-    private int from;
-    private int size;
+    private Integer from;
+    private Integer size;
     private T sortField;
-    private boolean direction;
+    private Boolean direction;
 
-    public void setFrom(int from) {
+    public void setFrom(Integer from) {
         this.from = from;
     }
 
-    public void setSize(int size) {
+    public void setSize(Integer size) {
         this.size = size;
     }
 
-    public int getFrom() {
+    public Integer getFrom() {
         return from;
     }
 
-    public int getSize() {
+    public Integer getSize() {
         return size;
     }
 
@@ -28,7 +28,7 @@ public class AbstractSearchRequest<T extends ISearchFieldEnum> implements Search
     }
 
     @Override
-    public void setDirection(boolean direction) {
+    public void setDirection(Boolean direction) {
         this.direction = direction;
     }
 
@@ -38,7 +38,7 @@ public class AbstractSearchRequest<T extends ISearchFieldEnum> implements Search
     }
 
     @Override
-    public boolean getDirection() {
+    public Boolean getDirection() {
         return direction;
     }
 }
