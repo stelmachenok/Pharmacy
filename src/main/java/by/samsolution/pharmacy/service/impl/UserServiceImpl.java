@@ -3,18 +3,17 @@ package by.samsolution.pharmacy.service.impl;
 import by.samsolution.pharmacy.converter.impl.UserConverter;
 import by.samsolution.pharmacy.dao.impl.UserJdbcDao;
 import by.samsolution.pharmacy.dto.UserDto;
-import by.samsolution.pharmacy.entity.User;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
 import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.UserSearchRequest;
 import by.samsolution.pharmacy.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 public class UserServiceImpl implements UserService{
     private UserJdbcDao userDao;
     private UserConverter converter;
@@ -37,6 +36,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+
+    }
+
+    @Override
+    public void delete(UserSearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
 
     }
 

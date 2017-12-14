@@ -5,6 +5,7 @@ import by.samsolution.pharmacy.comparator.pharmacy.*;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.Pharmacy;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.PharmacySearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
@@ -96,6 +97,11 @@ public class PharmacyDAO implements InterfaceDAO<Pharmacy, Long, String, Pharmac
         List<Pharmacy> pharmacies = storage.getItemList();
         Pharmacy existedPharmacy = pharmacies.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         pharmacies.remove(existedPharmacy);
+    }
+
+    @Override
+    public void delete(PharmacySearchRequest request) throws JdbcManipulationException {
+
     }
 
     @Override

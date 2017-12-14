@@ -88,7 +88,10 @@ public class AvailabilityOfDrugsController {
 
         if (action != null && action.equals("delete") && id != null) {
             try {
-                availabilityService.delete(id);
+                AvailabilitySearchRequest availabilityRequest = new AvailabilitySearchRequest();
+                availabilityRequest.setPharmacyId(getPharmacyId(authentication));
+                availabilityRequest.setMedicamentId(id);
+                availabilityService.delete(availabilityRequest);
             } catch (EntityNotFoundException | JdbcManipulationException e) {
                 e.printStackTrace();
             }
@@ -184,5 +187,13 @@ public class AvailabilityOfDrugsController {
         AvailabilitySearchRequest availabilityRequest = new AvailabilitySearchRequest();
         availabilityRequest.setPharmacyId(userDto.getPharmacyId());
         return availabilityRequest;
+    }
+
+    private Long getPharmacyId(Authentication authentication){
+        String userName = authentication.getName();
+        UserSearchRequest request = new UserSearchRequest();
+        request.setLogin(userName);
+        UserDto userDto = userService.getAll(request).stream().findAny().get();
+        return userDto.getPharmacyId();
     }
 }

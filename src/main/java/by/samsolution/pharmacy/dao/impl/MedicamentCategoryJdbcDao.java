@@ -129,6 +129,11 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
     }
 
     @Override
+    public void delete(CategorySearchRequest request) throws JdbcManipulationException {
+
+    }
+
+    @Override
     public void create(MedicamentCategory entity) throws JdbcManipulationException {
         String SQL = "INSERT INTO category (categoryName, description, guid)" +
                 " VALUES (:categoryName, :description, :guid)";

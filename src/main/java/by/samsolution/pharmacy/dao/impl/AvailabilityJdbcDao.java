@@ -48,12 +48,12 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
     @Override
     public List<AvailabilityEntity> getAll(AvailabilitySearchRequest request) {
         String SQL = "SELECT * FROM availability ";
-        if (request.getPharmacyId() != null){
+        if (request.getPharmacyId() != null) {
             SQL += " WHERE pharmacyId=" + request.getPharmacyId();
         }
         if (request.getSortField() != null) {
             SQL += " ORDER BY " + request.getSortField().getFieldName();
-            if (request.getDirection() != null && !request.getDirection()){
+            if (request.getDirection() != null && !request.getDirection()) {
                 SQL += " DESC ";
             }
         }
@@ -86,12 +86,12 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
     @Override
     public int countOf(AvailabilitySearchRequest request) {
         String SQL = "SELECT COUNT(*) FROM availability ";
-        if (request.getPharmacyId() != null){
+        if (request.getPharmacyId() != null) {
             SQL += " WHERE pharmacyId=" + request.getPharmacyId();
         }
         if (request.getSortField() != null) {
             SQL += " ORDER BY " + request.getSortField().getFieldName();
-            if (request.getDirection() != null && !request.getDirection()){
+            if (request.getDirection() != null && !request.getDirection()) {
                 SQL += " DESC ";
             }
         }
@@ -122,6 +122,19 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "DELETE FROM availability WHERE medicamentId = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
+        if (changedRecords != 1) {
+            throw new JdbcManipulationException("Deleted more or less than 1 record!");
+        }
+    }
+
+    @Override
+    public void delete(AvailabilitySearchRequest request) throws JdbcManipulationException {
+        String SQL = "DELETE FROM availability WHERE medicamentId = :medicamentId AND pharmacyId = :pharmacyId";
+        Map namedParameters = new HashMap();
+        namedParameters.put("medicamentId", request.getMedicamentId());
+        namedParameters.put("pharmacyId", request.getPharmacyId());
+
         Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
         if (changedRecords != 1) {
             throw new JdbcManipulationException("Deleted more or less than 1 record!");

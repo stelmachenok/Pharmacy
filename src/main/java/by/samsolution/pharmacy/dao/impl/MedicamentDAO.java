@@ -4,6 +4,7 @@ import by.samsolution.pharmacy.comparator.ComparatorChooser;
 import by.samsolution.pharmacy.comparator.medicament.*;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
@@ -96,6 +97,11 @@ public class MedicamentDAO implements InterfaceDAO<MedicamentEntity, Long, Strin
         List<MedicamentEntity> medicamentEntities = storage.getItemList();
         MedicamentEntity existedMedicamentEntity = medicamentEntities.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         medicamentEntities.remove(existedMedicamentEntity);
+    }
+
+    @Override
+    public void delete(MedicamentsSearchRequest request) throws JdbcManipulationException {
+
     }
 
     @Override

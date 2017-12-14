@@ -137,6 +137,11 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
     }
 
     @Override
+    public void delete(MedicamentsSearchRequest request) throws JdbcManipulationException {
+
+    }
+
+    @Override
     public void create(MedicamentEntity entity) throws JdbcManipulationException {
         String SQL = "INSERT INTO medicament (brandName, activeIngredient, dosage, packingForm, internationalNonproprietaryName, releaseForm, guid, medicamentCategory)" +
                 " VALUES (:brandName, :activeIngredient, :dosage, :packingForm, :internationalNonproprietaryName, :releaseForm, :guid, :medicamentCategory)";

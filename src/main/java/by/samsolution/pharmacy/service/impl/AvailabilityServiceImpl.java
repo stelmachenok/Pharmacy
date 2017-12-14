@@ -11,10 +11,11 @@ import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.AvailabilitySearchRequest;
 import by.samsolution.pharmacy.service.AvailabilityService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 public class AvailabilityServiceImpl implements AvailabilityService {
     private InterfaceDAO<AvailabilityEntity, Long, String, AvailabilitySearchRequest> availabilityDAO;
     private AvailabilityConverter availabilityConverter;
@@ -47,6 +48,16 @@ public class AvailabilityServiceImpl implements AvailabilityService {
             availabilityDAO.delete(id);
         } else {
             throw new EntityNotFoundException("Availability with id " + id + " doesn't exist");
+        }
+    }
+
+    @Override
+    public void delete(AvailabilitySearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
+        List<AvailabilityEntity> existedAvailabilityEntities = availabilityDAO.getAll(request);
+        if (existedAvailabilityEntities != null) {
+            availabilityDAO.delete(request);
+        } else {
+            throw new EntityNotFoundException("Availability with id " + request.getMedicamentId() + " doesn't exist");
         }
     }
 

@@ -23,16 +23,6 @@
     <context:component-scan base-package="by.samsolution.pharmacy.controller" />
 
     <!--for i18n-->
-    <bean id="messageSource"
-          class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basenames">
-            <list>
-                <value>label</value>
-                <value>validation</value>
-            </list>
-        </property>
-        <property name="defaultEncoding" value="utf-8" />
-    </bean>
 
     <bean id="localeResolver"
                 class="org.springframework.web.servlet.i18n.CookieLocaleResolver">

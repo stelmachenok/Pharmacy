@@ -182,7 +182,7 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select itemLabel="resPath" itemValue="fieldName" items="${packingFormValues}"
+                <form:select itemLabel="translatedName" itemValue="fieldName" items="${packingFormValues}"
                              class="form-control" name="packingForm" path="packingForm">
                 </form:select>
                     <%--<form:select class="form-control" name="packingForm" path="packingForm">--%>
@@ -230,7 +230,7 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select itemLabel="resPath" itemValue="fieldName" items="${releaseFormValues}"
+                <form:select itemLabel="translatedName" itemValue="fieldName" items="${releaseFormValues}"
                              class="form-control" name="releaseForm" path="releaseForm">
                 </form:select>
                 <%--<form:select class="form-control" name="releaseForm" path="releaseForm">--%>

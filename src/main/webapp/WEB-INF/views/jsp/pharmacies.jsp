@@ -170,7 +170,7 @@
         </label>
         <div class="col-sm-2">
             <div class="form-group">
-                <form:select itemLabel="resPath" itemValue="fieldName" items="${pharmacyCategoryValues}"
+                <form:select itemLabel="translatedName" itemValue="fieldName" items="${pharmacyCategoryValues}"
                              class="form-control" name="category" path="category">
                 </form:select>
                 <%--<form:select class="form-control" name="category" path="category">--%>

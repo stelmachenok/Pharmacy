@@ -93,6 +93,11 @@ public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchR
     }
 
     @Override
+    public void delete(UserSearchRequest request) throws JdbcManipulationException {
+
+    }
+
+    @Override
     public void create(User entity) throws JdbcManipulationException {
 
     }

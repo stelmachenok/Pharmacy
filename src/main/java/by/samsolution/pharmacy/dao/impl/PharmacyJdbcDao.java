@@ -134,6 +134,11 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     }
 
     @Override
+    public void delete(PharmacySearchRequest request) throws JdbcManipulationException {
+
+    }
+
+    @Override
     public void create(Pharmacy entity) throws JdbcManipulationException {
         String SQL = "INSERT INTO pharmacy (pharmacyName, address, pharmacistName, contactNumber, login, password, category, uuid)" +
         "VALUES (:pharmacyName, :address, :pharmacistName, :contactNumber, :login, :password, :category, :uuid)";

@@ -12,10 +12,11 @@ import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.PharmacySearchRequest;
 import by.samsolution.pharmacy.service.PharmacyService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 public class PharmacyServiceImpl implements PharmacyService {
     private InterfaceDAO<Pharmacy, Long, String, PharmacySearchRequest> pharmacyDAO;
     private PharmacyConverter pharmacyConverter;
@@ -60,6 +61,11 @@ public class PharmacyServiceImpl implements PharmacyService {
         } else {
             throw new EntityNotFoundException("Pharmacy with id " + id + " doesn't exist");
         }
+    }
+
+    @Override
+    public void delete(PharmacySearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
+
     }
 
     @Override

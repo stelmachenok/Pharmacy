@@ -10,10 +10,11 @@ import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import by.samsolution.pharmacy.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private InterfaceDAO<MedicamentCategory, Long, String, CategorySearchRequest> categoryDAO;
     private CategoryConverter categoryConverter;
@@ -57,6 +58,11 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             throw new EntityNotFoundException("Category with id " + id + " doesn't exist");
         }
+    }
+
+    @Override
+    public void delete(CategorySearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
+
     }
 
     @Override

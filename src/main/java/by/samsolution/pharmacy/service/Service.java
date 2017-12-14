@@ -16,6 +16,8 @@ public interface Service<T extends BasicDto, R extends SearchRequest> {
 
     void delete(Long id) throws EntityNotFoundException, JdbcManipulationException;
 
+    void delete(R request) throws EntityNotFoundException, JdbcManipulationException;
+
     List<T> getAll();
 
     List<T> getAll(R request);

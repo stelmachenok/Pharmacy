@@ -5,6 +5,7 @@ import by.samsolution.pharmacy.comparator.category.CategoryDescriptionComparator
 import by.samsolution.pharmacy.comparator.category.CategoryNameComparator;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
+import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import by.samsolution.pharmacy.storage.Storage;
 
@@ -95,6 +96,11 @@ public class MedicamentCategoryDAO implements InterfaceDAO<MedicamentCategory, L
         List<MedicamentCategory> categories = storage.getItemList();
         MedicamentCategory existedCategory = categories.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
         categories.remove(existedCategory);
+    }
+
+    @Override
+    public void delete(CategorySearchRequest request) throws JdbcManipulationException {
+
     }
 
     @Override
