@@ -21,7 +21,6 @@ public class UserConverter implements InterfaceConverter<UserDto, User> {
         User entity = new User();
         entity.setId(dto.getId());
         entity.setLogin(dto.getLogin());
-//        entity.setPassword(dto.getPassword());
         entity.setRole(dto.getRole());
         entity.setEnabled(dto.getEnabled());
         entity.setPharmacyId(dto.getPharmacyId());

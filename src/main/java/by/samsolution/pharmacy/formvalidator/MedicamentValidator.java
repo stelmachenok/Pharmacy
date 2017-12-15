@@ -14,13 +14,14 @@ public class MedicamentValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
+
         MedicamentDto medicamentDto = (MedicamentDto) o;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "brandName", "NotEmpty.medicament.brandName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "activeIngredient", "NotEmpty.medicament.activeIngredient");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dosage", "NotEmpty.medicament.dosage");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "internationalNonproprietaryName", "NotEmpty.medicament.internationalNonproprietaryName");
 
-        if (medicamentDto.getDosage() == null){
+        if (errors.getFieldError("dosage") != null && !errors.getFieldError("dosage").isBindingFailure() && medicamentDto.getDosage() == null) {
             errors.rejectValue("dosage", "Pattern.medicament.dosageNotNumber");
         }
 

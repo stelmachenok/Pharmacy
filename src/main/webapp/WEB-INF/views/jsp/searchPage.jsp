@@ -1,58 +1,44 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: mast
-  Date: 14.12.2017
-  Time: 16:30
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ex" uri="/WEB-INF/tags/implicit.tld" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <%@ include file="styles.jsp" %>
+    <title><spring:message code="title.search"/></title>
+    <script src="js/searchAction.js"></script>
 </head>
 <body>
+<c:import url="navbar.jsp"></c:import>
+
+<div class="row">
+    <input id="searchInput" class="col-sm-offset-5 control-label" type="text" size="40">
+
+    <button id="searchButton" class="btn btn-default" onclick="searching(document.getElementById('searchInput').value)">
+        <spring:message code="button.search"/></button>
+</div>
+<div class="row">
+    <label class="col-sm-offset-5 control-label"><spring:message code="label.searchedMedicamentsCount"/>: </label><label
+        class="control-label" id="searched-medicaments-count"></label>
+</div>
 
 <table class="table">
+    <thead>
     <tr>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="BRAND_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.brandName"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="ACTIVE_INGREDIENT" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.activeIngredient"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="DOSAGE" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.dosage"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="PACKING_FORM" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.packingForm"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="INTERNATIONAL_NONPROPRIENTARY_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.internationalNonproprietaryName"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="RELEASE_FORM" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.releaseForm"/>
-            </a></th>
-        <th>
-            <a href="<ex:ref pageContext="${get_url}" sortField="MEDICAMENT_CATEGORY" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
-                <spring:message code="label.medicamentCategory"/>
-            </a></th>
-
-        <th><spring:message code="title.edit"/></th>
-        <th><spring:message code="title.delete"/></th>
-
+        <th><spring:message code="label.label"/></th>
+        <th><spring:message code="label.count"/></th>
+        <th><spring:message code="label.lastUpdate"/></th>
+        <th><spring:message code="label.pharmacyName"/></th>
+        <th><spring:message code="label.address"/></th>
+        <th><spring:message code="label.contactNumber"/></th>
     </tr>
-    <tr class="medicaments-search-table-body">
-        <td>${searchObj.brandName}</td>
-        <td>${searchObj.phone}</td>
-        <td>${searchObj.count}</td>
-    </tr>
+    </thead>
+    <tbody class="medicaments-search-table-body">
+
+    </tbody>
+
+
 </table>
-
 </body>
 </html>

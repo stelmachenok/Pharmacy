@@ -6,6 +6,7 @@ import by.samsolution.pharmacy.entity.ReleaseForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ReleaseFormConverter implements EnumConverterInterface<ReleaseFormDto, ReleaseForm> {
 
@@ -17,7 +18,7 @@ public class ReleaseFormConverter implements EnumConverterInterface<ReleaseFormD
     public ReleaseFormDto entityToDto(ReleaseForm releaseForm) {
         ReleaseFormDto dto = new ReleaseFormDto();
         dto.setFieldName(releaseForm.getFieldName());
-        dto.setTranslatedName(message.getMessage(dto.getResPath(), null, null));
+        dto.setTranslatedName(message.getMessage(dto.getResPath(), null, LocaleContextHolder.getLocale()));
         return dto;
     }
 }

@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Long, String, AvailabilitySearchRequest> {
     @Autowired
@@ -101,8 +100,7 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
         if (request.getFrom() != null) {
             SQL += " OFFSET " + request.getFrom();
         }
-        int count = jdbcTemplate.queryForObject(SQL, Integer.class);
-        return count;
+        return jdbcTemplate.queryForObject(SQL, Integer.class);
     }
 
     @Override

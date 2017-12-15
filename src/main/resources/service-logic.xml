@@ -58,9 +58,14 @@
         <constructor-arg ref="UserConverter"/>
     </bean>
 
-    <bean id="AvailabilityService" class="by.samsolution.pharmacy.service.impl.AvailabilityServiceImpl">
+    <bean id="AvailabilityServiceImpl" class="by.samsolution.pharmacy.service.impl.AvailabilityServiceImpl">
         <constructor-arg ref="AvailabilityDAO"/>
         <constructor-arg ref="AvailabilityConverter"/>
+    </bean>
+
+    <bean id="SearchServiceImpl" class="by.samsolution.pharmacy.service.impl.SearchServiceImpl">
+        <constructor-arg ref="SearchDAO"/>
+        <constructor-arg ref="PackingFormConverter"/>
     </bean>
 
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
@@ -84,7 +89,6 @@
             </list>
         </property>
         <property name="defaultEncoding" value="utf-8"/>
-        <property name="useCodeAsDefaultMessage" value="true"/>
     </bean>
     <!--transaction-->
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

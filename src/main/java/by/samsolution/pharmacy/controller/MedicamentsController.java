@@ -55,11 +55,6 @@ public class MedicamentsController {
         this.releaseFormConverter = releaseFormConverter;
     }
 
-    @RequestMapping("/")
-    public ModelAndView welcome() {
-        return new ModelAndView("welcome");
-    }
-
     @RequestMapping(value = "/formExecute", method = RequestMethod.POST)
     public String submit(
             @ModelAttribute("medicament") MedicamentDto medicamentDto,

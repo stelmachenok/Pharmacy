@@ -5,8 +5,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
-    <title><spring:message code="title.availabilityOfDrugs"/></title>
     <%@ include file="styles.jsp" %>
+    <title><spring:message code="title.availabilityOfDrugs"/></title>
 </head>
 <body>
 <script>
@@ -16,16 +16,10 @@
         }
     }
 </script>
+<c:import url="navbar.jsp"></c:import>
 
 <h5><p class="text-center"><spring:message code="title.yourPharmacy"/> : ${pharmacyName}</p></h5>
-<%@ include file="logout.jsp" %>
 <c:url var="get_url" value="/availabilityOfDrugs"/>
-<span id="time"></span>
-<span style="float: right">
-    <a href="<ex:ref pageContext="${get_url}" lang="en"/>">en</a>
-    |
-    <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
-</span>
 
 <table class="table">
     <tr>
@@ -84,7 +78,7 @@
     <input name="sortDir" type="hidden" value="${sortDir}"/>
 
     <div class="row">
-        <label for="medicamentId" class="col-sm-2 control-label">
+        <label for="medicamentId" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.brandName"/>
         </label>
         <div class="col-sm-2">
@@ -97,7 +91,7 @@
     </div>
 
     <div class="row">
-        <label for="count" class="col-sm-2 control-label">
+        <label for="count" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.count"/>
         </label>
         <div class="col-sm-2">
@@ -112,7 +106,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-2 button">
+        <div class="col-sm-offset-5 col-sm-2 button">
             <button type="submit" class="btn btn-default"><spring:message code="button.submit"/></button>
         </div>
     </div>

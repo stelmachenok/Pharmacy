@@ -5,10 +5,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
-    <title><spring:message code="title.pharmacies"/></title>
     <%@ include file="styles.jsp" %>
+    <title><spring:message code="title.pharmacies"/></title>
 </head>
 <body>
+<c:import url="navbar.jsp"></c:import>
 <script>
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
@@ -18,13 +19,6 @@
 </script>
 
 <c:url var="get_url" value="/pharmacies"/>
-
-<span id="time"></span>
-<span style="float: right">
-    <a href="<ex:ref pageContext="${get_url}" lang="en"/>">en</a>
-    |
-    <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
-</span>
 
 <table class="table">
     <tr>
@@ -105,7 +99,7 @@
     <input name="sortDir" type="hidden" value="${sortDir}"/>
 
     <div class="row">
-        <label for="pharmacyName" class="col-sm-2 control-label">
+        <label for="pharmacyName" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.pharmacyName"/>
         </label>
         <div class="col-sm-2">
@@ -120,7 +114,7 @@
     </div>
 
     <div class="row">
-        <label for="address" class="col-sm-2 control-label">
+        <label for="address" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.address"/>
         </label>
         <div class="col-sm-2">
@@ -135,7 +129,7 @@
     </div>
 
     <div class="row">
-        <label for="pharmacistName" class="col-sm-2 control-label">
+        <label for="pharmacistName" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.pharmacistName"/>
         </label>
         <div class="col-sm-2">
@@ -150,7 +144,7 @@
     </div>
 
     <div class="row">
-        <label for="contactNumber" class="col-sm-2 control-label">
+        <label for="contactNumber" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.contactNumber"/>
         </label>
         <div class="col-sm-2">
@@ -165,7 +159,7 @@
     </div>
 
     <div class="row">
-        <label for="category" class="col-sm-2 control-label">
+        <label for="category" class="col-sm-offset-3 col-sm-2 control-label">
             <spring:message code="label.category"/>
         </label>
         <div class="col-sm-2">
@@ -173,19 +167,12 @@
                 <form:select itemLabel="translatedName" itemValue="fieldName" items="${pharmacyCategoryValues}"
                              class="form-control" name="category" path="category">
                 </form:select>
-                <%--<form:select class="form-control" name="category" path="category">--%>
-                    <%--<option value="FIRST"><spring:message code="label.pharmacyCategory.FIRST"/></option>--%>
-                    <%--<option value="SECOND"><spring:message code="label.pharmacyCategory.SECOND"/></option>--%>
-                    <%--<option value="THIRD"><spring:message code="label.pharmacyCategory.THIRD"/></option>--%>
-                    <%--<option value="FOURTH"><spring:message code="label.pharmacyCategory.FOURTH"/></option>--%>
-                    <%--<option value="FIFTH"><spring:message code="label.pharmacyCategory.FIFTH"/></option>--%>
-                <%--</form:select>--%>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-2 button">
+        <div class="col-sm-offset-5 col-sm-2 button">
             <button type="submit" class="btn btn-default"><spring:message code="button.submit"/></button>
         </div>
     </div>

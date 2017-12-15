@@ -130,10 +130,9 @@ public class MedicamentJdbcDao implements InterfaceDAO<MedicamentEntity, Long, S
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "DELETE FROM Medicament WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Deleted more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
+        SQL = "DELETE FROM availability WHERE medicamentId = :id";
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override

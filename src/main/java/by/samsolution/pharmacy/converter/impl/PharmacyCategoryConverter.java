@@ -6,6 +6,7 @@ import by.samsolution.pharmacy.entity.PharmacyCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 public class PharmacyCategoryConverter implements EnumConverterInterface<PharmacyCategoryDto, PharmacyCategory> {
 
@@ -17,7 +18,7 @@ public class PharmacyCategoryConverter implements EnumConverterInterface<Pharmac
     public PharmacyCategoryDto entityToDto(PharmacyCategory pharmacyCategory) {
         PharmacyCategoryDto dto = new PharmacyCategoryDto();
         dto.setFieldName(pharmacyCategory.getFieldName());
-        dto.setTranslatedName(message.getMessage(dto.getResPath(), null, null));
+        dto.setTranslatedName(message.getMessage(dto.getResPath(), null, LocaleContextHolder.getLocale()));
         return dto;
     }
 }

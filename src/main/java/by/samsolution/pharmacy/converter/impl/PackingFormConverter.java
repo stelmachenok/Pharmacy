@@ -21,7 +21,6 @@ public class PackingFormConverter implements EnumConverterInterface<PackingFormD
         PackingFormDto dto = new PackingFormDto();
         dto.setFieldName(packingForm.getFieldName());
         dto.setTranslatedName(message.getMessage(dto.getResPath(), null, LocaleContextHolder.getLocale()));
-        //Locale locale = LocaleContextHolder.getLocale();
         return dto;
     }
 

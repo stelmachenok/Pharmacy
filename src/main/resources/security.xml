@@ -13,9 +13,10 @@
         <intercept-url pattern="/medicaments*" access="ROLE_ADMIN"/>
         <intercept-url pattern="/pharmacies*" access="ROLE_ADMIN"/>
         <intercept-url pattern="/categories*" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/searchPage*" access="ROLE_ADMIN,ROLE_PHARMACIST"/>
         <intercept-url pattern="/availabilityOfDrugs*" access="ROLE_PHARMACIST"/>
         <form-login
-                login-page="/login" default-target-url="/" authentication-failure-url="/login?error=true"
+                login-page="/login" default-target-url="/searchPage" authentication-failure-url="/login?error=true"
                 username-parameter="login" password-parameter="password"
         />
         <logout logout-url="/logout" logout-success-url="/login?logout=true"/>

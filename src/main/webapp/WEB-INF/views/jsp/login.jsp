@@ -5,16 +5,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
-    <title><spring:message code="title.login"/></title>
     <%@ include file="styles.jsp" %>
+    <title><spring:message code="title.login"/></title>
 </head>
 <body>
-<span id="time"></span>
-<span style="float: right">
-    <a href="<ex:ref pageContext="${get_url}" lang="en"/>">en</a>
-    |
-    <a href="<ex:ref pageContext="${get_url}" lang="ru"/>">ru</a>
-</span>
+<c:import url="navbar.jsp"></c:import>
+
 <c:url var="post_url"
        value="/login"/>
 <b>${error}</b>

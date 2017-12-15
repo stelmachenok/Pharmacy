@@ -1,14 +1,12 @@
 package by.samsolution.pharmacy.dto;
 
 import by.samsolution.pharmacy.entity.PackingForm;
-import by.samsolution.pharmacy.entity.ReleaseForm;
 
 import java.util.Date;
 
 public class SearchDto {
-    private Long id;
-    private PackingForm packingForm;
     private String brandName;
+    private PackingForm packingForm;
     private String activeIngredient;
     private Long count;
     private Date lastUpdate;
@@ -17,12 +15,17 @@ public class SearchDto {
     private String contactNumber;
     private Long pharmacyId;
     private Long medicamentId;
+    private String packingFormName;
 
     public SearchDto() {
     }
 
-    public Long getId() {
-        return id;
+    public String getPackingFormName() {
+        return packingFormName;
+    }
+
+    public String getLabel() {
+        return brandName + ", " + packingFormName + ", " + activeIngredient;
     }
 
     public PackingForm getPackingForm() {
@@ -105,7 +108,7 @@ public class SearchDto {
         this.medicamentId = medicamentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPackingFormName(String packingFormName) {
+        this.packingFormName = packingFormName;
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlRequestListDto>
+    <SqlRequestDto>
+        <key>InsertAvailability</key>
+        <value>
+            <![CDATA[
+            SELECT brandName, packingForm, activeIngredient, count, lastUpdate, pharmacyName, address, contactNumber, pharmacyId, medicamentId
+                FROM medicament, availability, pharmacy
+                WHERE (medicament.id = availability.medicamentId AND pharmacy.id = availability.pharmacyId)
+                AND (brandName LIKE :request OR
+                activeIngredient LIKE :request OR
+                count LIKE :request OR
+                address LIKE :request)
+                ORDER BY brandName
+            ]]>
+        </value>
+    </SqlRequestDto>
+</sqlRequestListDto>

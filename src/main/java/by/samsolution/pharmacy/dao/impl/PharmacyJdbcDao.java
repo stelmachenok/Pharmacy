@@ -127,10 +127,11 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
         String SQL = "DELETE FROM pharmacy WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Deleted more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
+        SQL = "DELETE FROM availability WHERE pharmacyId = :id";
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
+        SQL = "DELETE FROM usertable WHERE pharmacyId = :id";
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     @Override
     public void create(Pharmacy entity) throws JdbcManipulationException {
         String SQL = "INSERT INTO pharmacy (pharmacyName, address, pharmacistName, contactNumber, login, password, category, uuid)" +
-        "VALUES (:pharmacyName, :address, :pharmacistName, :contactNumber, :login, :password, :category, :uuid)";
+                "VALUES (:pharmacyName, :address, :pharmacistName, :contactNumber, :login, :password, :category, :uuid)";
         Map namedParameters = new HashMap();
         namedParameters.put("pharmacyName", entity.getPharmacyName());
         namedParameters.put("address", entity.getAddress());
@@ -152,9 +153,15 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
         namedParameters.put("category", String.valueOf(entity.getCategory()));
         namedParameters.put("uuid", String.valueOf(entity.getUuid()));
         namedParameters.put("id", entity.getId());
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Created more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
+        SQL = "INSERT INTO usertable (login, password, role, pharmacyId, enabled)" +
+                "VALUES (:login, :password, :role, :pharmacyId, :enabled)";
+        namedParameters = new HashMap();
+        namedParameters.put("login", entity.getContactNumber());
+        namedParameters.put("password", entity.getContactNumber());
+        namedParameters.put("role", "ROLE_PROVISOR");
+        namedParameters.put("pharmacyId", entity.getId());
+        namedParameters.put("enabled", true);
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 }
