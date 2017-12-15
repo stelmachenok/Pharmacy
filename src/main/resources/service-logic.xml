@@ -2,56 +2,99 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="MedicamentStorage" class="by.samsolution.pharmacy.storage.Storage">
-        <property name="itemList">
-            <list value-type="by.samsolution.pharmacy.entity.MedicamentEntity">
-            </list>
-        </property>
-    </bean>
+    <context:annotation-config/>
 
-    <bean id="PharmacyStorage" class="by.samsolution.pharmacy.storage.Storage">
-        <property name="itemList">
-            <list value-type="by.samsolution.pharmacy.entity.Pharmacy">
-            </list>
-        </property>
-    </bean>
+    <import resource="classpath:jdbc-config.xml"/>
+    <import resource="classpath:in-memory-dao.xml"/>
+    <import resource="classpath:jdbc-dao.xml"/>
+    <import resource="security.xml"/>
 
-    <bean id="CategoryStorage" class="by.samsolution.pharmacy.storage.Storage">
-        <property name="itemList">
-            <list value-type="by.samsolution.pharmacy.entity.MedicamentCategory">
-            </list>
-        </property>
-    </bean>
-
-    <bean id="MedicamentDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentDAO">
-        <property name="ID" value="0"/>
-        <property name="storage" ref="MedicamentStorage"/>
-    </bean>
-
-    <bean id="PharmacyDAO" class="by.samsolution.pharmacy.dao.impl.PharmacyDAO">
-        <property name="ID" value="0"/>
-        <property name="storage" ref="PharmacyStorage"/>
-    </bean>
-
-    <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO">
-        <property name="ID" value="0"/>
-        <property name="storage" ref="CategoryStorage"/>
+    <bean id="CategoryConverter" class="by.samsolution.pharmacy.converter.impl.CategoryConverter">
     </bean>
 
     <bean id="MedicineConverter" class="by.samsolution.pharmacy.converter.impl.MedicineConverter">
+        <constructor-arg name="categoryConverter" ref="CategoryConverter"/>
     </bean>
 
-    <bean id="Service" class="by.samsolution.pharmacy.service.Service">
-        <constructor-arg ref="CategoryDAO"/>
+    <bean id="PharmacyConverter" class="by.samsolution.pharmacy.converter.impl.PharmacyConverter">
+    </bean>
+
+    <bean id="UserConverter" class="by.samsolution.pharmacy.converter.impl.UserConverter">
+    </bean>
+
+    <bean id="AvailabilityConverter" class="by.samsolution.pharmacy.converter.impl.AvailabilityConverter">
+    </bean>
+
+    <bean id="PackingFormConverter" class="by.samsolution.pharmacy.converter.impl.PackingFormConverter">
+    </bean>
+
+    <bean id="ReleaseFormConverter" class="by.samsolution.pharmacy.converter.impl.ReleaseFormConverter">
+    </bean>
+
+    <bean id="PharmacyCategoryConverter" class="by.samsolution.pharmacy.converter.impl.PharmacyCategoryConverter">
+    </bean>
+
+    <bean id="MedicamentServiceImpl" class="by.samsolution.pharmacy.service.impl.MedicamentServiceImpl">
         <constructor-arg ref="MedicamentDAO"/>
-        <constructor-arg ref="PharmacyDAO"/>
         <constructor-arg ref="MedicineConverter"/>
+    </bean>
+
+    <bean id="CategoryServiceImpl" class="by.samsolution.pharmacy.service.impl.CategoryServiceImpl">
+        <constructor-arg ref="CategoryDAO"/>
+        <constructor-arg ref="CategoryConverter"/>
+    </bean>
+
+    <bean id="PharmacyServiceImpl" class="by.samsolution.pharmacy.service.impl.PharmacyServiceImpl">
+        <constructor-arg ref="PharmacyDAO"/>
+        <constructor-arg ref="PharmacyConverter"/>
+    </bean>
+
+    <bean id="UserServiceImpl" class="by.samsolution.pharmacy.service.impl.UserServiceImpl">
+        <constructor-arg ref="UserDAO"/>
+        <constructor-arg ref="UserConverter"/>
+    </bean>
+
+    <bean id="AvailabilityServiceImpl" class="by.samsolution.pharmacy.service.impl.AvailabilityServiceImpl">
+        <constructor-arg ref="AvailabilityDAO"/>
+        <constructor-arg ref="AvailabilityConverter"/>
+    </bean>
+
+    <bean id="SearchServiceImpl" class="by.samsolution.pharmacy.service.impl.SearchServiceImpl">
+        <constructor-arg ref="SearchDAO"/>
+        <constructor-arg ref="PackingFormConverter"/>
     </bean>
 
     <bean id="MedicamentValidator" class="by.samsolution.pharmacy.formvalidator.MedicamentValidator">
     </bean>
+
+    <bean id="CategoryValidator" class="by.samsolution.pharmacy.formvalidator.CategoryValidator">
+    </bean>
+
+    <bean id="PharmacyValidator" class="by.samsolution.pharmacy.formvalidator.PharmacyValidator">
+    </bean>
+
+    <bean id="AvailabilityValidator" class="by.samsolution.pharmacy.formvalidator.AvailabilityValidator">
+    </bean>
+    <!--messageSourceBundle-->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>label</value>
+                <value>validation</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    <!--transaction-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
 
 </beans>

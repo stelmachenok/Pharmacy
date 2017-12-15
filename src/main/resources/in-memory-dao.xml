@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans profile="inMemory" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="MedicamentStorage" class="by.samsolution.pharmacy.storage.Storage">
+        <property name="itemList">
+            <list value-type="by.samsolution.pharmacy.entity.MedicamentEntity">
+            </list>
+        </property>
+    </bean>
+
+    <bean id="PharmacyStorage" class="by.samsolution.pharmacy.storage.Storage">
+        <property name="itemList">
+            <list value-type="by.samsolution.pharmacy.entity.Pharmacy">
+            </list>
+        </property>
+    </bean>
+
+    <bean id="CategoryStorage" class="by.samsolution.pharmacy.storage.Storage">
+        <property name="itemList">
+            <list value-type="by.samsolution.pharmacy.entity.MedicamentCategory">
+            </list>
+        </property>
+    </bean>
+
+    <bean id="MedicamentDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentDAO">
+        <property name="ID" value="0"/>
+        <property name="storage" ref="MedicamentStorage"/>
+    </bean>
+
+    <bean id="PharmacyDAO" class="by.samsolution.pharmacy.dao.impl.PharmacyDAO">
+        <property name="ID" value="0"/>
+        <property name="storage" ref="PharmacyStorage"/>
+    </bean>
+
+    <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryDAO">
+        <property name="ID" value="0"/>
+        <property name="storage" ref="CategoryStorage"/>
+    </bean>
+
+</beans>

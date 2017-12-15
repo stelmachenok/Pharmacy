@@ -1,14 +1,9 @@
 package by.samsolution.pharmacy.dto;
 
-import by.samsolution.pharmacy.entity.MedicamentEntity;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-public class MedicamentDto extends BasicDto{
+public class MedicamentDto extends BasicDto {
 
     private String brandName;
     private String activeIngredient;
@@ -16,32 +11,25 @@ public class MedicamentDto extends BasicDto{
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
+    private CategoryDto category;
+    private Long categoryDtoId;
     private Long id;
 
     public MedicamentDto() {
     }
 
-    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentDto(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, CategoryDto category) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
+        this.category = category;
     }
 
-    public MedicamentDto(MedicamentEntity medicamentEntity) {
-        this.brandName = medicamentEntity.getBrandName();
-        this.activeIngredient = medicamentEntity.getActiveIngredient();
-        this.dosage = medicamentEntity.getDosage();
-        this.packingForm = medicamentEntity.getPackingForm();
-        this.internationalNonproprietaryName = medicamentEntity.getInternationalNonproprietaryName();
-        this.releaseForm = medicamentEntity.getReleaseForm();
-        this.id = medicamentEntity.getId();
-    }
-
-    public MedicamentEntity toEntity(){
-        return new MedicamentEntity(this);
+    public String getLabel() {
+        return brandName + " " + category.getCategoryName() + " " + activeIngredient;
     }
 
     public String getBrandName() {
@@ -72,6 +60,14 @@ public class MedicamentDto extends BasicDto{
         return id;
     }
 
+    public CategoryDto getCategory() {
+        return category;
+    }
+
+    public Long getCategoryDtoId() {
+        return categoryDtoId;
+    }
+
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
@@ -98,6 +94,14 @@ public class MedicamentDto extends BasicDto{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCategory(CategoryDto category) {
+        this.category = category;
+    }
+
+    public void setCategoryDtoId(Long categoryDtoId) {
+        this.categoryDtoId = categoryDtoId;
     }
 
     @Override

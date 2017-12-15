@@ -36,9 +36,9 @@
         </listener-class>
     </listener>
 
-    <listener>
-        <listener-class>by.samsolution.pharmacy.servlet.MyAppServletContextListener</listener-class>
-    </listener>
+    <!--<listener>-->
+        <!--<listener-class>by.samsolution.pharmacy.servlet.MyAppServletContextListener</listener-class>-->
+    <!--</listener>-->
 
     <!--Позволяет работать с русскими символами-->
     <filter>
@@ -55,6 +55,15 @@
     </filter>
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--security filter-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

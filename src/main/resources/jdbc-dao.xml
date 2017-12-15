@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans profile="jdbc" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="MedicamentDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentJdbcDao">
+    </bean>
+
+    <bean id="PharmacyDAO" class="by.samsolution.pharmacy.dao.impl.PharmacyJdbcDao">
+    </bean>
+
+    <bean id="CategoryDAO" class="by.samsolution.pharmacy.dao.impl.MedicamentCategoryJdbcDao">
+    </bean>
+
+    <bean id="UserDAO" class="by.samsolution.pharmacy.dao.impl.UserJdbcDao">
+    </bean>
+    <bean id="AvailabilityDAO" class="by.samsolution.pharmacy.dao.impl.AvailabilityJdbcDao">
+    </bean>
+    <bean id="SearchDAO" class="by.samsolution.pharmacy.dao.impl.SearchJdbcDaoImpl">
+    </bean>
+
+</beans>

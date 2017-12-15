@@ -14,36 +14,24 @@ public class MedicamentEntity extends BasicEntity{
     private PackingForm packingForm;
     private String internationalNonproprietaryName;
     private ReleaseForm releaseForm;
-    private final UUID guid;
+    private UUID guid;
     private Long id;
+    private MedicamentCategory category;
+
 
     public MedicamentEntity() {
         this.guid = UUID.randomUUID();
     }
 
-    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm) {
+    public MedicamentEntity(String brandName, String activeIngredient, Double dosage, PackingForm packingForm, String internationalNonproprietaryName, ReleaseForm releaseForm, MedicamentCategory category) {
         this.brandName = brandName;
         this.activeIngredient = activeIngredient;
         this.dosage = dosage;
         this.packingForm = packingForm;
         this.internationalNonproprietaryName = internationalNonproprietaryName;
         this.releaseForm = releaseForm;
+        this.category = category;
         this.guid = UUID.randomUUID();
-    }
-
-    public MedicamentEntity(MedicamentDto medicamentDto){
-        this.brandName = medicamentDto.getBrandName();
-        this.activeIngredient = medicamentDto.getActiveIngredient();
-        this.dosage = Double.valueOf(medicamentDto.getDosage());
-        this.packingForm = medicamentDto.getPackingForm();
-        this.internationalNonproprietaryName = medicamentDto.getInternationalNonproprietaryName();
-        this.releaseForm = medicamentDto.getReleaseForm();
-        this.id = medicamentDto.getId();
-        this.guid = UUID.randomUUID();
-    }
-
-    public MedicamentDto toDto(){
-        return new MedicamentDto(this);
     }
 
     public String getBrandName() {
@@ -83,6 +71,10 @@ public class MedicamentEntity extends BasicEntity{
         return id;
     }
 
+    public MedicamentCategory getCategory() {
+        return category;
+    }
+
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
@@ -105,6 +97,14 @@ public class MedicamentEntity extends BasicEntity{
 
     public void setReleaseForm(ReleaseForm releaseForm) {
         this.releaseForm = releaseForm;
+    }
+
+    public void setGuid(UUID guid) {
+        this.guid = guid;
+    }
+
+    public void setCategory(MedicamentCategory category) {
+        this.category = category;
     }
 
     @Override

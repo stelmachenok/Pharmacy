@@ -37,6 +37,10 @@ public class MedicamentCategory extends BasicEntity{
         return id;
     }
 
+    public void setGuid(UUID guid) {
+        this.guid = guid;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -47,5 +51,15 @@ public class MedicamentCategory extends BasicEntity{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "MedicamentCategory{" +
+                "categoryName='" + categoryName + '\'' +
+                ", description='" + description + '\'' +
+                ", guid=" + guid +
+                ", id=" + id +
+                '}';
     }
 }
