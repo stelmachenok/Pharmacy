@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,11 @@ public class LoginController {
                                 @RequestParam(value = "logout", required = false) Boolean logout
     ) {
         if (error != null) {
-            String errorMessage = message.getMessage("message.loginError", null, null);
+            String errorMessage = message.getMessage("message.loginError", null, LocaleContextHolder.getLocale());
             model.addAttribute("error", errorMessage);
         }
         if (logout != null) {
-            String errorMessage = message.getMessage("message.logout", null, null);
+            String errorMessage = message.getMessage("message.logout", null, LocaleContextHolder.getLocale());
             model.addAttribute("error", errorMessage);
         }
         User user = new User("", "");

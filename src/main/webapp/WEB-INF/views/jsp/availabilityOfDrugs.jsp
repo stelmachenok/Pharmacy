@@ -16,7 +16,7 @@
         }
     }
 </script>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="navbar.jsp"/>
 
 <h5><p class="text-center"><spring:message code="title.yourPharmacy"/> : ${pharmacyName}</p></h5>
 <c:url var="get_url" value="/availabilityOfDrugs"/>
@@ -47,23 +47,22 @@
             <td>${availability.lastUpdate}</td>
 
             <td>
-                <a id="delete"
-                   onclick="deleteConfirmation('${availability.brandName}', '${availability.medicamentId}')">
+                <button id="delete" type="button" class="btn btn-default"
+                        onclick="deleteConfirmation('${availability.brandName}', '${availability.medicamentId}')">
                     <spring:message code="title.delete"/>
-                </a>
+                </button>
             </td>
         </tr>
     </c:forEach>
 </table>
 
-<c:forEach var="i" begin="1" end="${pagesCount}">
-    <div class="row">
-        <a class="col-sm-2"
-           href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">
-            <spring:message code="title.page"/> ${i}
-        </a>
-    </div>
-</c:forEach>
+<ul class="pagination">
+    <c:forEach var="i" begin="1" end="${pagesCount}">
+        <li>
+            <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">${i}</a>
+        </li>
+    </c:forEach>
+</ul>
 
 <c:url var="post_url"
        value="/availabilityFormExecute"/>
@@ -74,7 +73,6 @@
     <input name="sortField" type="hidden" value="${sortField}"/>
     <input name="pageNum" type="hidden" value="${pageNum}"/>
     <input name="pageSize" type="hidden" value="${pageSize}"/>
-    <%--<input id="action" name="action" type="hidden" value="${action}"/>--%>
     <input name="sortDir" type="hidden" value="${sortDir}"/>
 
     <div class="row">

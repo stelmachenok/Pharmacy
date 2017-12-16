@@ -9,11 +9,13 @@
     <title><spring:message code="title.login"/></title>
 </head>
 <body>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="navbar.jsp"/>
 
 <c:url var="post_url"
        value="/login"/>
-<b>${error}</b>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${error}</label>
+</div>
 <form:form class="form-horizontal" method="POST" modelAttribute="user" action="${post_url}">
     <div class="row">
         <label for="login" class="col-sm-offset-3 col-sm-2 control-label">
@@ -23,7 +25,7 @@
             <spring:bind path="login">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input class="form-control" type="text" size="70"
-                                path="login" id="login"  />
+                                path="login" id="login"/>
                     <form:errors path="login"/>
                 </div>
             </spring:bind>
@@ -44,13 +46,13 @@
             </spring:bind>
         </div>
     </div>
-
     <div class="row">
         <div class="col-sm-offset-5 col-sm-2 button">
             <button type="submit" class="btn btn-default"><spring:message code="button.login"/></button>
         </div>
     </div>
 </form:form>
+
 
 
 </body>

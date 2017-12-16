@@ -16,8 +16,6 @@ public class AvailabilityValidator implements Validator {
         AvailabilityDto availabilityDto = (AvailabilityDto) target;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "count", "NotEmpty.availability.count");
 
-
-
         if (availabilityDto.getCount() != null && availabilityDto.getCount() <= 0) {
             errors.rejectValue("count", "Pattern.availability.negativeCount");
         }

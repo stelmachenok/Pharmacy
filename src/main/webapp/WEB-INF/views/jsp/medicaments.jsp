@@ -1,6 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--<%@ taglib prefix="form" uri="http://java.sun.com/jsf/html" %>--%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ex" uri="/WEB-INF/tags/implicit.tld" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
@@ -13,7 +12,6 @@
 </head>
 
 <body>
-<c:import url="navbar.jsp"></c:import>
 <script>
     $(document).ready(function () {
         setInterval(function () {
@@ -26,11 +24,8 @@
             window.location.href = "<%= pageContext.getServletContext().getContextPath() %>/medicaments?sort-field=${sortField}&sort-direction=${sortDir}&page-num=${pageNum}&page-size=${pageSize}&action=delete&id=" + id;
         }
     }
-
-    function changeSelectedCategory(id) {
-        $('#categoryMedicament').val(id);
-    }
 </script>
+<c:import url="navbar.jsp"/>
 <c:url var="get_url" value="/medicaments"/>
 
 <table class="table">
@@ -80,32 +75,31 @@
             <td>${medicament.category.categoryName}</td>
 
             <td>
-                <a onclick="changeSelectedCategory('${medicament.categoryDtoId}')"
-                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>">
+                <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${medicament.id}"/>"
+                   class="btn btn-default" role="button">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
 
             <td>
-                <a id="delete" onclick="deleteConfirmation('${medicament.brandName}', '${medicament.id}')">
+                <button id="delete" type="button" class="btn btn-default"
+                        onclick="deleteConfirmation('${medicament.brandName}', '${medicament.id}')">
                     <spring:message code="title.delete"/>
-                </a>
+                </button>
             </td>
         </tr>
     </c:forEach>
 </table>
 
-<c:forEach var="i" begin="1" end="${pagesCount}">
-    <div class="row">
-        <a class="col-sm-2"
-           href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">
-            <spring:message code="title.page"/> ${i}
-        </a>
-    </div>
-</c:forEach>
+<ul class="pagination">
+    <c:forEach var="i" begin="1" end="${pagesCount}">
+        <li>
+            <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">${i}</a>
+        </li>
+    </c:forEach>
+</ul>
 
-<c:url var="post_url"
-       value="/formExecute"/>
+<c:url var="post_url" value="/formExecute"/>
 <form:form class="form-horizontal" method="POST" modelAttribute="medicament" action="${post_url}">
     <spring:bind path="id">
         <form:input type="hidden" value="${medicament.id}" path="id"/>
@@ -222,6 +216,8 @@
         </div>
     </div>
 </form:form>
-<b>${exceptionText}</b>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${exceptionText}</label>
+</div>
 </body>
 </html>

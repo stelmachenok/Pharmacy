@@ -10,7 +10,8 @@
                 AND (brandName LIKE :request OR
                 activeIngredient LIKE :request OR
                 count LIKE :request OR
-                address LIKE :request)
+                address LIKE :request OR
+                pharmacyName LIKE :request)
                 ORDER BY brandName
             ]]>
         </value>

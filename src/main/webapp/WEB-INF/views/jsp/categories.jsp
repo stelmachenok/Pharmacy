@@ -9,7 +9,7 @@
     <title><spring:message code="title.categories"/></title>
 </head>
 <body>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="navbar.jsp"/>
 <script>
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
@@ -38,29 +38,29 @@
             <td>${category.categoryName}</td>
             <td>${category.description}</td>
             <td>
-                <a onclick="changeSelectedCategory('${category.id}')"
-                   href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${category.id}"/>">
+                <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${pageNum}" pageSize="${pageSize}" action="edit" id="${category.id}"/>"
+                   class="btn btn-default" role="button">
                     <spring:message code="title.edit"/>
                 </a>
             </td>
 
             <td>
-                <a id="delete" onclick="deleteConfirmation('${category.categoryName}', '${category.id}')">
+                <button id="delete" type="button" class="btn btn-default"
+                        onclick="deleteConfirmation('${category.categoryName}', '${category.id}')">
                     <spring:message code="title.delete"/>
-                </a>
+                </button>
             </td>
         </tr>
     </c:forEach>
 </table>
 
-<c:forEach var="i" begin="1" end="${pagesCount}">
-    <div class="row">
-        <a class="col-sm-2"
-           href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">
-            <spring:message code="title.page"/> ${i}
-        </a>
-    </div>
-</c:forEach>
+<ul class="pagination">
+    <c:forEach var="i" begin="1" end="${pagesCount}">
+        <li>
+            <a href="<ex:ref pageContext="${get_url}" sortField="${sortField}" sortDir="${sortDir}" pageNum="${i}" pageSize="${pageSize}"/>">${i}</a>
+        </li>
+    </c:forEach>
+</ul>
 
 <c:url var="post_url"
        value="/categoryFormExecute"/>
@@ -110,7 +110,9 @@
         </div>
     </div>
 </form:form>
-<b>${exceptionText}</b>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${exceptionText}</label>
+</div>
 
 </body>
 </html>

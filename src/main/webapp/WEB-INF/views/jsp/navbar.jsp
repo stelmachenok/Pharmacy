@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ex" uri="/WEB-INF/tags/implicit.tld" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ include file="styles.jsp" %>
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -19,9 +18,9 @@
                 <li><a href="/availabilityOfDrugs"><spring:message code="title.availabilityOfDrugs"/></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="<%= pageContext.getServletContext().getContextPath() %>/?lang=en">
+                <li><a href="<ex:ref pageContext="${get_url}" lang="en"/>">
                     <spring:message code="language.english"/></a></li>
-                <li><a href="<%= pageContext.getServletContext().getContextPath() %>/?lang=ru">
+                <li><a href="<ex:ref pageContext="${get_url}" lang="ru"/>">
                     <spring:message code="language.russian"/></a></li>
             </ul>
         </div>

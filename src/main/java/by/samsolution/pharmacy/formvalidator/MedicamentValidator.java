@@ -21,10 +21,6 @@ public class MedicamentValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dosage", "NotEmpty.medicament.dosage");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "internationalNonproprietaryName", "NotEmpty.medicament.internationalNonproprietaryName");
 
-        if (errors.getFieldError("dosage") != null && !errors.getFieldError("dosage").isBindingFailure() && medicamentDto.getDosage() == null) {
-            errors.rejectValue("dosage", "Pattern.medicament.dosageNotNumber");
-        }
-
         if (medicamentDto.getDosage() != null && medicamentDto.getDosage() < 0) {
             errors.rejectValue("dosage", "Pattern.medicament.negativeDosage");
         }

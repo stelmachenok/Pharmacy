@@ -10,7 +10,7 @@
     <script src="js/searchAction.js"></script>
 </head>
 <body>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="navbar.jsp"/>
 
 <div class="row">
     <input id="searchInput" class="col-sm-offset-5 control-label" type="text" size="40">
