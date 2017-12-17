@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -12,21 +13,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @TestPropertySource("/db.properties")
 @ContextConfiguration(locations = {"classpath*:spring-web-config.xml", "classpath*:service-logic.xml"})
-public class TestMedicamentsController {
+public class ControllerTests {
     @Autowired
     WebApplicationContext wac;
+    @Autowired
+    MockHttpSession session;
 
     MockMvc mockMvc;
 
@@ -36,35 +40,53 @@ public class TestMedicamentsController {
     }
 
     @Test
-    public void when_Default_Page_Is_Requested_We_Expect_Pharmacy_In_AppName_Var() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/");
+    public void test_return_login_page_when_requested_url_is_login() throws Exception {
+        MockHttpServletRequestBuilder request = get("/login");
         ResultActions result = mockMvc.perform(request);
-        MvcResult result1 = result.andDo(print())
-                .andExpect(MockMvcResultMatchers.view().name("welcome"))
-                .andExpect(MockMvcResultMatchers.model().attribute("appName", "Pharmacy"))
-                /*.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.content().contentType("text/html"))
-                .andExpect(xpath("/html/head/title").string("Welcome"))*/
+        result.andDo(print())
+                .andExpect(view().name("login"))
                 .andReturn();
     }
 
     @Test
-    public void when_Medicaments_Page_Is_Requested_We_Expect_To_Get_Time() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/getTime");
+    public void test_return_medicaments_page_when_requested_url_is_medicaments() throws Exception {
+        MockHttpServletRequestBuilder request = get("/medicaments");
         ResultActions result = mockMvc.perform(request);
-        MvcResult result1 = result.andDo(print())
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+        result.andDo(print())
+                .andExpect(view().name("medicaments"))
                 .andReturn();
-
-        String s = result1.getResponse().getContentAsString();
-        assertEquals(Long.parseLong(s), System.currentTimeMillis(), 5000);
     }
 
-    //    "АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE, new CategoryDto("Категоря 1", "Описание 1")))
     @Test
-    public void when_Correct_post_form_is_submited_expect_get_medicament_page() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/formExecute")
+    public void test_return_categories_page_when_requested_url_is_categories() throws Exception {
+        MockHttpServletRequestBuilder request = get("/categories");
+        ResultActions result = mockMvc.perform(request);
+        result.andDo(print())
+                .andExpect(view().name("categories"))
+                .andReturn();
+    }
+
+    @Test
+    public void test_return_pharmacies_page_when_requested_url_is_pharmacies() throws Exception {
+        MockHttpServletRequestBuilder request = get("/pharmacies");
+        ResultActions result = mockMvc.perform(request);
+        result.andDo(print())
+                .andExpect(view().name("pharmacies"))
+                .andReturn();
+    }
+
+    @Test
+    public void test_return_search_page_when_requested_url_is_searchPage() throws Exception {
+        MockHttpServletRequestBuilder request = get("/searchPage");
+        ResultActions result = mockMvc.perform(request);
+        result.andDo(print())
+                .andExpect(view().name("searchPage"))
+                .andReturn();
+    }
+
+    @Test
+    public void when_correct_medicament_post_form_is_submited_expect_get_medicament_page() throws Exception {
+        MockHttpServletRequestBuilder request = post("/formExecute")
                 .param("id", "")
                 .param("brandName", "АВОДАРТ")
                 .param("activeIngredient", "Дутастерид")
@@ -85,26 +107,19 @@ public class TestMedicamentsController {
     }
 
     @Test
-    public void when_record_already_exist_and_post_form_is_submited_expect_form_execute_page() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/formExecute")
+    public void when_correct_post_category_form_is_submited_expect_get_category_page() throws Exception {
+        MockHttpServletRequestBuilder request = post("/categoryFormExecute")
                 .param("id", "")
-                .param("brandName", "5-НОК")
-                .param("activeIngredient", "Нитроксолин")
-                .param("dosage", "50.01")
-                .param("packingForm", "CAPSULE")
-                .param("internationalNonproprietaryName", "Нитроксолин")
-                .param("releaseForm", "WITHOUT_RECIPE")
-                .param("categoryMedicament", "1")
+                .param("categoryName", "Category C")
+                .param("description", "descr")
                 .param("pageNum", "1")
                 .param("pageSize", "10")
-                .param("sortField", "BRAND_NAME")
+                .param("sortField", "CATEGORY_NAME")
                 .param("sortDir", "true")
                 .param("action", "");
-        //  5-НОК	Нитроксолин	50.01	CAPSULE	Нитроксолин	WITHOUT_RECIPE	1
-
         ResultActions result = mockMvc.perform(request);
         MvcResult result1 = result.andDo(print())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/formExecute"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/categories?page-num=1&page-size=10&sort-field=CATEGORY_NAME&sort-dir=true"))
                 .andReturn();
     }
 }

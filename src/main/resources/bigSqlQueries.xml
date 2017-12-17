@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlRequestListDto>
     <SqlRequestDto>
-        <key>InsertAvailability</key>
+        <key>search</key>
         <value>
             <![CDATA[
             SELECT brandName, packingForm, activeIngredient, count, lastUpdate, pharmacyName, address, contactNumber, pharmacyId, medicamentId
-                FROM medicament, availability, pharmacy
-                WHERE (medicament.id = availability.medicamentId AND pharmacy.id = availability.pharmacyId)
+            FROM medicament, availability, pharmacy
+            WHERE (medicament.id = availability.medicamentId AND pharmacy.id = availability.pharmacyId)
                 AND (brandName LIKE :request OR
                 activeIngredient LIKE :request OR
                 count LIKE :request OR
                 address LIKE :request OR
                 pharmacyName LIKE :request)
-                ORDER BY brandName
+            ORDER BY brandName
+            ]]>
+        </value>
+    </SqlRequestDto>
+    <SqlRequestDto>
+        <key>updateMedicamentEntity</key>
+        <value>
+            <![CDATA[
+            UPDATE Medicament
+            SET  brandName = :brandName,
+                activeIngredient = :activeIngredient,
+                dosage = :dosage, packingForm = :packingForm,
+                internationalNonproprietaryName = :internationalNonproprietaryName,
+                releaseForm = :releaseForm,
+                guid = :guid,
+                medicamentCategory = :medicamentCategory
+            WHERE id = :id
+            ]]>
+        </value>
+    </SqlRequestDto>
+    <SqlRequestDto>
+        <key>createMedicamentEntity</key>
+        <value>
+            <![CDATA[
+            INSERT INTO medicament (brandName, activeIngredient, dosage, packingForm, internationalNonproprietaryName, releaseForm, guid, medicamentCategory)
+            VALUES (:brandName, :activeIngredient, :dosage, :packingForm, :internationalNonproprietaryName, :releaseForm, :guid, :medicamentCategory)
+            ]]>
+        </value>
+    </SqlRequestDto>
+    <SqlRequestDto>
+        <key>updatePharmacy</key>
+        <value>
+            <![CDATA[
+            UPDATE pharmacy
+            SET pharmacyName = :pharmacyName,
+                address = :address,
+                pharmacistName = :pharmacistName,
+                contactNumber = :contactNumber,
+                login = :login,
+                password = :password,
+                category = :category,
+                uuid = :uuid
+            WHERE id = :id
+            ]]>
+        </value>
+    </SqlRequestDto>
+    <SqlRequestDto>
+        <key>createPharmacy</key>
+        <value>
+            <![CDATA[
+            INSERT INTO pharmacy (pharmacyName, address, pharmacistName, contactNumber, login, password, category, uuid)
+            VALUES (:pharmacyName, :address, :pharmacistName, :contactNumber, :login, :password, :category, :uuid)
             ]]>
         </value>
     </SqlRequestDto>

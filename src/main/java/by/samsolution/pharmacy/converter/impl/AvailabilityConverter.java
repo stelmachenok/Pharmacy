@@ -8,6 +8,7 @@ public class AvailabilityConverter implements InterfaceConverter<AvailabilityDto
     @Override
     public AvailabilityDto entityToDto(AvailabilityEntity entity) {
         AvailabilityDto dto = new AvailabilityDto();
+        dto.setId(entity.getId());
         dto.setPharmacyId(entity.getPharmacyId());
         dto.setMedicamentId(entity.getMedicamentId());
         dto.setCount(entity.getCount());
@@ -18,6 +19,7 @@ public class AvailabilityConverter implements InterfaceConverter<AvailabilityDto
     @Override
     public AvailabilityEntity dtoToEntity(AvailabilityDto dto) {
         AvailabilityEntity entity = new AvailabilityEntity();
+        entity.setId(dto.getId());
         entity.setPharmacyId(dto.getPharmacyId());
         entity.setMedicamentId(dto.getMedicamentId());
         entity.setCount(dto.getCount());

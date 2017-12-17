@@ -18,6 +18,8 @@ public class PharmacyValidator implements Validator {
     public void validate(Object target, Errors errors) {
         PharmacyDto pharmacyDto = (PharmacyDto) target;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pharmacyName", "NotEmpty.pharmacy.pharmacyName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "login", "NotEmpty.pharmacy.login");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.pharmacy.password");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "NotEmpty.pharmacy.address");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pharmacistName", "NotEmpty.pharmacy.pharmacistName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "contactNumber", "NotEmpty.pharmacy.contactNumber");
@@ -26,7 +28,9 @@ public class PharmacyValidator implements Validator {
         Pattern homePhonePattern = Pattern.compile("8\\s(\\d){3}\\s((\\d){3})-(\\d){2}-(\\d){2}");
         Matcher mobilePhoneMatcher = mobilePhonePattern.matcher(pharmacyDto.getContactNumber());
         Matcher homePhoneMatcher = homePhonePattern.matcher(pharmacyDto.getContactNumber());
-        if (!mobilePhoneMatcher.matches() && !homePhoneMatcher.matches()) {
+        if ((errors.getFieldError() == null ||
+                errors.getFieldError() != null && !errors.getFieldError().getField().equals("contactNumber")) &&
+                        !mobilePhoneMatcher.matches() && !homePhoneMatcher.matches()) {
             errors.rejectValue("contactNumber", "Pattern.pharmacy.incorrectContactNumber");
         }
     }

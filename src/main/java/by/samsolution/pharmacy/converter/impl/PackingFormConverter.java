@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import java.util.Locale;
-
 public class PackingFormConverter implements EnumConverterInterface<PackingFormDto, PackingForm> {
     @Autowired
     @Qualifier(value = "messageSource")

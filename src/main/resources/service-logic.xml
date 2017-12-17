@@ -9,7 +9,6 @@
     <context:annotation-config/>
 
     <import resource="classpath:jdbc-config.xml"/>
-    <import resource="classpath:in-memory-dao.xml"/>
     <import resource="classpath:jdbc-dao.xml"/>
     <import resource="security.xml"/>
 

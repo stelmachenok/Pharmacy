@@ -3,7 +3,6 @@ package by.samsolution.pharmacy.dao.impl;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.AvailabilityEntity;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.AvailabilitySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +28,7 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
         @Override
         public AvailabilityEntity mapRow(ResultSet rs, int i) throws SQLException {
             AvailabilityEntity availabilityEntity = new AvailabilityEntity();
+            availabilityEntity.setId(rs.getLong("id"));
             availabilityEntity.setPharmacyId(rs.getLong("pharmacyId"));
             availabilityEntity.setMedicamentId(rs.getLong("medicamentId"));
             availabilityEntity.setCount(rs.getLong("count"));
@@ -67,7 +67,7 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
 
     @Override
     public AvailabilityEntity getEntityById(Long id) {
-        String SQL = "SELECT * FROM availability WHERE medicamentId=:id";
+        String SQL = "SELECT * FROM availability WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
         return namedParameterJdbcTemplate.queryForObject(SQL, namedParameters, mapper);
     }
@@ -104,43 +104,26 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
     }
 
     @Override
-    public void update(AvailabilityEntity entity) throws EntityNotFoundException, JdbcManipulationException {
+    public void update(AvailabilityEntity entity) throws EntityNotFoundException {
         String SQL = "UPDATE availability SET count = :count, lastUpdate = :lastUpdate " +
                 "WHERE pharmacyId = :pharmacyId AND medicamentId = :medicamentId";
         Map namedParameters = new HashMap();
+        namedParameters.put("count", entity.getCount());
+        namedParameters.put("lastUpdate", entity.getLastUpdate());
         namedParameters.put("pharmacyId", entity.getPharmacyId());
         namedParameters.put("medicamentId", entity.getMedicamentId());
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Updated more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
-        String SQL = "DELETE FROM availability WHERE medicamentId = :id";
+    public void delete(Long id) throws EntityNotFoundException {
+        String SQL = "DELETE FROM availability WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Deleted more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
-    public void delete(AvailabilitySearchRequest request) throws JdbcManipulationException {
-        String SQL = "DELETE FROM availability WHERE medicamentId = :medicamentId AND pharmacyId = :pharmacyId";
-        Map namedParameters = new HashMap();
-        namedParameters.put("medicamentId", request.getMedicamentId());
-        namedParameters.put("pharmacyId", request.getPharmacyId());
-
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Deleted more or less than 1 record!");
-        }
-    }
-
-    @Override
-    public void create(AvailabilityEntity entity) throws JdbcManipulationException {
+    public void create(AvailabilityEntity entity) {
         String SQL = "INSERT INTO availability (pharmacyId, medicamentId, count, lastUpdate) " +
                 "VALUES (:pharmacyId, :medicamentId, :count, :lastUpdate)";
         Map namedParameters = new HashMap();
@@ -148,9 +131,6 @@ public class AvailabilityJdbcDao implements InterfaceDAO<AvailabilityEntity, Lon
         namedParameters.put("medicamentId", entity.getMedicamentId());
         namedParameters.put("count", entity.getCount());
         namedParameters.put("lastUpdate", entity.getLastUpdate());
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Created more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 }

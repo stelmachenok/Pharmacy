@@ -10,7 +10,7 @@
     <script src="js/searchAction.js"></script>
 </head>
 <body>
-<c:import url="navbar.jsp"/>
+<%@ include file="navbar.jsp" %>
 
 <div class="row">
     <input id="searchInput" class="col-sm-offset-5 control-label" type="text" size="40">
@@ -23,7 +23,7 @@
         class="control-label" id="searched-medicaments-count"></label>
 </div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
     <tr>
         <th><spring:message code="label.label"/></th>

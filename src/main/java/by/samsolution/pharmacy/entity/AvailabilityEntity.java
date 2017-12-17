@@ -3,12 +3,17 @@ package by.samsolution.pharmacy.entity;
 import java.util.Date;
 
 public class AvailabilityEntity extends BasicEntity{
+    private Long id;
     private Long pharmacyId;
     private Long medicamentId;
     private Long count;
     private Date lastUpdate;
 
     public AvailabilityEntity() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getPharmacyId() {
@@ -25,6 +30,10 @@ public class AvailabilityEntity extends BasicEntity{
 
     public Date getLastUpdate() {
         return lastUpdate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setPharmacyId(Long pharmacyId) {

@@ -20,7 +20,7 @@
 
 <c:url var="get_url" value="/pharmacies"/>
 
-<table class="table">
+<table class="table table-striped">
     <tr>
         <th>
             <a href="<ex:ref pageContext="${get_url}" sortField="PHARMACY_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
@@ -81,17 +81,13 @@
     </c:forEach>
 </ul>
 
-<c:url var="post_url"
-       value="/pharmaciesFormExecute"/>
+<c:url var="post_url" value="/pharmaciesFormExecute"/>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${errorText}</label>
+</div>
 <form:form class="form-horizontal" method="POST" modelAttribute="pharmacy" action="${post_url}">
     <spring:bind path="id">
         <form:input type="hidden" value="${pharmacy.id}" path="id"/>
-    </spring:bind>
-    <spring:bind path="login">
-        <form:input type="hidden" value="${pharmacy.login}" path="login"/>
-    </spring:bind>
-    <spring:bind path="password">
-        <form:input type="hidden" value="${pharmacy.password}" path="password"/>
     </spring:bind>
     <input name="sortField" type="hidden" value="${sortField}"/>
     <input name="pageNum" type="hidden" value="${pageNum}"/>
@@ -109,6 +105,36 @@
                     <form:input class="form-control" type="text" size="70"
                                 path="pharmacyName" id="pharmacyName"/>
                     <form:errors path="pharmacyName"/>
+                </div>
+            </spring:bind>
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="login" class="col-sm-offset-3 col-sm-2 control-label">
+            <spring:message code="label.login"/>
+        </label>
+        <div class="col-sm-2">
+            <spring:bind path="login">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input class="form-control" type="text" size="70"
+                                path="login" id="login"/>
+                    <form:errors path="login"/>
+                </div>
+            </spring:bind>
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="password" class="col-sm-offset-3 col-sm-2 control-label">
+            <spring:message code="label.password"/>
+        </label>
+        <div class="col-sm-2">
+            <spring:bind path="password">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input class="form-control" type="password" size="70"
+                                path="password" id="password"/>
+                    <form:errors path="password"/>
                 </div>
             </spring:bind>
         </div>
@@ -178,9 +204,7 @@
         </div>
     </div>
 </form:form>
-<div class="row">
-    <label class="col-sm-offset-5 col-sm-2 control-label">${exceptionText}</label>
-</div>
+
 
 </body>
 </html>

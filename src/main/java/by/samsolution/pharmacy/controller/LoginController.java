@@ -1,9 +1,10 @@
 package by.samsolution.pharmacy.controller;
 
 import by.samsolution.pharmacy.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,7 @@ public class LoginController {
     @Autowired
     @Qualifier(value = "messageSource")
     private MessageSource message;
-    @Autowired
-    ApplicationContext applicationContext;
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -29,10 +29,12 @@ public class LoginController {
         if (error != null) {
             String errorMessage = message.getMessage("message.loginError", null, LocaleContextHolder.getLocale());
             model.addAttribute("error", errorMessage);
+            logger.error("Login error");
         }
         if (logout != null) {
             String errorMessage = message.getMessage("message.logout", null, LocaleContextHolder.getLocale());
             model.addAttribute("error", errorMessage);
+            logger.info("Logout");
         }
         User user = new User("", "");
         model.addAttribute("user", user);

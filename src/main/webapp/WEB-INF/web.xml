@@ -36,11 +36,7 @@
         </listener-class>
     </listener>
 
-    <!--<listener>-->
-        <!--<listener-class>by.samsolution.pharmacy.servlet.MyAppServletContextListener</listener-class>-->
-    <!--</listener>-->
-
-    <!--Позволяет работать с русскими символами-->
+    <!--filter for russian characters-->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

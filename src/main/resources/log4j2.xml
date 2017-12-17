@@ -1,58 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
-
-    <!--<Appenders>-->
-        <!--<Console name="ConsoleAppender" target="SYSTEM_OUT">-->
-            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
-        <!--</Console>-->
-
-        <!--<File name="FileAppender" fileName="log4j.log">-->
-            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
-        <!--</File>-->
-    <!--</Appenders>-->
-
-
-    <!--<Loggers>-->
-        <!--<Logger name="FileLogger" additivity="true">-->
-            <!--<AppenderRef ref="FileAppender"/>-->
-        <!--</Logger>-->
-
-        <!--<Logger name="ConsoleLogger" additiasdasvity="truadasde">-->
-            <!--<AppenderRef ref="ConsoleAppender"/>-->
-        <!--</Logger>-->
-
-
-        <!--&lt;!&ndash; Root Logger &ndash;&gt;-->
-        <!--<Root level="all">-->
-            <!--<AppenderRef ref="ConsoleAppender"/>-->
-            <!--<AppenderRef ref="FileLogger"/>-->
-        <!--</Root>-->
-    <!--</Loggers>-->
-
-    <!--<Properties>-->
-        <!--<Property name="filename">target/log4j.log</Property>-->
-    <!--</Properties>-->
-
-
-    <!--<Appenders>-->
-        <!--<Appender type="Console" name="STDOUT">-->
-            <!--<Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
-        <!--</Appender>-->
-        <!--<Appender type="File" name="File" fileName="${filename}">-->
-            <!--<Layout type="PatternLayout">-->
-                <!--<Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>-->
-            <!--</Layout>-->
-        <!--</Appender>-->
-    <!--</Appenders>-->
-
-    <!--<Loggers>-->
-        <!--<Root level="trace">-->
-            <!--<AppenderRef ref="STDOUT"/>-->
-            <!--<AppenderRef ref="File"/>-->
-        <!--</Root>-->
-    <!--</Loggers>-->
-
-
     <Properties>
         <Property name="log-path">default</Property>
     </Properties>
@@ -91,6 +38,5 @@
             <AppenderRef ref="error-log"/>
         </Root>
     </Loggers>
-
 
 </Configuration>

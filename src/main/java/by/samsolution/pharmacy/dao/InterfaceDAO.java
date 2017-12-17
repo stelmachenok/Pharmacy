@@ -1,7 +1,7 @@
 package by.samsolution.pharmacy.dao;
 
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.AbstractSearchRequest;
 
 import java.util.List;
@@ -22,11 +22,9 @@ public interface InterfaceDAO<E, K, N, R extends AbstractSearchRequest> {
 
     int countOf(R request);
 
-    void update(E entity) throws EntityNotFoundException, JdbcManipulationException;
+    void update(E entity) throws EntityNotFoundException;
 
-    void delete(K id) throws EntityNotFoundException, JdbcManipulationException;
+    void delete(K id) throws EntityNotFoundException;
 
-    void delete(R request) throws JdbcManipulationException;
-
-    void create(E entity) throws JdbcManipulationException;
+    void create(E entity) throws DuplicatePrimaryKeyException;
 }

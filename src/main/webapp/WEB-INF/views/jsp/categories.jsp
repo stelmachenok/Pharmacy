@@ -9,7 +9,6 @@
     <title><spring:message code="title.categories"/></title>
 </head>
 <body>
-<c:import url="navbar.jsp"/>
 <script>
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
@@ -18,8 +17,9 @@
     }
 </script>
 <c:url var="get_url" value="/categories"/>
+<%@ include file="navbar.jsp" %>
 
-<table class="table">
+<table class="table table-striped">
     <tr>
         <th>
             <a href="<ex:ref pageContext="${get_url}" sortField="CATEGORY_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
@@ -62,8 +62,10 @@
     </c:forEach>
 </ul>
 
-<c:url var="post_url"
-       value="/categoryFormExecute"/>
+<c:url var="post_url" value="/categoryFormExecute"/>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${errorText}</label>
+</div>
 <form:form class="form-horizontal" method="POST" modelAttribute="category" action="${post_url}">
     <spring:bind path="id">
         <form:input type="hidden" value="${category.id}" path="id"/>
@@ -110,9 +112,7 @@
         </div>
     </div>
 </form:form>
-<div class="row">
-    <label class="col-sm-offset-5 col-sm-2 control-label">${exceptionText}</label>
-</div>
+
 
 </body>
 </html>

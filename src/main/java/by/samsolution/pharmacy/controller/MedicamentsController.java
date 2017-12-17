@@ -8,10 +8,9 @@ import by.samsolution.pharmacy.dto.PackingFormDto;
 import by.samsolution.pharmacy.dto.ReleaseFormDto;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.entity.ReleaseForm;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.searchrequest.MedicineSearchFieldEnum;
 import by.samsolution.pharmacy.service.CategoryService;
@@ -20,6 +19,9 @@ import by.samsolution.pharmacy.formvalidator.MedicamentValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +47,10 @@ public class MedicamentsController {
     private PackingFormConverter packingFormConverter;
     private ReleaseFormConverter releaseFormConverter;
     private static Logger logger = LoggerFactory.getLogger(MedicamentsController.class);
+
+    @Autowired
+    @Qualifier(value = "messageSource")
+    private MessageSource message;
 
     @Autowired
     public MedicamentsController(MedicamentService medicamentService, CategoryService categoryService, MedicamentValidator medicamentValidator, PackingFormConverter packingFormConverter, ReleaseFormConverter releaseFormConverter) {
@@ -76,19 +82,17 @@ public class MedicamentsController {
                     medicamentService.add(medicamentDto);
                     logger.info("Medicament " + medicamentDto + " pushed successfully");
                 }
-            } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
-                model.addAttribute("exceptionText", e.getMessage());
-                logger.error(e.getMessage());
+            } catch (EntityAlreadyExistException | EntityNotFoundException | DuplicatePrimaryKeyException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
                 addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
                 return "medicaments";
-            } catch (JdbcManipulationException e) {
-                logger.error("Updated more or less than 1 record!");
             }
             return "redirect:/medicaments?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
-                    "&sort-dir=" + sortDir /*+
-                    ((action != null && action.equals("edit")) ? "" : "&action=" + action)*/;
+                    "&sort-dir=" + sortDir;
         } else {
             addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
             return "medicaments";
@@ -103,13 +107,15 @@ public class MedicamentsController {
                                   @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
                                   @RequestParam(value = "action", required = false) String action,
                                   @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("medicament", new MedicamentDto("АВОДАРТ", "Дутастерид", 0.5, CAPSULE, "Дутастерид", WITHOUT_RECIPE, new CategoryDto("Категоря 1", "Описание 1")));
+        model.addAttribute("medicament", new MedicamentDto());
         if (action != null && action.equals("delete") && id != null) {
             try {
                 medicamentService.delete(id);
-            } catch (EntityNotFoundException | JdbcManipulationException e) {
-                logger.error(e.getMessage());
-                model.addAttribute("exceptionText", e.getMessage());
+                logger.info("Medicament deleted successfully");
+            } catch (EntityNotFoundException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
             }
         }
         if (action != null && action.equals("edit") && id != null) {
@@ -140,10 +146,10 @@ public class MedicamentsController {
             sortDir = true;
         }
 
-        int recordsCount = medicamentService.getAll().size();
+        int recordsCount = medicamentService.countOf();
         int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
         int firstRecord = (pageNum - 1) * pageSize;
-        int lastRecord = (recordsCount - 1 < pageNum * pageSize - 1) ? recordsCount - 1 : pageNum * pageSize - 1;
+        int recordsOnPage = pageSize;
         model.addAttribute("pageNum", pageNum);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pagesCount", pagesCount);
@@ -151,13 +157,13 @@ public class MedicamentsController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("action", action);
         model.addAttribute("categories", categoryService.getAll());
-        List<PackingFormDto> packingFormDtoList = Arrays.stream(PackingForm.values()).map((p)->packingFormConverter.entityToDto(p)).collect(Collectors.toList());
+        List<PackingFormDto> packingFormDtoList = Arrays.stream(PackingForm.values()).map((p) -> packingFormConverter.entityToDto(p)).collect(Collectors.toList());
         model.addAttribute("packingFormValues", packingFormDtoList);
-        List<ReleaseFormDto> releaseFormDtoList = Arrays.stream(ReleaseForm.values()).map((p)->releaseFormConverter.entityToDto(p)).collect(Collectors.toList());
+        List<ReleaseFormDto> releaseFormDtoList = Arrays.stream(ReleaseForm.values()).map((p) -> releaseFormConverter.entityToDto(p)).collect(Collectors.toList());
         model.addAttribute("releaseFormValues", releaseFormDtoList);
 
         request.setFrom(firstRecord);
-        request.setSize(lastRecord - firstRecord);
+        request.setSize(recordsOnPage);
         model.addAttribute("medicaments", medicamentService.getAll(request));
     }
 }

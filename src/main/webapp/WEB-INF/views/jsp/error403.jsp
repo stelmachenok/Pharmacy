@@ -10,7 +10,7 @@
 
 </head>
 <body>
-<c:import url="navbar.jsp"></c:import>
+<%@ include file="navbar.jsp" %>
 <spring:message code="message.error403"/>
 <c:url var="get_url" value="/searchPage"/>
 <a href="${get_url}"><spring:message code="message.returnToWelcomePage"/></a>

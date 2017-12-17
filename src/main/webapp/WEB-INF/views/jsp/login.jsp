@@ -9,10 +9,9 @@
     <title><spring:message code="title.login"/></title>
 </head>
 <body>
-<c:import url="navbar.jsp"/>
+<%@ include file="navbar.jsp" %>
 
-<c:url var="post_url"
-       value="/login"/>
+<c:url var="post_url" value="/login"/>
 <div class="row">
     <label class="col-sm-offset-5 col-sm-2 control-label">${error}</label>
 </div>
@@ -39,7 +38,7 @@
         <div class="col-sm-2">
             <spring:bind path="password">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input class="form-control" type="text" size="70"
+                    <form:input class="form-control" type="password" size="70"
                                 path="password" id="j_password"/>
                     <form:errors path="password"/>
                 </div>
@@ -52,7 +51,6 @@
         </div>
     </div>
 </form:form>
-
 
 
 </body>

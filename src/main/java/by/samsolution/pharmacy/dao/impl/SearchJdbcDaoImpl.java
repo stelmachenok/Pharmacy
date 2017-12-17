@@ -5,7 +5,6 @@ import by.samsolution.pharmacy.dto.SearchDto;
 import by.samsolution.pharmacy.entity.PackingForm;
 import by.samsolution.pharmacy.util.SqlQueryReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -17,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchJdbcDaoImpl implements SearchDao {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -46,7 +43,7 @@ public class SearchJdbcDaoImpl implements SearchDao {
     public List<SearchDto> search(String request) {
         if (request == null || request.equals(""))
             return new ArrayList<>();
-        String SQL = SqlQueryReader.read("InsertAvailability");
+        String SQL = SqlQueryReader.read("search");
         Map namedParameters = new HashMap();
         namedParameters.put("request", "%" + request + "%");
         return namedParameterJdbcTemplate.query(SQL, namedParameters, mapper);

@@ -4,13 +4,11 @@ import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.User;
 import by.samsolution.pharmacy.entity.UserRole;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.UserSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,22 +81,17 @@ public class UserJdbcDao implements InterfaceDAO<User, Long, String, UserSearchR
     }
 
     @Override
-    public void update(User entity) throws EntityNotFoundException, JdbcManipulationException {
+    public void update(User entity) throws EntityNotFoundException {
 
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+    public void delete(Long id) throws EntityNotFoundException {
 
     }
 
     @Override
-    public void delete(UserSearchRequest request) throws JdbcManipulationException {
-
-    }
-
-    @Override
-    public void create(User entity) throws JdbcManipulationException {
+    public void create(User entity) {
 
     }
 }

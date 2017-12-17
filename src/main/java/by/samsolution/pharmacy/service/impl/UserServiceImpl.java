@@ -5,8 +5,6 @@ import by.samsolution.pharmacy.dao.impl.UserJdbcDao;
 import by.samsolution.pharmacy.dto.UserDto;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.searchrequest.impl.UserSearchRequest;
 import by.samsolution.pharmacy.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,22 +23,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void add(UserDto dto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException {
+    public void add(UserDto dto) throws EntityAlreadyExistException {
 
     }
 
     @Override
-    public void update(UserDto dto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException, EntityAlreadyExistException {
+    public void update(UserDto dto) throws EntityNotFoundException, EntityAlreadyExistException {
 
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
-
-    }
-
-    @Override
-    public void delete(UserSearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
+    public void delete(Long id) throws EntityNotFoundException {
 
     }
 

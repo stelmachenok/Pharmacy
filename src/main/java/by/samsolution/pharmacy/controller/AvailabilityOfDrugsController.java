@@ -3,10 +3,9 @@ package by.samsolution.pharmacy.controller;
 import by.samsolution.pharmacy.dto.AvailabilityDto;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.dto.UserDto;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.formvalidator.AvailabilityValidator;
 import by.samsolution.pharmacy.searchrequest.AvailabilitySearchFieldEnum;
 import by.samsolution.pharmacy.searchrequest.impl.AvailabilitySearchRequest;
@@ -18,6 +17,9 @@ import by.samsolution.pharmacy.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,6 +45,10 @@ public class AvailabilityOfDrugsController {
     private AvailabilityValidator availabilityValidator;
 
     @Autowired
+    @Qualifier(value = "messageSource")
+    private MessageSource message;
+
+    @Autowired
     public AvailabilityOfDrugsController(MedicamentService medicamentService, PharmacyService pharmacyService, UserService userService, AvailabilityService availabilityService, AvailabilityValidator availabilityValidator) {
         this.medicamentService = medicamentService;
         this.pharmacyService = pharmacyService;
@@ -65,8 +71,10 @@ public class AvailabilityOfDrugsController {
         if (!result.hasErrors()) {
             try {
                 availabilityService.add(availabilityDto);
-            } catch (ObjectValidationFailedException | EntityAlreadyExistException | JdbcManipulationException | EntityNotFoundException e) {
-                e.printStackTrace();
+            } catch (EntityAlreadyExistException | EntityNotFoundException | DuplicatePrimaryKeyException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
                 addAttributes(model, authentication, pageNum, pageSize, sortField, sortDir);
                 return "availabilityOfDrugs";
             }
@@ -88,12 +96,12 @@ public class AvailabilityOfDrugsController {
 
         if (action != null && action.equals("delete") && id != null) {
             try {
-                AvailabilitySearchRequest availabilityRequest = new AvailabilitySearchRequest();
-                availabilityRequest.setPharmacyId(getPharmacyId(authentication));
-                availabilityRequest.setMedicamentId(id);
-                availabilityService.delete(availabilityRequest);
-            } catch (EntityNotFoundException | JdbcManipulationException e) {
-                e.printStackTrace();
+                availabilityService.delete(id);
+                logger.info("Record deleted successfully");
+            } catch (EntityNotFoundException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
             }
         }
         addPharmacyIdAttribute(model, authentication);
@@ -175,11 +183,13 @@ public class AvailabilityOfDrugsController {
         UserDto userDto = userService.getAll(request).stream().findAny().get();
         availabilityRequest.setPharmacyId(userDto.getPharmacyId());
         List<AvailabilityDto> availabilities = availabilityService.getAll(availabilityRequest);
-        availabilities.forEach((a) -> a.setBrandName(medicamentService.getById(a.getMedicamentId()).getBrandName()));
+        availabilities.forEach((a) ->{
+            a.setBrandName(medicamentService.getById(a.getMedicamentId()).getLabel());
+        });
         model.addAttribute("availabilities", availabilities);
     }
 
-    private AvailabilitySearchRequest getAvailabilitySizeRequest(Authentication authentication){
+    private AvailabilitySearchRequest getAvailabilitySizeRequest(Authentication authentication) {
         String userName = authentication.getName();
         UserSearchRequest request = new UserSearchRequest();
         request.setLogin(userName);
@@ -189,7 +199,7 @@ public class AvailabilityOfDrugsController {
         return availabilityRequest;
     }
 
-    private Long getPharmacyId(Authentication authentication){
+    private Long getPharmacyId(Authentication authentication) {
         String userName = authentication.getName();
         UserSearchRequest request = new UserSearchRequest();
         request.setLogin(userName);

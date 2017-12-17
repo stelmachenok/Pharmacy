@@ -3,10 +3,12 @@ package by.samsolution.pharmacy.dao.impl;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.Pharmacy;
 import by.samsolution.pharmacy.entity.PharmacyCategory;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.PharmacySearchRequest;
+import by.samsolution.pharmacy.util.SqlQueryReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,18 +56,20 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
 
     @Override
     public List<Pharmacy> getAll(PharmacySearchRequest request) {
-        String SQL = "SELECT * FROM pharmacy ORDER BY " + request.getSortField().getFieldName() + (!request.getDirection() ? " DESC" : "");
-        Map namedParameters = new HashMap();
-        List<Pharmacy> pharmacies = namedParameterJdbcTemplate.query(SQL, namedParameters, mapper);
-        int from = request.getFrom();
-        int size = request.getSize();
-        int count = countOf();
-        int last = count < from + size ? count : from + size;
-        List<Pharmacy> wantedPharmacies = new ArrayList<>();
-        for (int i = from; i <= last; i++) {
-            wantedPharmacies.add(pharmacies.get(i));
+        String SQL = "SELECT * FROM pharmacy ";
+        if (request.getSortField() != null) {
+            SQL += " ORDER BY " + request.getSortField().getFieldName();
+            if (request.getDirection() != null && !request.getDirection()) {
+                SQL += " DESC ";
+            }
         }
-        return wantedPharmacies;
+        if (request.getSize() != null) {
+            SQL += " LIMIT " + request.getSize();
+        }
+        if (request.getFrom() != null) {
+            SQL += " OFFSET " + request.getFrom();
+        }
+        return namedParameterJdbcTemplate.query(SQL, mapper);
     }
 
     @Override
@@ -87,7 +90,8 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
 
     @Override
     public int countOf() {
-        return getAll().size();
+        String SQL = "SELECT COUNT(*) FROM pharmacy";
+        return jdbcTemplate.queryForObject(SQL, Integer.class);
     }
 
     @Override
@@ -96,17 +100,8 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     }
 
     @Override
-    public void update(Pharmacy entity) throws EntityNotFoundException, JdbcManipulationException {
-        String SQL = "UPDATE pharmacy SET " +
-                "pharmacyName = :pharmacyName, " +
-                "address = :address, " +
-                "pharmacistName = :pharmacistName, " +
-                "contactNumber = :contactNumber,  " +
-                "login = :login, " +
-                "password = :password, " +
-                "category = :category, " +
-                "uuid = :uuid " +
-                "WHERE id = :id";
+    public void update(Pharmacy entity) throws EntityNotFoundException {
+        String SQL = SqlQueryReader.read("updatePharmacy");
         Map namedParameters = new HashMap();
         namedParameters.put("pharmacyName", entity.getPharmacyName());
         namedParameters.put("address", entity.getAddress());
@@ -117,14 +112,11 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
         namedParameters.put("category", String.valueOf(entity.getCategory()));
         namedParameters.put("uuid", String.valueOf(entity.getUuid()));
         namedParameters.put("id", entity.getId());
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Updated more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+    public void delete(Long id) throws EntityNotFoundException {
         String SQL = "DELETE FROM pharmacy WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
         namedParameterJdbcTemplate.update(SQL, namedParameters);
@@ -135,14 +127,8 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
     }
 
     @Override
-    public void delete(PharmacySearchRequest request) throws JdbcManipulationException {
-
-    }
-
-    @Override
-    public void create(Pharmacy entity) throws JdbcManipulationException {
-        String SQL = "INSERT INTO pharmacy (pharmacyName, address, pharmacistName, contactNumber, login, password, category, uuid)" +
-                "VALUES (:pharmacyName, :address, :pharmacistName, :contactNumber, :login, :password, :category, :uuid)";
+    public void create(Pharmacy entity) throws DuplicatePrimaryKeyException {
+        String SQL = SqlQueryReader.read("createPharmacy");
         Map namedParameters = new HashMap();
         namedParameters.put("pharmacyName", entity.getPharmacyName());
         namedParameters.put("address", entity.getAddress());
@@ -154,14 +140,24 @@ public class PharmacyJdbcDao implements InterfaceDAO<Pharmacy, Long, String, Pha
         namedParameters.put("uuid", String.valueOf(entity.getUuid()));
         namedParameters.put("id", entity.getId());
         namedParameterJdbcTemplate.update(SQL, namedParameters);
+        SQL = "SELECT id FROM pharmacy WHERE pharmacyName = :pharmacyName AND address = :address";
+        namedParameters = new HashMap();
+        namedParameters.put("pharmacyName", entity.getPharmacyName());
+        namedParameters.put("address", entity.getAddress());
+        Long pharmacyId = namedParameterJdbcTemplate.queryForObject(SQL, namedParameters, Long.class);
         SQL = "INSERT INTO usertable (login, password, role, pharmacyId, enabled)" +
                 "VALUES (:login, :password, :role, :pharmacyId, :enabled)";
         namedParameters = new HashMap();
-        namedParameters.put("login", entity.getContactNumber());
-        namedParameters.put("password", entity.getContactNumber());
-        namedParameters.put("role", "ROLE_PROVISOR");
-        namedParameters.put("pharmacyId", entity.getId());
+        namedParameters.put("login", entity.getLogin());
+        namedParameters.put("password", entity.getPassword());
+        namedParameters.put("role", "ROLE_PHARMACIST");
+        namedParameters.put("pharmacyId", pharmacyId);
         namedParameters.put("enabled", true);
-        namedParameterJdbcTemplate.update(SQL, namedParameters);
+        try {
+            namedParameterJdbcTemplate.update(SQL, namedParameters);
+        }
+        catch (DuplicateKeyException e){
+            throw new DuplicatePrimaryKeyException(e);
+        }
     }
 }

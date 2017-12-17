@@ -3,7 +3,6 @@ package by.samsolution.pharmacy.dao.impl;
 import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,10 +11,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,18 +49,20 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
 
     @Override
     public List<MedicamentCategory> getAll(CategorySearchRequest request) {
-        String SQL = "SELECT * FROM category ORDER BY " + request.getSortField().getFieldName() + (!request.getDirection() ? " DESC" : "");
-        Map namedParameters = new HashMap();
-        List<MedicamentCategory> categories = namedParameterJdbcTemplate.query(SQL, namedParameters, mapper);
-        int from = request.getFrom();
-        int size = request.getSize();
-        int count = countOf();
-        int last = count < from + size ? count : from + size;
-        List<MedicamentCategory> wantedCategories = new ArrayList<>();
-        for (int i = from; i <= last; i++) {
-            wantedCategories.add(categories.get(i));
+        String SQL = "SELECT * FROM category ";
+        if (request.getSortField() != null) {
+            SQL += " ORDER BY " + request.getSortField().getFieldName();
+            if (request.getDirection() != null && !request.getDirection()) {
+                SQL += " DESC ";
+            }
         }
-        return wantedCategories;
+        if (request.getSize() != null) {
+            SQL += " LIMIT " + request.getSize();
+        }
+        if (request.getFrom() != null) {
+            SQL += " OFFSET " + request.getFrom();
+        }
+        return namedParameterJdbcTemplate.query(SQL, mapper);
     }
 
     @Override
@@ -91,7 +90,8 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
 
     @Override
     public int countOf() {
-        return getAll().size();
+        String SQL = "SELECT COUNT(*) FROM category";
+        return jdbcTemplate.queryForObject(SQL, Integer.class);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
     }
 
     @Override
-    public void update(MedicamentCategory entity) throws EntityNotFoundException, JdbcManipulationException {
+    public void update(MedicamentCategory entity) throws EntityNotFoundException {
         String SQL = "UPDATE Category SET " +
                 "categoryName = :categoryName, " +
                 "description = :description " +
@@ -110,40 +110,26 @@ public class MedicamentCategoryJdbcDao implements InterfaceDAO<MedicamentCategor
         namedParameters.put("description", entity.getDescription());
         namedParameters.put("id", entity.getId());
 
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Updated more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+    public void delete(Long id) throws EntityNotFoundException {
         String SQL = "DELETE FROM category WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Deleted more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
         SQL = "UPDATE medicament SET medicamentCategory = NULL WHERE medicamentCategory = :id";
         namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
     @Override
-    public void delete(CategorySearchRequest request) throws JdbcManipulationException {
-
-    }
-
-    @Override
-    public void create(MedicamentCategory entity) throws JdbcManipulationException {
+    public void create(MedicamentCategory entity) {
         String SQL = "INSERT INTO category (categoryName, description, guid)" +
                 " VALUES (:categoryName, :description, :guid)";
         Map namedParameters = new HashMap();
         namedParameters.put("categoryName", entity.getCategoryName());
         namedParameters.put("description", entity.getDescription());
         namedParameters.put("guid", String.valueOf(entity.getGuid()));
-        Integer changedRecords = namedParameterJdbcTemplate.update(SQL, namedParameters);
-        if (changedRecords != 1) {
-            throw new JdbcManipulationException("Created more or less than 1 record!");
-        }
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 }

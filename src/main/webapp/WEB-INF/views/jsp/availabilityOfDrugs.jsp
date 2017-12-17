@@ -16,12 +16,13 @@
         }
     }
 </script>
-<c:import url="navbar.jsp"/>
+<c:url var="get_url" value="/availabilityOfDrugs"/>
+<%@ include file="navbar.jsp" %>
 
 <h5><p class="text-center"><spring:message code="title.yourPharmacy"/> : ${pharmacyName}</p></h5>
-<c:url var="get_url" value="/availabilityOfDrugs"/>
 
-<table class="table">
+
+<table class="table table-striped">
     <tr>
         <th>
             <a href="<ex:ref pageContext="${get_url}" sortField="MEDICAMENT_ID" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
@@ -48,7 +49,7 @@
 
             <td>
                 <button id="delete" type="button" class="btn btn-default"
-                        onclick="deleteConfirmation('${availability.brandName}', '${availability.medicamentId}')">
+                        onclick="deleteConfirmation('${availability.brandName}', '${availability.id}')">
                     <spring:message code="title.delete"/>
                 </button>
             </td>

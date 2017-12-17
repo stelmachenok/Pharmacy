@@ -1,4 +1,4 @@
-package by.samsolution.pharmacy.servlet;
+package by.samsolution.pharmacy.util;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.context.ApplicationContext;
@@ -8,7 +8,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import javax.sql.DataSource;
 
-public class ApplicationListenerBean implements ApplicationListener {
+public class FlyWayInit implements ApplicationListener {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {

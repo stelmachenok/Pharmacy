@@ -1,4 +1,4 @@
-package by.samsolution.pharmacy.util;
+package by.samsolution.pharmacy.dto;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

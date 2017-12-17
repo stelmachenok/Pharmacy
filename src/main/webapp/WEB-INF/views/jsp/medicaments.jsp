@@ -13,11 +13,6 @@
 
 <body>
 <script>
-    $(document).ready(function () {
-        setInterval(function () {
-            $('#time').load('/getTime');
-        }, 1000);
-    });
 
     function deleteConfirmation(brandName, id) {
         if (confirm("<spring:message code="question.deleteConfirmation"/> " + brandName + "?")) {
@@ -25,10 +20,11 @@
         }
     }
 </script>
-<c:import url="navbar.jsp"/>
 <c:url var="get_url" value="/medicaments"/>
+<%@ include file="navbar.jsp" %>
 
-<table class="table">
+
+<table class="table table-striped">
     <tr>
         <th>
             <a href="<ex:ref pageContext="${get_url}" sortField="BRAND_NAME" sortDir="${!sortDir}" pageNum="${pageNum}" pageSize="${pageSize}"/>">
@@ -100,6 +96,9 @@
 </ul>
 
 <c:url var="post_url" value="/formExecute"/>
+<div class="row">
+    <label class="col-sm-offset-5 col-sm-2 control-label">${errorText}</label>
+</div>
 <form:form class="form-horizontal" method="POST" modelAttribute="medicament" action="${post_url}">
     <spring:bind path="id">
         <form:input type="hidden" value="${medicament.id}" path="id"/>
@@ -216,8 +215,6 @@
         </div>
     </div>
 </form:form>
-<div class="row">
-    <label class="col-sm-offset-5 col-sm-2 control-label">${exceptionText}</label>
-</div>
+
 </body>
 </html>

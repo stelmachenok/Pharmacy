@@ -5,10 +5,9 @@ import by.samsolution.pharmacy.dto.PharmacyCategoryDto;
 import by.samsolution.pharmacy.dto.PharmacyDto;
 import by.samsolution.pharmacy.entity.Pharmacy;
 import by.samsolution.pharmacy.entity.PharmacyCategory;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
 import by.samsolution.pharmacy.formvalidator.PharmacyValidator;
 import by.samsolution.pharmacy.searchrequest.PharmacySearchFieldEnum;
 import by.samsolution.pharmacy.searchrequest.impl.PharmacySearchRequest;
@@ -16,6 +15,9 @@ import by.samsolution.pharmacy.service.PharmacyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -37,6 +39,10 @@ public class PharmaciesController {
     private PharmacyValidator validator;
     private PharmacyCategoryConverter pharmacyCategoryConverter;
     private static Logger logger = LoggerFactory.getLogger(PharmaciesController.class);
+
+    @Autowired
+    @Qualifier(value = "messageSource")
+    private MessageSource message;
 
     @Autowired
     public PharmaciesController(PharmacyService pharmacyService, PharmacyValidator validator, PharmacyCategoryConverter pharmacyCategoryConverter) {
@@ -65,13 +71,12 @@ public class PharmaciesController {
                     pharmacyService.add(pharmacyDto);
                     logger.info("Pharmacy " + pharmacyDto + " pushed successfully");
                 }
-            } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
-                model.addAttribute("exceptionText", e.getMessage());
-                logger.error(e.getMessage());
+            } catch (EntityAlreadyExistException | EntityNotFoundException | DuplicatePrimaryKeyException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
                 addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
                 return "pharmacies";
-            } catch (JdbcManipulationException e) {
-                logger.error("Updated more or less than 1 record!");
             }
             return "redirect:/pharmacies?page-num=" + pageNum +
                     "&page-size=" + pageSize +
@@ -91,14 +96,16 @@ public class PharmaciesController {
                                  @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
                                  @RequestParam(value = "action", required = false) String action,
                                  @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("pharmacy", new Pharmacy("Большая аптека № 1", "проспект Независимости 58, Минск", "Нина Шоцкая", "8 017 331-06-87", "Pharmacy", "Pharmacy", FIRST));
+        model.addAttribute("pharmacy", new Pharmacy());
         if (action != null && id != null) {
             if (action.equals("delete")) {
                 try {
                     pharmacyService.delete(id);
-                } catch (EntityNotFoundException | JdbcManipulationException e) {
-                    logger.error(e.getMessage());
-                    model.addAttribute("exceptionText", e.getMessage());
+                    logger.info("Pharmacy deleted successfully");
+                } catch (EntityNotFoundException e) {
+                    String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                    model.addAttribute("errorText", info);
+                    logger.info(e.getMessage());
                 }
             }
             if (action.equals("edit")) {
@@ -130,10 +137,10 @@ public class PharmaciesController {
             sortDir = true;
         }
 
-        int recordsCount = pharmacyService.getAll().size();
+        int recordsCount = pharmacyService.countOf();
         int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
         int firstRecord = (pageNum - 1) * pageSize;
-        int lastRecord = (recordsCount - 1 < pageNum * pageSize - 1) ? recordsCount - 1 : pageNum * pageSize - 1;
+        int recordsOnPage = pageSize;
         model.addAttribute("pageNum", pageNum);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pagesCount", pagesCount);
@@ -144,7 +151,7 @@ public class PharmaciesController {
         model.addAttribute("pharmacyCategoryValues", pharmacyCategoryDtoList);
 
         request.setFrom(firstRecord);
-        request.setSize(lastRecord - firstRecord);
+        request.setSize(recordsOnPage);
         model.addAttribute("pharmacies", pharmacyService.getAll(request));
     }
 }

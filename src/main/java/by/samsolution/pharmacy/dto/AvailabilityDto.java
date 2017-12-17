@@ -3,6 +3,7 @@ package by.samsolution.pharmacy.dto;
 import java.util.Date;
 
 public class AvailabilityDto extends BasicDto {
+    private Long id;
     private Long pharmacyId;
     private Long medicamentId;
     private Long count;
@@ -10,6 +11,10 @@ public class AvailabilityDto extends BasicDto {
     private String brandName;
 
     public AvailabilityDto() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getPharmacyId() {
@@ -30,6 +35,10 @@ public class AvailabilityDto extends BasicDto {
 
     public String getBrandName() {
         return brandName;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setPharmacyId(Long pharmacyId) {

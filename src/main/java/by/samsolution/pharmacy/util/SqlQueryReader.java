@@ -1,4 +1,6 @@
 package by.samsolution.pharmacy.util;
+import by.samsolution.pharmacy.dto.SqlRequestDto;
+import by.samsolution.pharmacy.dto.SqlRequestListDto;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;

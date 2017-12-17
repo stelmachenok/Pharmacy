@@ -1,6 +1,6 @@
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория A', 'Описание 1', UUID());
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория B', 'Описание 2', UUID());
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория C', 'Описание 3', UUID());
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория D', 'Описание 4', UUID());
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория X', 'Описание 5', UUID());
-INSERT INTO Category (categoryName, description, guid) VALUES ('Категория N', 'Описание 6', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория A', 'Клинические исследования не показали риска для плода', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория B', 'Исследования на животных не показали риска для плода', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория C', 'Исследования на животных показали побочный эффект на плод, и нет достаточных клинических исследований', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория D', 'Есть доказательства риска для плода, основываясь на данных клинических исследований', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория X', 'Риск при использовании препарата явно превышает возможный положительный эффект', UUID());
+INSERT INTO Category (categoryName, description, guid) VALUES ('Категория N', 'FDA пока не присвоила категорию для препарата', UUID());

@@ -12,6 +12,8 @@ public class CategoryConverter implements InterfaceConverter<CategoryDto, Medica
             dto.setCategoryName(entity.getCategoryName());
             dto.setDescription(entity.getDescription());
             dto.setId(entity.getId());
+        } else {
+            dto = null;
         }
         return dto;
     }
@@ -19,9 +21,13 @@ public class CategoryConverter implements InterfaceConverter<CategoryDto, Medica
     @Override
     public MedicamentCategory dtoToEntity(CategoryDto dto) {
         MedicamentCategory entity = new MedicamentCategory();
-        entity.setCategoryName(dto.getCategoryName());
-        entity.setDescription(dto.getDescription());
-        entity.setId(dto.getId());
+        if (dto != null) {
+            entity.setCategoryName(dto.getCategoryName());
+            entity.setDescription(dto.getDescription());
+            entity.setId(dto.getId());
+        } else {
+            entity = null;
+        }
         return entity;
     }
 }

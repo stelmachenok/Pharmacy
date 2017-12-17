@@ -1,11 +1,9 @@
 package by.samsolution.pharmacy.controller;
 
 import by.samsolution.pharmacy.dto.CategoryDto;
-import by.samsolution.pharmacy.entity.MedicamentCategory;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.formvalidator.CategoryValidator;
 import by.samsolution.pharmacy.searchrequest.CategorySearchFieldEnum;
 import by.samsolution.pharmacy.searchrequest.impl.CategorySearchRequest;
@@ -13,6 +11,9 @@ import by.samsolution.pharmacy.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,10 @@ public class CategoriesController {
     private static Logger logger = LoggerFactory.getLogger(CategoriesController.class);
 
     @Autowired
+    @Qualifier(value = "messageSource")
+    private MessageSource message;
+
+    @Autowired
     public CategoriesController(CategoryService categoryService, CategoryValidator validator) {
         this.categoryService = categoryService;
         this.validator = validator;
@@ -45,9 +50,6 @@ public class CategoriesController {
                          @RequestParam("pageSize") Integer pageSize,
                          @RequestParam("action") String action) {
         validator.validate(categoryDto, result);
-        Long id = categoryDto.getId();
-
-
         if (!result.hasErrors()) {
             try {
                 if (action != null && action.equals("edit")) {
@@ -57,20 +59,19 @@ public class CategoriesController {
                     categoryService.add(categoryDto);
                     logger.info("Category " + categoryDto + " pushed successfully");
                 }
-            } catch (EntityAlreadyExistException | ObjectValidationFailedException | EntityNotFoundException e) {
-                model.addAttribute("exceptionText", e.getMessage());
-                logger.error(e.getMessage());
-                addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+            } catch (EntityAlreadyExistException | EntityNotFoundException | DuplicatePrimaryKeyException e) {
+                String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                model.addAttribute("errorText", info);
+                logger.info(e.getMessage());
+                addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
                 return "categories";
-            } catch (JdbcManipulationException e) {
-                logger.error("Updated more or less than 1 record!");
             }
             return "redirect:/categories?page-num=" + pageNum +
                     "&page-size=" + pageSize +
                     "&sort-field=" + sortField +
                     "&sort-dir=" + sortDir;
         } else {
-            addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+            addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
             return "categories";
         }
     }
@@ -82,14 +83,16 @@ public class CategoriesController {
                                  @RequestParam(value = "sort-direction", required = false) Boolean sortDir,
                                  @RequestParam(value = "action", required = false) String action,
                                  @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("category", new MedicamentCategory("Категория A", "Описание 1"));
+        model.addAttribute("category", new CategoryDto());
         if (action != null && id != null) {
             if (action.equals("delete")) {
                 try {
                     categoryService.delete(id);
-                } catch (EntityNotFoundException | JdbcManipulationException e) {
-                    logger.error(e.getMessage());
-                    model.addAttribute("exceptionText", e.getMessage());
+                    logger.info("Category deleted successfully");
+                } catch (EntityNotFoundException e) {
+                    String info = message.getMessage("message." + e.getClass().getSimpleName(), null, LocaleContextHolder.getLocale());
+                    model.addAttribute("errorText", info);
+                    logger.info(e.getMessage());
                 }
             }
             if (action.equals("edit")) {
@@ -98,11 +101,11 @@ public class CategoriesController {
             }
         }
 
-        addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action, id);
+        addAllAttributes(pageNum, pageSize, model, sortField, sortDir, action);
         return "categories";
     }
 
-    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, CategorySearchFieldEnum sortField, Boolean sortDir, String action, Long id) {
+    private void addAllAttributes(Integer pageNum, Integer pageSize, ModelMap model, CategorySearchFieldEnum sortField, Boolean sortDir, String action) {
         CategorySearchRequest request = new CategorySearchRequest();
         if (pageNum == null)
             pageNum = 1;
@@ -121,10 +124,10 @@ public class CategoriesController {
             sortDir = true;
         }
 
-        int recordsCount = categoryService.getAll().size();
+        int recordsCount = categoryService.countOf();
         int pagesCount = (recordsCount % pageSize == 0) ? recordsCount / pageSize : recordsCount / pageSize + 1;
         int firstRecord = (pageNum - 1) * pageSize;
-        int lastRecord = (recordsCount - 1 < pageNum * pageSize - 1) ? recordsCount - 1 : pageNum * pageSize - 1;
+        int recordsOnPage = pageSize;
         model.addAttribute("pageNum", pageNum);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pagesCount", pagesCount);
@@ -133,7 +136,7 @@ public class CategoriesController {
         model.addAttribute("action", action);
 
         request.setFrom(firstRecord);
-        request.setSize(lastRecord - firstRecord);
+        request.setSize(recordsOnPage);
         model.addAttribute("categories", categoryService.getAll(request));
     }
 

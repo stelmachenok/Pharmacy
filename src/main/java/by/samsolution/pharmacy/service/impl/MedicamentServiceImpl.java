@@ -5,16 +5,16 @@ import by.samsolution.pharmacy.dao.InterfaceDAO;
 import by.samsolution.pharmacy.dto.MedicamentDto;
 import by.samsolution.pharmacy.entity.MedicamentCategory;
 import by.samsolution.pharmacy.entity.MedicamentEntity;
+import by.samsolution.pharmacy.exception.DuplicatePrimaryKeyException;
 import by.samsolution.pharmacy.exception.EntityAlreadyExistException;
 import by.samsolution.pharmacy.exception.EntityNotFoundException;
-import by.samsolution.pharmacy.exception.ObjectValidationFailedException;
-import by.samsolution.pharmacy.exception.JdbcManipulationException;
 import by.samsolution.pharmacy.searchrequest.impl.MedicamentsSearchRequest;
 import by.samsolution.pharmacy.service.MedicamentService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Transactional
 public class MedicamentServiceImpl implements MedicamentService {
     private InterfaceDAO<MedicamentEntity, Long, String, MedicamentsSearchRequest> medicamentDAO;
@@ -27,10 +27,7 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void add(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityAlreadyExistException, JdbcManipulationException {
-        if (medicamentDto.getDosage() < 0) {
-            throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
-        }
+    public void add(MedicamentDto medicamentDto) throws EntityAlreadyExistException, DuplicatePrimaryKeyException {
         MedicamentEntity entity = medicineConverter.dtoToEntity(medicamentDto);
         List<MedicamentEntity> existedMedicamentEntities = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
         if (!equalsMedicaments(existedMedicamentEntities, entity)) {
@@ -41,14 +38,11 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void update(MedicamentDto medicamentDto) throws ObjectValidationFailedException, EntityNotFoundException, JdbcManipulationException, EntityAlreadyExistException {
-        if (medicamentDto.getDosage() < 0) {
-            throw new ObjectValidationFailedException("Incorrect dosage " + medicamentDto.getDosage());
-        }
+    public void update(MedicamentDto medicamentDto) throws EntityNotFoundException, EntityAlreadyExistException {
         MedicamentEntity entity = medicineConverter.dtoToEntity(medicamentDto);
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(medicamentDto.getId());
         List<MedicamentEntity> existedMedicaments = medicamentDAO.getEntityByName(medicamentDto.getBrandName());
-        if (equalsMedicaments(existedMedicaments, entity)){
+        if (equalsMedicaments(existedMedicaments, entity)) {
             throw new EntityAlreadyExistException("MedicamentEntity with same characteristics already exist");
         }
         if (existedMedicamentEntity != null) {
@@ -59,18 +53,13 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException, JdbcManipulationException {
+    public void delete(Long id) throws EntityNotFoundException {
         MedicamentEntity existedMedicamentEntity = medicamentDAO.getEntityById(id);
         if (existedMedicamentEntity != null) {
             medicamentDAO.delete(id);
         } else {
             throw new EntityNotFoundException("MedicamentEntity with id " + id + " doesn't exist");
         }
-    }
-
-    @Override
-    public void delete(MedicamentsSearchRequest request) throws EntityNotFoundException, JdbcManipulationException {
-
     }
 
     @Override
@@ -94,16 +83,15 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public int countOf(MedicamentsSearchRequest request) {
-        return medicamentDAO.getAll(request).size();
+        return medicamentDAO.countOf(request);
     }
 
     @Override
     public int countOf() {
-        return medicamentDAO.getAll().size();
+        return medicamentDAO.countOf();
     }
 
     private boolean equalsMedicaments(List<MedicamentEntity> medicamentEntities, MedicamentEntity medicamentEntity) {
-
         if (medicamentEntities != null && medicamentEntity != null) {
             for (MedicamentEntity e : medicamentEntities) {
                 if (e.getBrandName().equals(medicamentEntity.getBrandName()) &&
@@ -120,8 +108,10 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     private boolean equalsCategories(MedicamentCategory category, MedicamentCategory category2) {
-        return category != null && category2 != null &&
+        return category == null && category2 == null ||
+                category != null && category2 != null &&
                 /*category.getDescription().equals(category2.getDescription()) &&*/
-                category.getCategoryName().equals(category2.getCategoryName());
+                /*category.getDescription().equals(category2.getDescription()) &&*/
+                        category.getCategoryName().equals(category2.getCategoryName());
     }
 }
